@@ -1,0 +1,1964 @@
+<!DOCTYPE html>
+<html lang="zh">
+    <!-- title -->
+
+
+
+
+<!-- keywords -->
+
+
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" >
+    <meta name="author" content="fe1w0">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="fe1w0">
+    
+    <meta name="keywords" content="fe1w0,fe1w0,fe1w0-blog">
+    
+    <meta name="description" content="">
+    <meta name="description" content="搭建web运行的基础环境  基本信息 任务目标:准备学习环境,学习web服务器的搭建过程,并做相应的加固学习 操作系统:win10家庭版+ vm15 预装环境:ubuntu 18.04 + nginx + php-fpm + mysql   报告要求:搭建过程详细记录,收集加固文档,学习加固技术  搭建 0x01安装 nginx + php-fpm + mysqlNginx的安装这篇文章涵盖ng">
+<meta property="og:type" content="article">
+<meta property="og:title" content="搭建web运行的基础环境">
+<meta property="og:url" content="https://xzlxr.github.io/2020/03/16/%E6%90%AD%E5%BB%BAweb%E8%BF%90%E8%A1%8C%E7%9A%84%E5%9F%BA%E7%A1%80%E7%8E%AF%E5%A2%83/index.html">
+<meta property="og:site_name" content="fe1w0">
+<meta property="og:description" content="搭建web运行的基础环境  基本信息 任务目标:准备学习环境,学习web服务器的搭建过程,并做相应的加固学习 操作系统:win10家庭版+ vm15 预装环境:ubuntu 18.04 + nginx + php-fpm + mysql   报告要求:搭建过程详细记录,收集加固文档,学习加固技术  搭建 0x01安装 nginx + php-fpm + mysqlNginx的安装这篇文章涵盖ng">
+<meta property="og:locale">
+<meta property="og:image" content="https://ae05.alicdn.com/kf/H2e409e51f9b746ca9af9d409c0652d49s.png">
+<meta property="og:image" content="http://img.xzaslxr.xyz/img/20200412102858.png">
+<meta property="og:image" content="http://img.xzaslxr.xyz/img/20200412102937.png">
+<meta property="og:image" content="http://img.xzaslxr.xyz/img/232952.png">
+<meta property="og:image" content="http://img.xzaslxr.xyz/img/233715.png">
+<meta property="og:image" content="http://img.xzaslxr.xyz/img/233941.png">
+<meta property="og:image" content="http://img.xzaslxr.xyz/img/234212.png">
+<meta property="og:image" content="http://img.xzaslxr.xyz/img/002047.png">
+<meta property="og:image" content="http://img.xzaslxr.xyz/img/161955.png">
+<meta property="og:image" content="http://img.xzaslxr.xyz/img/142600.png">
+<meta property="og:image" content="http://img.xzaslxr.xyz/img/152337.png">
+<meta property="article:published_time" content="2020-03-15T16:00:00.000Z">
+<meta property="article:modified_time" content="2020-04-12T02:31:50.526Z">
+<meta property="article:author" content="fe1w0">
+<meta property="article:tag" content="web">
+<meta property="article:tag" content="信安之路">
+<meta property="article:tag" content="ubuntu">
+<meta property="article:tag" content="apache">
+<meta property="article:tag" content="nginx">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ae05.alicdn.com/kf/H2e409e51f9b746ca9af9d409c0652d49s.png">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    
+    <title>搭建web运行的基础环境 · fe1w0_blog</title>
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .back-top,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s infinite;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+
+</style>
+
+    <link rel="preload" href= "/css/style.css?v=20180824" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <link rel="stylesheet" href= "/css/mobile.css?v=20180824" media="(max-width: 980px)">
+    
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+(function( w ){
+	"use strict";
+	// rel=preload support test
+	if( !w.loadCSS ){
+		w.loadCSS = function(){};
+	}
+	// define on the loadCSS obj
+	var rp = loadCSS.relpreload = {};
+	// rel=preload feature support test
+	// runs once and returns a function for compat purposes
+	rp.support = (function(){
+		var ret;
+		try {
+			ret = w.document.createElement( "link" ).relList.supports( "preload" );
+		} catch (e) {
+			ret = false;
+		}
+		return function(){
+			return ret;
+		};
+	})();
+
+	// if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+	// then change that media back to its intended value on load
+	rp.bindMediaToggle = function( link ){
+		// remember existing media attr for ultimate state, or default to 'all'
+		var finalMedia = link.media || "all";
+
+		function enableStylesheet(){
+			link.media = finalMedia;
+		}
+
+		// bind load handlers to enable media
+		if( link.addEventListener ){
+			link.addEventListener( "load", enableStylesheet );
+		} else if( link.attachEvent ){
+			link.attachEvent( "onload", enableStylesheet );
+		}
+
+		// Set rel and non-applicable media type to start an async request
+		// note: timeout allows this to happen async to let rendering continue in IE
+		setTimeout(function(){
+			link.rel = "stylesheet";
+			link.media = "only x";
+		});
+		// also enable media after 3 seconds,
+		// which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+		setTimeout( enableStylesheet, 3000 );
+	};
+
+	// loop through link elements in DOM
+	rp.poly = function(){
+		// double check this to prevent external calls from running
+		if( rp.support() ){
+			return;
+		}
+		var links = w.document.getElementsByTagName( "link" );
+		for( var i = 0; i < links.length; i++ ){
+			var link = links[ i ];
+			// qualify links to those with rel=preload and as=style attrs
+			if( link.rel === "preload" && link.getAttribute( "as" ) === "style" && !link.getAttribute( "data-loadcss" ) ){
+				// prevent rerunning on link
+				link.setAttribute( "data-loadcss", true );
+				// bind listeners to toggle media back
+				rp.bindMediaToggle( link );
+			}
+		}
+	};
+
+	// if unsupported, run the polyfill
+	if( !rp.support() ){
+		// run once at least
+		rp.poly();
+
+		// rerun poly on an interval until onload
+		var run = w.setInterval( rp.poly, 500 );
+		if( w.addEventListener ){
+			w.addEventListener( "load", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		} else if( w.attachEvent ){
+			w.attachEvent( "onload", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		}
+	}
+
+
+	// commonjs
+	if( typeof exports !== "undefined" ){
+		exports.loadCSS = loadCSS;
+	}
+	else {
+		w.loadCSS = loadCSS;
+	}
+}( typeof global !== "undefined" ? global : this ) );
+</script>
+
+    <link rel="icon" href= "/assets/favicon.ico" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js" as="script" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" as="script" />
+    <link rel="preload" href="/scripts/main.js" as="script" />
+    <link rel="preload" as="font" href="/font/Oswald-Regular.ttf" crossorigin>
+    <link rel="preload" as="font" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" crossorigin>
+    
+    <!-- fancybox -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="read-progress"></div>
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >follow my dream</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">搭建web运行的基础环境</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href=/>follow my dream</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro" style="
+
+
+
+
+
+
+
+height:50vh;
+">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(https://source.unsplash.com/user/erondu)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            搭建web运行的基础环境
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                    <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "web">web</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "信安之路">信安之路</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "ubuntu">ubuntu</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "apache">apache</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "nginx">nginx</a>
+    
+</div>
+                
+                
+                    <div class="post-intro-read">
+                        <span>字数统计: <span class="post-count word-count">7.2k</span>阅读时长: <span class="post-count reading-time">35 min</span></span>
+                    </div>
+                
+                <div class="post-intro-meta">
+                    <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                    <span class="post-intro-time">2020/03/16</span>
+                    
+                    <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                        <span class="iconfont-archer">&#xe602;</span>
+                        <span id="busuanzi_value_page_pv"></span>
+                    </span>
+                    
+                    <span class="shareWrapper">
+                        <span class="iconfont-archer shareIcon">&#xe71d;</span>
+                        <span class="shareText">Share</span>
+                        <ul class="shareList">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+        
+    </div>
+</div>
+        <script>
+ 
+  // get user agent
+  var browser = {
+    versions: function () {
+      var u = window.navigator.userAgent;
+      return {
+        userAgent: u,
+        trident: u.indexOf('Trident') > -1, //IE内核
+        presto: u.indexOf('Presto') > -1, //opera内核
+        webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+        gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+        mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+        ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+        android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+        iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+        iPad: u.indexOf('iPad') > -1, //是否为iPad
+        webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+        weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+        uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+      };
+    }()
+  }
+  console.log("userAgent:" + browser.versions.userAgent);
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded');
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+      document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in');
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb(){
+    if (browser.versions.uc) {
+      console.log("UCBrowser");
+      fontLoaded();
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular']
+        },
+        loading: function () {  //所有字体开始加载
+          // console.log('loading');
+        },
+        active: function () {  //所有字体已渲染
+          fontLoaded();
+        },
+        inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout');
+          fontLoaded();
+        },
+        timeout: 5000 // Set the timeout to two seconds
+      });
+    }
+  }
+
+  function asyncErr(){
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (cb) { o.addEventListener('load', function (e) { cb(null, e); }, false); }
+    if (err) { o.addEventListener('error', function (e) { err(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+
+  var asyncLoadWithFallBack = function(arr, success, reject) {
+      var currReject = function(){
+        reject()
+        arr.shift()
+        if(arr.length)
+          async(arr[0], success, currReject)
+        }
+
+      async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack([
+    "https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js", 
+    "https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js",
+    "/lib/webfontloader.min.js"
+  ], asyncCb, asyncErr)
+</script>        
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <blockquote>
+<p>搭建web运行的基础环境</p>
+</blockquote>
+<h2 id="基本信息"><a href="#基本信息" class="headerlink" title="基本信息"></a>基本信息</h2><ul>
+<li>任务目标:准备学习环境,学习web服务器的搭建过程,并做相应的加固学习</li>
+<li>操作系统:win10家庭版+ vm15</li>
+<li>预装环境:ubuntu 18.04 + nginx + php-fpm + mysql  </li>
+<li>报告要求:搭建过程详细记录,收集加固文档,学习加固技术</li>
+</ul>
+<h2 id="搭建-0x01"><a href="#搭建-0x01" class="headerlink" title="搭建 0x01"></a>搭建 0x01</h2><h3 id="安装-nginx-php-fpm-mysql"><a href="#安装-nginx-php-fpm-mysql" class="headerlink" title="安装 nginx + php-fpm + mysql"></a>安装 nginx + php-fpm + mysql</h3><p><a target="_blank" rel="noopener" href="https://wiki.ubuntu.org.cn/Nginx">Nginx的安装</a><br>这篇文章涵盖nginx + php-fpm + mysql的详细安装过程和指南</p>
+<h4 id="更新系统软件源"><a href="#更新系统软件源" class="headerlink" title="更新系统软件源"></a>更新系统软件源</h4><ul>
+<li>备份原有软件源文件<br><code>cp /etc/apt/sources.list /etc/apt/sources.list.bak</code></li>
+<li>打开并更改<br><code>sudo  gedit  /etc/apt/sources.list</code></li>
+<li>添加源</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">#添加阿里源</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;ubuntu&#x2F; bionic main restricted universe multiverse</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;ubuntu&#x2F; bionic-security main restricted universe multiverse</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;ubuntu&#x2F; bionic-updates main restricted universe multiverse</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;ubuntu&#x2F; bionic-proposed main restricted universe multiverse</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;ubuntu&#x2F; bionic-backports main restricted universe multiverse</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;ubuntu&#x2F; bionic main restricted universe multiverse</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;ubuntu&#x2F; bionic-security main restricted universe multiverse</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;ubuntu&#x2F; bionic-updates main restricted universe multiverse</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;ubuntu&#x2F; bionic-proposed main restricted universe multiverse</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;ubuntu&#x2F; bionic-backports main restricted universe multiverse</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>更新<br><code>sudo apt-get update</code><br><code>sudo apt-get upgrade</code></p>
+</li>
+<li><p>当<code>sudo apt-get update</code>出现<br>W: Some index files failed to download. They have been ignored, or old ones used instead.时<br>解决方案<br><code>sudo vim /etc/resolv.conf</code><br>添加</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#这里用的使用的是阿里云的DNS服务器,根据你使用的源来填写</span><br><span class="line">nameserver 223.5.5.5  </span><br><span class="line">nameserver 223.6.6.6</span><br></pre></td></tr></table></figure>
+
+<p>再次更新<br>参考:<br><a target="_blank" rel="noopener" href="https://blog.csdn.net/feiniao8651/article/details/60332535">https://blog.csdn.net/feiniao8651/article/details/60332535</a></p>
+<ul>
+<li>其他<br><a target="_blank" rel="noopener" href="https://www.linuxidc.com/Linux/2018-08/153709.htm">其他源</a><br>但从个人经历而言<br>最好的方法是使用Software &amp; Update的<strong>Select Best Server</strong>来选择源<br>点击Download from<br>后选择Select Best Server</li>
+</ul>
+<h4 id="安装-nginx"><a href="#安装-nginx" class="headerlink" title="安装 nginx"></a>安装 nginx</h4><p><code>sudo apt-get install nginx</code><br>文件结构大致如下:</p>
+<ul>
+<li>所有配置文件在<code>/etc/nginx</code>,且每个虚拟主机已经安排在<code>/etc/nginx/sites-acailable/</code></li>
+<li>程序文件在<code>/usr/sbin/nginx</code>  但目前没有?</li>
+<li>日志文件在<code>/var/log/nginx</code></li>
+<li>默认的虚拟主机的目录设置在<code>/var/www/html</code>   <strong>注意,请看配置文件</strong><code>/etc/nginx/sites-acailable/</code></li>
+<li>启动脚本 <code>sudo /etc/init.d/nginx start</code>,访问 <a target="_blank" rel="noopener" href="http://127.0.0.1/">http://127.0.0.1</a> </li>
+</ul>
+<h4 id="安装php-mysql"><a href="#安装php-mysql" class="headerlink" title="安装php ,mysql"></a>安装php ,mysql</h4><p>考虑版本更新问题,装php7.4版本<br><a target="_blank" rel="noopener" href="https://www.php.net/supported-versions.php">php支援版本信息</a></p>
+<ul>
+<li>Add PHP PPA Repository</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt -y install software-properties-common</span><br><span class="line">sudo add-apt-repository ppa:ondrej&#x2F;php</span><br><span class="line">sudo apt-get update</span><br></pre></td></tr></table></figure>
+
+<h5 id="可能遇到问题"><a href="#可能遇到问题" class="headerlink" title="可能遇到问题"></a>可能遇到问题</h5><ul>
+<li><code>add-apt-repository ppa:ondrej/php</code>会有错误或长时间无回应<br>字符编码的锅<br><a target="_blank" rel="noopener" href="https://github.com/oerdnj/deb.sury.org/issues/56">解决方案</a></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo LC_ALL&#x3D;C.UTF-8 add-apt-repository ppa:ondrej&#x2F;php</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>但有Error显示</li>
+</ul>
+<blockquote>
+<p>Error: retrieving gpg key timed out.</p>
+</blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/e2a15336f174">需要手动添加ppa源</a><br><a target="_blank" rel="noopener" href="https://launchpad.net/~ondrej/+archive/ubuntu/php">PPA源</a><br>注意要选择版本</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">deb http:&#x2F;&#x2F;ppa.launchpad.net&#x2F;ondrej&#x2F;php&#x2F;ubuntu bionic main </span><br><span class="line">deb-src http:&#x2F;&#x2F;ppa.launchpad.net&#x2F;ondrej&#x2F;php&#x2F;ubuntu bionic main </span><br></pre></td></tr></table></figure>
+
+<p> 打开源并添加<br><code>sudo  gedit  /etc/apt/sources.list</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">deb http:&#x2F;&#x2F;ppa.launchpad.net&#x2F;ondrej&#x2F;php&#x2F;ubuntu bionic main </span><br><span class="line">deb-src http:&#x2F;&#x2F;ppa.launchpad.net&#x2F;ondrej&#x2F;php&#x2F;ubuntu bionic main </span><br></pre></td></tr></table></figure>
+
+<p>在Terminal添加Signing Key<br><code>sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 14AA40EC0831756756D7F66C4F4EA0AAE5267A6C</code></p>
+<p>再更新<br><code>sudo apt-get update &amp;&amp; sudo apt-get upgrade</code></p>
+<h5 id="推荐另一种方法-install-PHP-7-4-amp-mysql"><a href="#推荐另一种方法-install-PHP-7-4-amp-mysql" class="headerlink" title="推荐另一种方法 install PHP 7.4 &amp; mysql"></a><a target="_blank" rel="noopener" href="https://guides.wp-bullet.com/install-php-7-4-fpm-on-ubuntu-18-04/">推荐另一种方法 install PHP 7.4 &amp; mysql</a></h5><p>首先添加sury.org提供的存储库</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install apt-transport-https -y</span><br><span class="line">sudo wget -O &#x2F;etc&#x2F;apt&#x2F;trusted.gpg.d&#x2F;php.gpg https:&#x2F;&#x2F;packages.sury.org&#x2F;php&#x2F;apt.gpg</span><br><span class="line">echo &quot;deb https:&#x2F;&#x2F;packages.sury.org&#x2F;php&#x2F; stretch main&quot; | sudo tee &#x2F;etc&#x2F;apt&#x2F;sources.list.d&#x2F;php.list</span><br></pre></td></tr></table></figure>
+
+<p>更新软件包列表</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br></pre></td></tr></table></figure>
+
+<p>安装用于nginx和PHP -fpm功能的PHP 7.4包</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install php7.4-cli php7.4-curl php7.4-mysql php7.4-fpm php7.4-gd php7.4-xml php7.4-mbstring php7.4-zip php7.4-soap php7.4-dev -y</span><br></pre></td></tr></table></figure>
+
+<p>如果这步报错试试</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install libcurl3</span><br></pre></td></tr></table></figure>
+
+<p>将CLI更新到PHP 7.4</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo update-alternatives --set php &#x2F;usr&#x2F;bin&#x2F;php7.4</span><br></pre></td></tr></table></figure>
+
+<h4 id="mysql-install"><a href="#mysql-install" class="headerlink" title="mysql install"></a>mysql install</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install mysql-server</span><br></pre></td></tr></table></figure>
+
+<p>进行安装与配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo mysql_secure_installation</span><br></pre></td></tr></table></figure>
+
+<p>安装之后便可使用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo mysql</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="配置-Nginx"><a href="#配置-Nginx" class="headerlink" title="配置 Nginx"></a>配置 Nginx</h4><p><img src="https://ae05.alicdn.com/kf/H2e409e51f9b746ca9af9d409c0652d49s.png" alt="Nginx config"><br>修改主机名于配置文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo  gedit &#x2F;etc&#x2F;nginx&#x2F;sites-available&#x2F;default </span><br></pre></td></tr></table></figure>
+
+<p>添加index.php<br>更改一下注释为<br><img src="http://img.xzaslxr.xyz/img/20200412102858.png"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">location ~ \.php$ &#123;</span><br><span class="line">    include snippets&#x2F;fastcgi-php.conf;</span><br><span class="line"></span><br><span class="line">    # With php-fpm (or other unix sockets):</span><br><span class="line">    fastcgi_pass unix:&#x2F;var&#x2F;run&#x2F;php&#x2F;php7.4-fpm.sock;</span><br><span class="line">    # With php-cgi (or other tcp sockets):</span><br><span class="line">    #fastcgi_pass 127.0.0.1:9000;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>重启nginx和php</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo service nginx restart </span><br><span class="line">sudo service php7.4-fpm restart</span><br></pre></td></tr></table></figure>
+
+<p>测试</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">vim /<span class="keyword">var</span>/www/html/info.php</span><br><span class="line"><span class="meta">&lt;?php</span> phpinfo();<span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>访问<code>localhost/info</code></p>
+<p><code>/var/www/html</code>目录下,创建数据库连接文件<code>conmysql.php</code></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&quot;demo&quot;</span>;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&quot;connecting mysql &lt;br/&gt;&quot;</span>;</span><br><span class="line">    $link=mysqli_connect(<span class="string">&quot;127.0.0.1&quot;</span>,<span class="string">&quot;root&quot;</span>,<span class="string">&quot;password&quot;</span>);  <span class="comment">//mysqli_connect()</span></span><br><span class="line">    <span class="keyword">if</span>(!link)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">&quot;Sorry the connection of mysql failed!&quot;</span>;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">&quot;error message: &quot;</span>.mysql_error().<span class="string">&quot;&lt;br/&gt;&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> </span><br><span class="line">        <span class="keyword">echo</span> <span class="string">&quot;connect success!&quot;</span>.<span class="string">&quot;&lt;br/&gt;&quot;</span>;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>url <code>localhost/conmysql.php</code></p>
+<p>参考文章:<br><a target="_blank" rel="noopener" href="https://computingforgeeks.com/how-to-install-php-on-ubuntu/">php7.4 install</a><br><a target="_blank" rel="noopener" href="https://guides.wp-bullet.com/install-php-7-4-fpm-on-ubuntu-18-04/">Install PHP 7.4 FPM on Ubuntu 18.04</a><br><a target="_blank" rel="noopener" href="https://wiki.ubuntu.org.cn/Nginx">Ubuntu Nginx</a><br><a target="_blank" rel="noopener" href="https://www.digitalocean.com/community/tutorials/how-to-install-linux-nginx-mysql-php-lemp-stack-ubuntu-18-04">how-to-install-linux-nginx-mysql-php-lemp-stack-ubuntu-18-04</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_34039018/article/details/94437355">Ubuntu 16.04中配置nginx + php + mysql</a></p>
+<h3 id="模拟环境搭建"><a href="#模拟环境搭建" class="headerlink" title="模拟环境搭建"></a>模拟环境搭建</h3><p>在安全加固之前，可以先搭建模拟环境，同时也便于今后学习。这一点从<a target="_blank" rel="noopener" href="http://www.aiyuanzhen.com/index.php/archives/86/">Keefe_blog</a>学来。</p>
+<ul>
+<li>创建数据库</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">mysql - u root -p123</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> MyGuests (</span><br><span class="line">    <span class="keyword">id</span> <span class="built_in">INT</span>(<span class="number">6</span>) <span class="keyword">UNSIGNED</span> AUTO_INCREMENT PRIMARY <span class="keyword">KEY</span>, </span><br><span class="line">    firstname <span class="built_in">VARCHAR</span>(<span class="number">30</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">    lastname <span class="built_in">VARCHAR</span>(<span class="number">30</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">    email <span class="built_in">VARCHAR</span>(<span class="number">50</span>),</span><br><span class="line">    reg_date <span class="built_in">TIMESTAMP</span></span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> MyGuests (firstname, lastname, email) <span class="keyword">VALUES</span> (<span class="string">&#x27;John&#x27;</span>, <span class="string">&#x27;Doe&#x27;</span>, <span class="string">&#x27;john@example.com&#x27;</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> MyGuests (firstname, lastname, email) <span class="keyword">VALUES</span> (<span class="string">&#x27;Mary&#x27;</span>, <span class="string">&#x27;Moe&#x27;</span>, <span class="string">&#x27;mary@example.com&#x27;</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> MyGuests (firstname, lastname, email) <span class="keyword">VALUES</span> (<span class="string">&#x27;Julie&#x27;</span>, <span class="string">&#x27;Dooley&#x27;</span>, <span class="string">&#x27;julie@example.com&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>conmysql.php</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$servername  = <span class="string">&quot;127.0.0.1&quot;</span>;</span><br><span class="line">$username = <span class="string">&quot;root&quot;</span>;</span><br><span class="line">$password = <span class="string">&quot;password&quot;</span>;</span><br><span class="line">$dbname = <span class="string">&quot;demo&quot;</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">$conn = mysqli_connect($servername, $username, $password, $dbname);</span><br><span class="line"><span class="comment">// Check connection</span></span><br><span class="line"><span class="keyword">if</span> (!$conn) &#123;</span><br><span class="line">    <span class="keyword">die</span>(<span class="string">&quot;mysqli_connect_error: &quot;</span> . mysqli_connect_error());</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>index.php</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang=<span class="string">&quot;en&quot;</span> dir=<span class="string">&quot;ltr&quot;</span>&gt;</span><br><span class="line">  &lt;head&gt;</span><br><span class="line">    &lt;meta charset=<span class="string">&quot;utf-8&quot;</span>&gt;</span><br><span class="line">    &lt;title&gt;用户信息&lt;/title&gt;</span><br><span class="line">  &lt;/head&gt;</span><br><span class="line">  &lt;body&gt;</span><br><span class="line"><span class="meta">&lt;?php</span> </span><br><span class="line">@<span class="keyword">include</span>(<span class="string">&#x27;conmysql.php&#x27;</span>)</span><br><span class="line"></span><br><span class="line">$id = $_GET[<span class="string">&#x27;id&#x27;</span>];</span><br><span class="line"><span class="keyword">echo</span> $id;</span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>($id))</span><br><span class="line">&#123;</span><br><span class="line">    $sql = <span class="string">&quot;SELECT id, firstname, lastname FROM MyGuests where id = <span class="subst">$id</span>&quot;</span>;</span><br><span class="line">    $result = mysqli_query($conn, $sql);</span><br><span class="line">     </span><br><span class="line">    <span class="keyword">if</span> (mysqli_num_rows($result) &gt; <span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">        <span class="comment">// 输出数据</span></span><br><span class="line">        <span class="keyword">while</span>($row = mysqli_fetch_assoc($result))</span><br><span class="line">            &#123;</span><br><span class="line">            <span class="keyword">echo</span> <span class="string">&quot;id: &quot;</span> . $row[<span class="string">&quot;id&quot;</span>]. <span class="string">&quot; - Name: &quot;</span> . $row[<span class="string">&quot;firstname&quot;</span>]. <span class="string">&quot; &quot;</span> . $row[<span class="string">&quot;lastname&quot;</span>]. <span class="string">&quot;&lt;br&gt;&quot;</span>;</span><br><span class="line">         &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> </span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">&quot;no result&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&quot;please sent your id &quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line">mysqli_close($conn);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+<p>参考：<br><a target="_blank" rel="noopener" href="http://www.aiyuanzhen.com/index.php/archives/86/">搭建 LNMP 环境及一些安全加固总结</a><br><a target="_blank" rel="noopener" href="https://www.runoob.com/php">runoob_php</a></p>
+<h3 id="安全加固"><a href="#安全加固" class="headerlink" title="安全加固"></a>安全加固</h3><p>此部分的学习基本上源于网上的相关文档。分别从php、msyql、nginx、ubuntu四个部分进行安全加固。<br>参考文章：</p>
+<p><a target="_blank" rel="noopener" href="https://fengwenhua.top/archives/web%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE">web安全加固</a><br><a target="_blank" rel="noopener" href="https://github.com/php/php-src">https://github.com/php/php-src</a><br><a target="_blank" rel="noopener" href="https://www.alibabacloud.com/help/zh/faq-detail/50218.htm">PHP环境安全加固</a><br><a target="_blank" rel="noopener" href="http://www.aiyuanzhen.com/index.php/archives/86/">centos lnmp及安全加固</a></p>
+<p>[nginx安全配置 ][nginx安全配置 ]</p>
+<p><a target="_blank" rel="noopener" href="https://linuxeye.com/351.html">PHP网站在linux上的安全设置</a></p>
+<h4 id="Nginx-加固"><a href="#Nginx-加固" class="headerlink" title="Nginx 加固"></a>Nginx 加固</h4><h5 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h5><ul>
+<li>安装位置: /etc/nginx</li>
+<li>全局站点的配置文件: /etc/nginx/nginx.conf</li>
+<li>网站默认站点配置文件: /etc/nginx/sites-available/default</li>
+<li>需注意修改文件后，要重新加载</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo service nginx reload</span><br></pre></td></tr></table></figure>
+
+<h6 id="隐藏nginx版本号"><a href="#隐藏nginx版本号" class="headerlink" title="隐藏nginx版本号"></a>隐藏nginx版本号</h6><p>nginx版本信息的泄露,将便于黑客查找相应版本的漏洞并利用。</p>
+<p>修改 <code>/etc/nginx/nginx.conf</code>将<code>server_token off</code>前的注释删去即可。<br><img src="http://img.xzaslxr.xyz/img/20200412102937.png"></p>
+<p>此时报错后无版本信息</p>
+<p><img src="http://img.xzaslxr.xyz/img/232952.png"></p>
+<h6 id="禁止目录浏览"><a href="#禁止目录浏览" class="headerlink" title="禁止目录浏览"></a>禁止目录浏览</h6><p>打开目录浏览，会将文件和文件夹信息暴力出来，一般默认关闭</p>
+<p><code>/etc/nginx/sites-available/default</code></p>
+<p><img src="http://img.xzaslxr.xyz/img/233715.png" alt="233715"></p>
+<p>相应效果</p>
+<p><img src="http://img.xzaslxr.xyz/img/233941.png" alt="233941"></p>
+<p><code>autoindex off;</code>当关闭时，会显示403</p>
+<p><img src="http://img.xzaslxr.xyz/img/234212.png"></p>
+<h6 id="限制访问敏感文件"><a href="#限制访问敏感文件" class="headerlink" title="限制访问敏感文件"></a>限制访问敏感文件</h6><p>这类问题主要是源代码或敏感信息泄露。</p>
+<p>常见的有.DS_Store,.git,.ht,各类压缩文件(.rar  .zip    .7z   .tar.gz ),备份文件(.bak) ,.txt</p>
+<p>之外  还有  SVN导致文件泄露， WEB-INF/web.xml泄露  CVS泄漏</p>
+<p>修改文件为<code>/etc/nginx/sites-available/default</code></p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Restrict access to sensitive files in test folder</span></span><br><span class="line"><span class="attribute">location</span> <span class="regexp">~* \.(ht|git|bak|7z|zip|rar|txt)$</span> &#123;</span><br><span class="line">        <span class="attribute">deny</span> all;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这将禁止可以防止.ht    .git  .bak   .7z   .zip  .rar   .txt文件泄露，但最好的方法还是删除 不必要的文件</p>
+<p><img src="http://img.xzaslxr.xyz/img/002047.png"></p>
+<p>推荐:</p>
+<p><a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000013267839">location配置 </a></p>
+<h6 id="限制HTTP请求方式"><a href="#限制HTTP请求方式" class="headerlink" title="限制HTTP请求方式"></a>限制HTTP请求方式</h6><p>只允许GET|POST|HEAD 这三种方式请求，如果是之外的请求，则返回444状态码</p>
+<blockquote>
+<p>444 是 Nginx 定义的响应状态码，会立即断开连接，没有响应正文</p>
+</blockquote>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">if</span> (<span class="variable">$request_method</span> !<span class="regexp">~ ^(GET|HEAD|POST)$</span> ) &#123;</span><br><span class="line">    <span class="attribute">return</span>    <span class="number">444</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h6 id="Nginx降权启动"><a href="#Nginx降权启动" class="headerlink" title="Nginx降权启动"></a>Nginx降权启动</h6><p>在 <code>/etc/nginx/nginx.conf</code>  修改</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">user</span> nobody;</span><br></pre></td></tr></table></figure>
+
+<p>当然也可以使用普通用户，来防止ROOT分配权限过大。</p>
+<blockquote>
+<p>nobody在linux中是一个不能登陆的帐号，一些服务进程如apache，aquid等都采用一些特殊的帐号来运行，比如nobody,news,games等等，这是就可以防止程序本身有安全问题的时候，不会被黑客获得root权限</p>
+</blockquote>
+<h6 id="禁止文件上传目录执行php"><a href="#禁止文件上传目录执行php" class="headerlink" title="禁止文件上传目录执行php"></a>禁止文件上传目录执行php</h6><p>其配置方式与限制访问敏感文件一致<br>注意空格</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">location</span> <span class="regexp">~* ^/(attachments|data)/.*\.(php|php5)$</span> &#123;</span><br><span class="line">    <span class="attribute">deny</span> all;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h6 id="针对SQL注入的配置"><a href="#针对SQL注入的配置" class="headerlink" title="针对SQL注入的配置"></a>针对SQL注入的配置</h6><p>参考于:</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/lyj1101066558/article/details/54346053">https://blog.csdn.net/lyj1101066558/article/details/54346053</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.imydl.tech/lnmp/762.html">https://www.imydl.tech/lnmp/762.html</a></p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">if</span> (<span class="variable">$request_method</span> !<span class="regexp">~* GET|POST)</span> &#123; <span class="attribute">return</span> <span class="number">444</span>; &#125;</span><br><span class="line"><span class="comment">#使用444错误代码可以更加减轻服务器负载压力。</span></span><br><span class="line"><span class="comment">#防止SQL注入</span></span><br><span class="line"><span class="attribute">if</span> (<span class="variable">$query_string</span> <span class="regexp">~* (\$|&#x27;|--|[+|(%20)]union[+|(%20)]|[+|(%20)]insert[+|(%20)]|[+|(%20)]drop[+|(%20)]|[+|(%20)]truncate[+|(%20)]|[+|(%20)]update[+|(%20)]|[+|(%20)]from[+|(%20)]|[+|(%20)]grant[+|(%20)]|[+|(%20)]exec[+|(%20)]|[+|(%20)]where[+|(%20)]|[+|(%20)]select[+|(%20)]|[+|(%20)]and[+|(%20)]|[+|(%20)]or[+|(%20)]|[+|(%20)]count[+|(%20)]|[+|(%20)]exec[+|(%20)]|[+|(%20)]chr[+|(%20)]|[+|(%20)]mid[+|(%20)]|[+|(%20)]like[+|(%20)]|[+|(%20)]iframe[+|(%20)]|[\&lt;|%3c]script[\&gt;|%3e]|javascript|alert|webscan|dbappsecurity|style|confirm\(|innerhtml|innertext)(.*)$)</span> &#123; <span class="attribute">return</span> <span class="number">555</span>; &#125;</span><br><span class="line"><span class="attribute">if</span> (<span class="variable">$uri</span> <span class="regexp">~* (/~).*)</span> &#123; <span class="attribute">return</span> <span class="number">501</span>; &#125;</span><br><span class="line"><span class="attribute">if</span> (<span class="variable">$uri</span> <span class="regexp">~* (\\x.))</span> &#123; <span class="attribute">return</span> <span class="number">501</span>; &#125;</span><br><span class="line"><span class="comment">#防止SQL注入 </span></span><br><span class="line">if ($query_string ~* &quot;[;&#x27;&lt;&gt;].*&quot;) &#123; return 509; &#125;</span><br><span class="line"><span class="attribute">if</span> (<span class="variable">$request_uri</span> <span class="regexp">~ &quot;</span> <span class="string">&quot;) &#123; return 509; &#125;</span></span><br><span class="line"><span class="string">if (<span class="variable">$request_uri</span> ~ (\/\.+)) &#123; return 509; &#125;</span></span><br><span class="line"><span class="string">if (<span class="variable">$request_uri</span> ~ (\.+\/)) &#123; return 509; &#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">#if (<span class="variable">$uri</span> ~* (insert|select|delete|update|count|master|truncate|declare|exec|\*|\&#x27;)(.*)$ ) &#123; return 503; &#125;</span></span><br><span class="line"><span class="string">#防止SQL注入</span></span><br><span class="line"><span class="string">if (<span class="variable">$request_uri</span> ~* &quot;</span>(cost\()|(concat\()<span class="string">&quot;) &#123; return 504; &#125;</span></span><br><span class="line"><span class="string">if (<span class="variable">$request_uri</span> ~* &quot;</span>[+|(%<span class="number">20</span>)]union[+|(%<span class="number">20</span>)]<span class="string">&quot;) &#123; return 504; &#125;</span></span><br><span class="line"><span class="string">if (<span class="variable">$request_uri</span> ~* &quot;</span>[+|(%<span class="number">20</span>)]and[+|(%<span class="number">20</span>)]<span class="string">&quot;) &#123; return 504; &#125;</span></span><br><span class="line"><span class="string">if (<span class="variable">$request_uri</span> ~* &quot;</span>[+|(%<span class="number">20</span>)]<span class="literal">select</span>[+|(%<span class="number">20</span>)]<span class="string">&quot;) &#123; return 504; &#125;</span></span><br><span class="line"><span class="string">if (<span class="variable">$request_uri</span> ~* &quot;</span>[+|(%<span class="number">20</span>)]or[+|(%<span class="number">20</span>)]<span class="string">&quot;) &#123; return 504; &#125;</span></span><br><span class="line"><span class="string">if (<span class="variable">$request_uri</span> ~* &quot;</span>[+|(%<span class="number">20</span>)]delete[+|(%<span class="number">20</span>)]<span class="string">&quot;) &#123; return 504; &#125;</span></span><br><span class="line"><span class="string">if (<span class="variable">$request_uri</span> ~* &quot;</span>[+|(%<span class="number">20</span>)]update[+|(%<span class="number">20</span>)]<span class="string">&quot;) &#123; return 504; &#125;</span></span><br><span class="line"><span class="string">if (<span class="variable">$request_uri</span> ~* &quot;</span>[+|(%<span class="number">20</span>)]insert[+|(%<span class="number">20</span>)]<span class="string">&quot;) &#123; return 504; &#125;</span></span><br><span class="line"><span class="string">if (<span class="variable">$query_string</span> ~ &quot;</span>(&lt;|%3C).*<span class="regexp">script.*</span>(&gt;|%3E)<span class="string">&quot;) &#123; return 505; &#125;</span></span><br><span class="line">if ($query_string ~ &quot;GLOBALS(=|\[|\%[0-9A-Z]&#123;0,2&#125;)&quot;) &#123; return 505; &#125;</span><br><span class="line">if ($query_string ~ &quot;_REQUEST(=|\[|\%[0-9A-Z]&#123;0,2&#125;)&quot;) &#123; return 505; &#125;</span><br><span class="line"><span class="attribute">if</span> (<span class="variable">$query_string</span> <span class="regexp">~ &quot;proc/self/environ&quot;)</span> &#123; <span class="attribute">return</span> <span class="number">505</span>; &#125;</span><br><span class="line">if ($query_string ~ &quot;mosConfig_[a-zA-Z_]&#123;1,21&#125;(=|\%3D)&quot;) &#123; return 505; &#125;</span><br><span class="line"><span class="attribute">if</span> (<span class="variable">$query_string</span> <span class="regexp">~ &quot;base64_(en|de)code\(.*\)&quot;)</span> &#123; <span class="attribute">return</span> <span class="number">505</span>; &#125;</span><br><span class="line"><span class="attribute">if</span> (<span class="variable">$query_string</span> <span class="regexp">~ &quot;[a-zA-Z0-9_]=http://&quot;)</span> &#123; <span class="attribute">return</span> <span class="number">506</span>; &#125;</span><br><span class="line"><span class="attribute">if</span> (<span class="variable">$query_string</span> <span class="regexp">~ &quot;[a-zA-Z0-9_]=(\.\.//?)+&quot;)</span> &#123; <span class="attribute">return</span> <span class="number">506</span>; &#125;</span><br><span class="line"><span class="attribute">if</span> (<span class="variable">$query_string</span> <span class="regexp">~ &quot;[a-zA-Z0-9_]=/([a-z0-9_.]//?)+&quot;)</span> &#123; <span class="attribute">return</span> <span class="number">506</span>; &#125;</span><br><span class="line"><span class="attribute">if</span> (<span class="variable">$query_string</span> <span class="regexp">~ &quot;b(ultram|unicauca|valium|viagra|vicodin|xanax|ypxaieo)b&quot;)</span> &#123; <span class="attribute">return</span> <span class="number">507</span>; &#125;</span><br><span class="line"><span class="attribute">if</span> (<span class="variable">$query_string</span> <span class="regexp">~ &quot;b(erections|hoodia|huronriveracres|impotence|levitra|libido)b&quot;)</span> &#123;<span class="attribute">return</span> <span class="number">507</span>; &#125;</span><br><span class="line"><span class="attribute">if</span> (<span class="variable">$query_string</span> <span class="regexp">~ &quot;b(ambien|bluespill|cialis|cocaine|ejaculation|erectile)b&quot;)</span> &#123; <span class="attribute">return</span> <span class="number">507</span>; &#125;</span><br><span class="line"><span class="attribute">if</span> (<span class="variable">$query_string</span> <span class="regexp">~ &quot;b(lipitor|phentermin|pro[sz]ac|sandyauer|tramadol|troyhamby)b&quot;)</span> &#123; <span class="attribute">return</span> <span class="number">507</span>; &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+
+<h4 id="PHP-加固"><a href="#PHP-加固" class="headerlink" title="PHP 加固"></a>PHP 加固</h4><h5 id="配置文件-1"><a href="#配置文件-1" class="headerlink" title="配置文件"></a>配置文件</h5><p>php 的 配置文件为 php.ini,其具体位置可通过phpinfo()查询(/etc/php/7.4/fpm/php.ini)。</p>
+<h6 id="关于PHP的安全模式"><a href="#关于PHP的安全模式" class="headerlink" title="关于PHP的安全模式"></a>关于PHP的安全模式</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">safe_mode &#x3D; on </span><br></pre></td></tr></table></figure>
+
+<p>但safe_mode早在php5.3起废除，并将自 PHP 5.4.0 起移除。当然也不排除有些网站还会使用php5.3之前的版本.<br><a target="_blank" rel="noopener" href="https://www.php.net/manual/zh/features.safe-mode.php">具体信息features.safe-mode.php</a></p>
+<h6 id="禁用不安全的PHP-函数"><a href="#禁用不安全的PHP-函数" class="headerlink" title="禁用不安全的PHP 函数"></a>禁用不安全的PHP 函数</h6><p> 我这边php.ini中之前有默认设置</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">disable_functions = pcntl_alarm,pcntl_fork,pcntl_waitpid,pcntl_wait,pcntl_wifexited,pcntl_wifstopped,pcntl_wifsignaled,pcntl_wifcontinued,pcntl_wexitstatus,pcntl_wtermsig,pcntl_wstopsig,pcntl_signal,pcntl_signal_get_handler,pcntl_signal_dispatch,pcntl_get_last_error,pcntl_strerror,pcntl_sigprocmask,pcntl_sigwaitinfo,pcntl_sigtimedwait,pcntl_exec,pcntl_getpriority,pcntl_setpriority,pcntl_async_signals,pcntl_unshare,</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>然后添加了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">passthru,exec,system,chroot,chgrp,chown,shell_exec,proc_open,proc_get_status,ini_alter,ini_restore,dl,openlog,syslog,readlink,symlink,popepassthru,stream_socket_server,fsocket,phpinfo</span><br></pre></td></tr></table></figure>
+
+<h6 id="关闭错误显示"><a href="#关闭错误显示" class="headerlink" title="关闭错误显示"></a>关闭错误显示</h6><p>display_errors = Off<br>避免因为错误而泄露相关信息</p>
+<h6 id="设置错误日志"><a href="#设置错误日志" class="headerlink" title="设置错误日志"></a>设置错误日志</h6><p> log_errors = On<br> <a target="_blank" rel="noopener" href="https://www.php.net/manual/zh/errorfunc.configuration.php">错误和日志记录配置选项</a></p>
+<h6 id="Session-安全配置可以查看"><a href="#Session-安全配置可以查看" class="headerlink" title="Session 安全配置可以查看"></a>Session 安全配置可以查看</h6><p><a target="_blank" rel="noopener" href="https://www.php.net/manual/zh/session.security.ini.php">session.security.ini.php</a><br><code>session.cookie_httponly=On</code><br>禁止 JavaScript 访问会话 cookie。 此设置项可以保护 cookie 不被 JavaScript 窃取。推荐会话ID cookie 设置 httponly 为 On。</p>
+<h6 id="关闭PHP信息"><a href="#关闭PHP信息" class="headerlink" title="关闭PHP信息"></a>关闭PHP信息</h6><p>expose_php = Off<br><a target="_blank" rel="noopener" href="https://www.php.net/manual/zh/ini.core.php#ini.expose-php">Note:Since PHP 5.5.0 these guids and the php_logo_guid() function have been removed from PHP and the guids are replaced with data URIs instead. Thus accessing the PHP logo via appending the guid to the URL no longer works. Similarly, turning expose_php off will not affect seeing the PHP logo in phpinfo().</a></p>
+<h6 id="限制跨目录访问"><a href="#限制跨目录访问" class="headerlink" title="限制跨目录访问"></a>限制跨目录访问</h6><p>open_basedir = /www/<br>默认是所有文件<br>将PHP可以访问的文件限制在指定的目录树中，包括文件本身。这个指令不受安全模式是开启还是关闭的影响。<a target="_blank" rel="noopener" href="https://www.php.net/manual/zh/ini.core.php#ini.open-basedir">官方手册描述</a><br>Note:</p>
+<blockquote>
+<p>As of PHP 5.3.0 open_basedir can be tightened at run-time. This means that if open_basedir is set to /www/ in php.ini a script can tighten the configuration to /www/tmp/ at run-time with ini_set(). When listing several directories, you can use the PATH_SEPARATOR constant as a separator regardless of the operating system.</p>
+</blockquote>
+<h6 id="上传目录限制"><a href="#上传目录限制" class="headerlink" title="上传目录限制"></a>上传目录限制</h6><p>upload_tmp_dir = /tmp<br>执行文件上载时用于存储文件的临时目录。必须是可写的任何用户PHP正在运行。如果没有指定，PHP将使用系统的默认值 .  其他有关upload 的还有<a target="_blank" rel="noopener" href="https://www.php.net/manual/zh/ini.core.php#ini.upload-tmp-dir"> file_uploads upload_max_filesize   max_file_uploads </a></p>
+<h6 id="SQL注入防护"><a href="#SQL注入防护" class="headerlink" title="SQL注入防护"></a>SQL注入防护</h6><p><a target="_blank" rel="noopener" href="https://www.php.net/manual/zh/info.configuration.php#ini.magic-quotes-gpc">magci_quotes_gps </a><br>为 GPC (Get/Post/Cookie) 操作设置 magic_quotes 状态。 当 magic_quotes 为 on，所有的 ‘ (单引号)、” (双引号)、\（反斜杠）和 NUL’s 被一个反斜杠自动转义。适用版本:在 PHP &lt;= 4.2.3 是 PHP_INI_ALL，在 PHP 5.4.0 中被移除<br>Note:</p>
+<blockquote>
+<p>如果 magic_quotes_sybase 也是 ON，它会完全覆盖 magic_quotes_gpc。 两个指令都启用意味着只有单引号被转义为 ‘’。 双引号、反斜杠和 NUL’s 不会被转义。</p>
+</blockquote>
+<h4 id="mysql加固"><a href="#mysql加固" class="headerlink" title="mysql加固"></a>mysql加固</h4><p>参考:</p>
+<p><a target="_blank" rel="noopener" href="https://www.alibabacloud.com/help/zh/faq-detail/49568.htm">MySQL服务安全加固</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/guoke-boy/p/12391441.html">mysql用户管理</a></p>
+<h6 id="账户安全"><a href="#账户安全" class="headerlink" title="账户安全"></a>账户安全</h6><ul>
+<li>禁止使用管理员权限运行</li>
+</ul>
+<p>以普通账户安全运行mysqld,禁止以管理员账号权限来运行MYSQL 服务，</p>
+<p>配置文件<code>/etc/mysql/my.cnf</code> 为全局选项, <code>~/.my.cnf</code> 为用户特定选项</p>
+<ul>
+<li><ul>
+<li><p>修改为</p>
+</li>
+<li><pre><code class="mysql">[mysql.server]
+user=mysql
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">* 避免不同用户间共享账号</span><br><span class="line"></span><br><span class="line">* * 创建用户 xzlxr  密码 xzlxr2333 </span><br><span class="line"></span><br><span class="line">    &#96;&#96;&#96;mysql</span><br><span class="line">    GRANT USAGE ON *.* TO &#39;xzlxr&#39;@&#39;%&#39; IDENTIFIED BY &#39;any@hin$&#39; WITH GRANT OPTION;</span><br></pre></td></tr></table></figure>
+
+刷新生效
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">FLUSH PRIVILEGES;</span><br></pre></td></tr></table></figure>
+
+查看账户
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select host,user,authentication_string from mysql.user;</span><br></pre></td></tr></table></figure>
+
+
+</code></pre>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p>切换账号</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql -u xzlxr -p</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>删除账号</p>
+<p>使用DROP USER 可以删除一个或多个MYSQL账户。使用 DROP USER 语句必须拥有 MySQL 中的 MySQL 数据库的 DELETE 权限或全局 CREATE USER 权限。在 DROP USER 语句的使用中，若没有明确地给出账户的主机名，则该主机名默认为“%”</p>
+<p>没有权限时的ERROR</p>
+<blockquote>
+<p>ERROR 1227 (42000): Access denied; you need (at least one of) the CREATE USER privilege(s) for this operation</p>
+</blockquote>
+</li>
+</ul>
+<h6 id="口令"><a href="#口令" class="headerlink" title="口令"></a>口令</h6><p>检查账户默认密码和弱密码。口令长度需要至少八位，并包括数字、小写字母、大写字母和特殊符号四类中的至少两种类型，且五次以内不得设置相同的口令。密码应至少每 90 天进行一次更换。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">update user set  authentication_string&#x3D;password(&#39;any@hin$&#39;) where user&#x3D;&quot;xzlxr&quot;;</span><br><span class="line">flush privileges;</span><br></pre></td></tr></table></figure>
+
+<h6 id="授权"><a href="#授权" class="headerlink" title="授权"></a>授权</h6><p>在数据库权限配置能力范围内，根据用户的业务需要，配置其所需的最小权限。</p>
+<ul>
+<li><p>查看数据库授权情况</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">use mysql;</span><br><span class="line">select * from user;</span><br><span class="line">select * from db;</span><br><span class="line">select * from host;</span><br><span class="line">select * from tables_priv;</span><br><span class="line">select * from columns_priv;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>更新权限，为xzlxr用户添加SELECT 权限</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT Host,User,Select_priv,Grant_priv from user where user &#x3D; &#39;xzlxr&#39;; #查看权限</span><br><span class="line">update user set Select_priv &#x3D; &quot;Y&quot; where user&#x3D;&#39;xzlxr&#39;;</span><br><span class="line">flush privileges</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>通过 revoke 命令回收不必要的或危险的授权。</p>
+<p>可以使用<code>help revoke </code>来查看使用</p>
+</li>
+</ul>
+</li>
+</ul>
+<h6 id="开启日志审核功能"><a href="#开启日志审核功能" class="headerlink" title="开启日志审核功能"></a>开启日志审核功能</h6><p>数据库应配置日志功能，便于记录运行状况和操作行为。</p>
+<p>MySQL服务有以下几种日志类型：</p>
+<table>
+<thead>
+<tr>
+<th><strong>错误日志</strong></th>
+<th>-log-err</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>查询日志</strong></td>
+<td>-log （可选）</td>
+</tr>
+<tr>
+<td><strong>慢查询日志</strong></td>
+<td>-log-slow-queries （可选）</td>
+</tr>
+<tr>
+<td><strong>更新日志</strong></td>
+<td>-log-update</td>
+</tr>
+<tr>
+<td><strong>二进制日志</strong></td>
+<td>-log-bin</td>
+</tr>
+</tbody></table>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#Enter a name for the binary log.</span><br><span class="line">#log-bin&#x3D; mysql_bin</span><br><span class="line">#Enter a name for the query log file. </span><br><span class="line">#log&#x3D; </span><br><span class="line">#Enter a name for the error log file. </span><br><span class="line">log-error&#x3D;&#x2F;var&#x2F;log&#x2F;mysql&#x2F;error.log</span><br><span class="line">#Enter a name for the update log file. Otherwise a default name will be </span><br><span class="line">#log-update&#x3D;</span><br></pre></td></tr></table></figure>
+
+<p>日志查询操作说明</p>
+<p>执行<code>show variables like &#39;log_%&#39;;</code>命令可查看所有的 log。</p>
+<p>此处已经添加error.log </p>
+<h6 id="my-cnf的其他配置"><a href="#my-cnf的其他配置" class="headerlink" title="my.cnf的其他配置"></a>my.cnf的其他配置</h6><p>其他配置推荐看这篇</p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/64871865">Mysql配置文件/etc/my.cnf解析 </a></p>
+<h2 id="搭建-0x02"><a href="#搭建-0x02" class="headerlink" title="搭建 0x02"></a>搭建 0x02</h2><h3 id="Apache"><a href="#Apache" class="headerlink" title="Apache"></a>Apache</h3><h4 id="安装-Apache"><a href="#安装-Apache" class="headerlink" title="安装 Apache"></a>安装 Apache</h4><blockquote>
+<p>apache2的安装我还是安装在原ubuntu上的</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install apache2</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h4 id="配置文件-2"><a href="#配置文件-2" class="headerlink" title="配置文件"></a>配置文件</h4><ul>
+<li>apache2的配置文件在</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/etc/apache2/apache2.conf</span><br></pre></td></tr></table></figure>
+
+<p>同时在apache2.conf 描述了配置文件,apache2.conf 为一个主配置文件，通过including 方式包含其他配置文件.如果需要更多详细信息可以看官网</p>
+<p><a target="_blank" rel="noopener" href="http://httpd.apache.org/docs/2.4/">apache HTTP 服务器 2.4 版本</a></p>
+<p>或<a target="_blank" rel="noopener" href="https://blog.csdn.net/stay_zezo/article/details/80212552">apache2.conf详讲</a></p>
+<p>此外，在<code>/usr/share/doc/apache2/README.Debian.gz</code>中描述了apache2在Debain中的特殊点</p>
+<blockquote>
+<p>两个文件都写的很仔细，好评</p>
+</blockquote>
+<ul>
+<li>apache2的目录</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#   /etc/apache2/</span></span><br><span class="line"><span class="comment">#   |-- apache2.conf</span></span><br><span class="line"><span class="comment">#   |   `--  ports.conf</span></span><br><span class="line"><span class="comment">#   |-- mods-enabled</span></span><br><span class="line"><span class="comment">#   |   |-- *.load</span></span><br><span class="line"><span class="comment">#   |   `-- *.conf</span></span><br><span class="line"><span class="comment">#   |-- conf-enabled</span></span><br><span class="line"><span class="comment">#   |   `-- *.conf</span></span><br><span class="line"><span class="comment">#   `-- sites-enabled</span></span><br><span class="line"><span class="comment">#       `-- *.conf</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>端口配置文件为<code>/etc/apache2/ports.conf</code></li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># If you just change the port or add more ports here, you will likely also</span></span><br><span class="line"><span class="comment"># have to change the VirtualHost statement in</span></span><br><span class="line"><span class="comment"># /etc/apache2/sites-enabled/000-default.conf</span></span><br><span class="line"></span><br><span class="line">Listen 80</span><br><span class="line"></span><br><span class="line">&lt;IfModule ssl_module&gt;</span><br><span class="line">        Listen 443</span><br><span class="line">&lt;/IfModule&gt;</span><br><span class="line"></span><br><span class="line">&lt;IfModule mod_gnutls.c&gt;</span><br><span class="line">        Listen 443</span><br><span class="line">&lt;/IfModule&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment"># vim: syntax=apache ts=4 sw=4 sts=4 sr noet</span></span><br></pre></td></tr></table></figure>
+
+<p><code>mods-availablel</code>和<code>mods-enabled</code>文件夹：这两个文件夹里面存放的都是一些apache2的读写操作等模块，<code>mods-enabled</code>是apache2服务器启动配置的文件，<code>mods-available</code>是apache2服务器可以用的配置文件</p>
+<p>如果需要添加功能模块，可在<code>mods-available</code>中建立软连接到<code>mods-enabled</code>.</p>
+<ul>
+<li><code>site-available</code>和<code>site-enabled </code>是网站根目录的配置文件.</li>
+</ul>
+<p>同样在<code>site-enabled </code>中保留的是<code>site-available</code>的软连接</p>
+<p>在 <code>site-available</code>有两个文件</p>
+<table>
+<thead>
+<tr>
+<th>配置文件名称</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>000-default.conf</td>
+<td>使用http协议网站的默认网站配置文件</td>
+</tr>
+<tr>
+<td>default-ss.conf</td>
+<td>https协议网站才使用的默认网站配置文件,使用的话，还需申请SSL证书。</td>
+</tr>
+</tbody></table>
+<ul>
+<li><code>000-default.conf</code></li>
+</ul>
+<p>所以主要的配置工作是在<code>000-default.conf</code>中</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">&lt;VirtualHost *:80&gt;</span><br><span class="line">    <span class="comment"># The ServerName directive sets the request scheme, hostname and port that</span></span><br><span class="line">    <span class="comment"># the server uses to identify itself. This is used when creating</span></span><br><span class="line">    <span class="comment"># redirection URLs. In the context of virtual hosts, the ServerName</span></span><br><span class="line">    <span class="comment"># specifies what hostname must appear in the request&#x27;s Host: header to</span></span><br><span class="line">    <span class="comment"># match this virtual host. For the default virtual host (this file) this</span></span><br><span class="line">    <span class="comment"># value is not decisive as it is used as a last resort host regardless.</span></span><br><span class="line">    <span class="comment"># However, you must set it for any further virtual host explicitly.</span></span><br><span class="line">    <span class="comment">#ServerName www.example.com</span></span><br><span class="line"></span><br><span class="line">    ServerAdmin webmaster@localhost</span><br><span class="line">    DocumentRoot /var/www/html</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Available loglevels: trace8, ..., trace1, debug, info, notice, warn,</span></span><br><span class="line">    <span class="comment"># error, crit, alert, emerg.</span></span><br><span class="line">    <span class="comment"># It is also possible to configure the loglevel for particular</span></span><br><span class="line">    <span class="comment"># modules, e.g.</span></span><br><span class="line">    <span class="comment">#LogLevel info ssl:warn</span></span><br><span class="line"></span><br><span class="line">    ErrorLog <span class="variable">$&#123;APACHE_LOG_DIR&#125;</span>/error.log</span><br><span class="line">    CustomLog <span class="variable">$&#123;APACHE_LOG_DIR&#125;</span>/access.log combined</span><br><span class="line"></span><br><span class="line">    <span class="comment"># For most configuration files from conf-available/, which are</span></span><br><span class="line">    <span class="comment"># enabled or disabled at a global level, it is possible to</span></span><br><span class="line">    <span class="comment"># include a line for only one particular virtual host. For example the</span></span><br><span class="line">    <span class="comment"># following line enables the CGI configuration for this host only</span></span><br><span class="line">    <span class="comment"># after it has been globally disabled with &quot;a2disconf&quot;.</span></span><br><span class="line">    <span class="comment">#Include conf-available/serve-cgi-bin.conf</span></span><br><span class="line">&lt;/VirtualHost&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment"># vim: syntax=apache ts=4 sw=4 sts=4 sr noet</span></span><br></pre></td></tr></table></figure>
+
+
+
+<pre><code>ServerAdmin webmaster@localhost
+#设置站点邮箱
+DocumentRoot /var/www/html
+#DocumentRoot 为该站点的根目录</code></pre>
+<ul>
+<li>在<code>etc/apache2/mods-available/dir.conf</code>中，DirectoryIndex为Apache默认起始页面</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;IfModule mod_dir.c&gt;</span><br><span class="line">        DirectoryIndex index.html index.cgi index.pl index.php index.xhtml index.htm</span><br><span class="line">&lt;/IfModule&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment"># vim: syntax=apache ts=4 sw=4 sts=4 sr noet</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>配置中添加php配置</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ln -s /etc/apache2/conf-available/php7.4-fpm.conf  /etc/apache2/conf-enabled/php7.4-fpm.conf</span><br></pre></td></tr></table></figure>
+
+<p>软连接即可</p>
+<p>访问<code>index.php</code></p>
+<p><img src="http://img.xzaslxr.xyz/img/161955.png"></p>
+<h4 id="安全加固-1"><a href="#安全加固-1" class="headerlink" title="安全加固"></a>安全加固</h4><p>参考:<br><a target="_blank" rel="noopener" href="http://httpd.apache.org/docs/2.4/misc/security_tips.html">Apache2 security_tips</a><br><a target="_blank" rel="noopener" href="https://www.alibabacloud.com/help/zh/faq-detail/52981.htm">Apache服务安全加固</a><br>推荐:<a target="_blank" rel="noopener" href="http://httpd.apache.org/lists.html#http-announce">http-announce</a>以获取Apache信息</p>
+<p><del>网上对这部分基本相识</del></p>
+<h4 id="账号设置"><a href="#账号设置" class="headerlink" title="账号设置"></a>账号设置</h4><p>根据需要，为 Apache 服务创建用户及用户组。如果没有设置用户和组(默认是www-data)，则新建用户，并在 Apache 配置文件中进行指定。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">groupadd apache #创建 Apache 用户组</span><br><span class="line">useradd apache -g apache #创建 Apache 用户并加入 Apache 用户组</span><br></pre></td></tr></table></figure>
+
+<p>根据在<code>apache2.conf</code>中的信息</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> These need to be <span class="built_in">set</span> <span class="keyword">in</span> /etc/apache2/envvars</span></span><br><span class="line">User $&#123;APACHE_RUN_USER&#125;</span><br><span class="line">Group $&#123;APACHE_RUN_GROUP&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>之后再修改<code>/etc/apache2/envvars</code>文件(注此为Ubuntu系统)</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> APACHE_RUN_USER=apache</span><br><span class="line"><span class="built_in">export</span> APACHE_RUN_GROUP=apache</span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://askubuntu.com/questions/873839/what-is-the-www-data-user">what-is-the-www-data-user</a></p>
+<h6 id="授权设置"><a href="#授权设置" class="headerlink" title="授权设置"></a>授权设置</h6><ul>
+<li>严格控制 Apache 主目录的访问权限，非超级用户不能修改该目录中的内容。</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> ServerRoot: The top of the directory tree under <span class="built_in">which</span> the server<span class="string">&#x27;s</span></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> configuration, error, and <span class="built_in">log</span> files are kept.</span></span><br><span class="line"><span class="meta">#</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> NOTE!  If you intend to place this on an NFS (or otherwise network)</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> mounted filesystem <span class="keyword">then</span> please <span class="built_in">read</span> the Mutex documentation (available</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> at &lt;URL:http://httpd.apache.org/docs/2.4/mod/core.html<span class="comment">#mutex&gt;);</span></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> you will save yourself a lot of trouble.</span></span><br><span class="line"><span class="meta">#</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> Do NOT add a slash at the end of the directory path.</span></span><br><span class="line"><span class="meta">#</span></span><br><span class="line"><span class="meta">#</span><span class="bash">ServerRoot <span class="string">&quot;/etc/apache2&quot;</span></span></span><br></pre></td></tr></table></figure>
+
+<p>一般而言，默认配置已经符合要求。</p>
+<blockquote>
+<p>这里有个疑惑为什么给的配置文件中给ServerRoot注释掉？</p>
+<p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/16701761/apache2-and-serverroot-directive-in-ubuntu/16703035#16703035?newreg=4e42a6badd0e46bbbe8a82e1eddc1f3c">answer</a></p>
+</blockquote>
+<ul>
+<li>严格设置配置文件和日志文件的权限，防止未授权访问。</li>
+</ul>
+<p><code>/etc/apache/</code> 默认属主可读写，其他用户拥有只读权限。</p>
+<blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;</span><span class="bash">total 96</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash">drwxr-xr-x   8 root root  4096 Mar 14 10:15 .</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash">drwxr-xr-x 132 root root 12288 Mar 14 09:14 ..</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash">-rw-r--r--   1 root root  7224 Dec  3 07:55 apache2.conf</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash">drwxr-xr-x   2 root root  4096 Mar 14 21:05 conf-available</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash">drwxr-xr-x   2 root root  4096 Mar 14 21:07 conf-enabled</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash">-rw-r--r--   1 root root  1782 Jul 16  2019 envvars</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash">-rw-r--r--   1 root root 31063 Jul 16  2019 magic</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash">drwxr-xr-x   2 root root 12288 Mar 14 21:05 mods-available</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash">drwxr-xr-x   2 root root  4096 Mar 14 21:05 mods-enabled</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash">-rw-r--r--   1 root root   320 Jul 16  2019 ports.conf</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash">drwxr-xr-x   2 root root  4096 Mar 14 01:37 sites-available</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash">drwxr-xr-x   2 root root  4096 Mar 14 01:37 sites-enabled</span></span><br></pre></td></tr></table></figure>
+</blockquote>
+<p>将<code>apache2.conf</code>改为600权限，即仅ROOT用户读写</p>
+<blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;</span><span class="bash">drwxr-xr-x   8 root root  4096 Mar 14 10:15 .</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash">drwxr-xr-x 132 root root 12288 Mar 14 09:14 ..</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash">-rw-------   1 root root  7224 Dec  3 07:55 apache2.conf</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash">drwxr-xr-x   2 root root  4096 Mar 14 21:05 conf-available</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash">drwxr-xr-x   2 root root  4096 Mar 14 21:07 conf-enabled</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash">-rw-r--r--   1 root root  1782 Jul 16  2019 envvars</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash">-rw-r--r--   1 root root 31063 Jul 16  2019 magic</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash">drwxr-xr-x   2 root root 12288 Mar 14 21:05 mods-available</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash">drwxr-xr-x   2 root root  4096 Mar 14 21:05 mods-enabled</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash">-rw-r--r--   1 root root   320 Jul 16  2019 ports.conf</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash">drwxr-xr-x   2 root root  4096 Mar 14 01:37 sites-available</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash">drwxr-xr-x   2 root root  4096 Mar 14 01:37 sites-enabled</span></span><br></pre></td></tr></table></figure>
+
+
+</blockquote>
+<h6 id="日志设置"><a href="#日志设置" class="headerlink" title="日志设置"></a>日志设置</h6><p>Apache 设备应配置日志功能，对运行错误、用户访问等事件进行记录，记录内容包括时间，用户使用的 IP 地址等内容,它们也会让您了解对服务器引发的攻击，并允许您检查是否存在必要的安全级别。</p>
+<ul>
+<li>error.log</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> ErrorLog: The location of the error <span class="built_in">log</span> file.</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> If you <span class="keyword">do</span> not specify an ErrorLog directive within a &lt;VirtualHost&gt;</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> container, error messages relating to that virtual host will be</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> logged here.  If you *<span class="keyword">do</span>* define an error logfile <span class="keyword">for</span> a &lt;VirtualHost&gt;</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> container, that host<span class="string">&#x27;s errors will be logged there and not here.</span></span></span><br><span class="line"><span class="meta">#</span></span><br><span class="line">ErrorLog $&#123;APACHE_LOG_DIR&#125;/error.log</span><br></pre></td></tr></table></figure>
+
+<p><code>$&#123;APACHE_LOG_DIR&#125;</code>在<code>envvars</code>文件有描述</p>
+<blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> Only /var/<span class="built_in">log</span>/apache2 is handled by /etc/logrotate.d/apache2.</span></span><br><span class="line">export APACHE_LOG_DIR=/var/log/apache2$SUFFIX</span><br></pre></td></tr></table></figure>
+</blockquote>
+<ul>
+<li><code>LogLevel</code>命令用于调整记录在错误日志中的信息的详细程度，建议设置为 notice。日志的级别，默认是 warn 级别，notice 级别比较详细，但在实际中由于日志会占用大量硬盘空间。</li>
+</ul>
+<blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> LogLevel: Control the severity of messages logged to the error_log.</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> Available values: trace8, ..., trace1, debug, info, notice, warn,</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> error, crit, alert, emerg.</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> It is also possible to configure the <span class="built_in">log</span> level <span class="keyword">for</span> particular modules, e.g.</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> <span class="string">&quot;LogLevel info ssl:warn&quot;</span></span></span><br><span class="line"><span class="meta">#</span></span><br><span class="line">LogLevel warn</span><br></pre></td></tr></table></figure>
+</blockquote>
+<ul>
+<li>access_log</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="http://httpd.apache.org/docs/2.4/logs.html#accesslog">http://httpd.apache.org/docs/2.4/logs.html#accesslog</a></p>
+<p>默认是</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> The following directives define some format nicknames <span class="keyword">for</span> use with</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> a CustomLog directive.</span></span><br><span class="line"><span class="meta">#</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> These deviate from the Common Log Format definitions <span class="keyword">in</span> that they use %O</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> (the actual bytes sent including headers) instead of %b (the size of the</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> requested file), because the latter makes it impossible to detect partial</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> requests.</span></span><br><span class="line"><span class="meta">#</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> Note that the use of %&#123;X-Forwarded-For&#125;i instead of %h is not recommended.</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> Use mod_remoteip instead.</span></span><br><span class="line"><span class="meta">#</span></span><br><span class="line">LogFormat &quot;%v:%p %h %l %u %t \&quot;%r\&quot; %&gt;s %O \&quot;%&#123;Referer&#125;i\&quot; \&quot;%&#123;User-Agent&#125;i\&quot;&quot; vhost_combined</span><br><span class="line">LogFormat &quot;%h %l %u %t \&quot;%r\&quot; %&gt;s %O \&quot;%&#123;Referer&#125;i\&quot; \&quot;%&#123;User-Agent&#125;i\&quot;&quot; combined</span><br><span class="line">LogFormat &quot;%h %l %u %t \&quot;%r\&quot; %&gt;s %O&quot; common</span><br><span class="line">LogFormat &quot;%&#123;Referer&#125;i -&gt; %U&quot; referer</span><br><span class="line">LogFormat &quot;%&#123;User-agent&#125;i&quot; agent</span><br></pre></td></tr></table></figure>
+
+<p>添加<code>CustomLog /var/log/apache2/access_log vhost_combined</code></p>
+<p>重启Apache</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">root@ubuntu:/etc/apache2# find /var -name access_log</span><br><span class="line">/var/log/cups/access_log</span><br><span class="line">/var/log/apache2/access_log</span><br></pre></td></tr></table></figure>
+
+
+
+<h6 id="禁止访问外部文件-和-禁止目录列出"><a href="#禁止访问外部文件-和-禁止目录列出" class="headerlink" title="禁止访问外部文件 和 禁止目录列出"></a>禁止访问外部文件 和 禁止目录列出</h6><p>禁止 Apache 访问 Web 目录之外的任何文件。</p>
+<p>禁止访问设置在原配置文件中是有说明的，且在<a target="_blank" rel="noopener" href="http://httpd.apache.org/docs/2.4/misc/security_tips.html">官方网站上的安全提示</a>中也提到</p>
+<ul>
+<li>说明</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> Sets the default security model of the Apache2 HTTPD server. It does</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> not allow access to the root filesystem outside of /usr/share and /var/www.</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> The former is used by web applications packaged <span class="keyword">in</span> Debian,</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> the latter may be used <span class="keyword">for</span> <span class="built_in">local</span> directories served by the web server. If</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> your system is serving content from a sub-directory <span class="keyword">in</span> /srv you must allow</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> access here, or <span class="keyword">in</span> any related virtual host.</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>与上面说明相对于的默认配置</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&lt;Directory /&gt;</span><br><span class="line">    Options FollowSymLinks</span><br><span class="line">    AllowOverride None</span><br><span class="line">    Require all denied</span><br><span class="line">&lt;/Directory&gt;</span><br><span class="line"></span><br><span class="line">&lt;Directory /usr/share&gt;</span><br><span class="line">    AllowOverride None</span><br><span class="line">    Require all granted</span><br><span class="line">&lt;/Directory&gt;</span><br><span class="line"></span><br><span class="line">&lt;Directory /var/www/&gt;</span><br><span class="line">    Options Indexes FollowSymLinks</span><br><span class="line">    AllowOverride None</span><br><span class="line">    Require all granted</span><br><span class="line">&lt;/Directory&gt;</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">&lt;Directory /srv/&gt;</span></span><br><span class="line"><span class="meta">#</span><span class="bash">   Options Indexes FollowSymLinks</span></span><br><span class="line"><span class="meta">#</span><span class="bash">   AllowOverride None</span></span><br><span class="line"><span class="meta">#</span><span class="bash">   Require all granted</span></span><br><span class="line"><span class="meta">#</span><span class="bash">&lt;/Directory&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>简单说明</p>
+<blockquote>
+<p>不允许访问<code>/usr/share</code>和<code>/var/www</code>之外的根文件系统。</p>
+<p><code>/usr/share</code>用于Debian中打包的Web应用程序</p>
+<p><code>/var/www</code>用于Web服务器服务的本地目录</p>
+</blockquote>
+<ul>
+<li>禁止目录列出</li>
+</ul>
+<p>在<code>/var/www</code>设置中有<code>Options Indexes FollowSymLinks</code></p>
+<p>Indexes 的作用就是当该目录下没有 index.html 文件时，就显示目录结构，去掉 Indexes，Apache 就不会显示该目录的列表了。</p>
+<p>即</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;Directory /var/www/&gt;</span><br><span class="line">    Options FollowSymLinks</span><br><span class="line">    AllowOverride None</span><br><span class="line">    Require all granted</span><br><span class="line">&lt;/Directory&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>效果</p>
+<p><img src="http://img.xzaslxr.xyz/img/142600.png"></p>
+</li>
+</ul>
+<h6 id="错误页面重新定向"><a href="#错误页面重新定向" class="headerlink" title="错误页面重新定向"></a>错误页面重新定向</h6><p>Apache 错误页面重定向功能可以防止敏感信息泄露。</p>
+<p>参考:<br><a target="_blank" rel="noopener" href="https://www.howtoing.com/how-to-configure-apache-to-use-custom-error-pages-on-ubuntu-14-04">https://www.howtoing.com/how-to-configure-apache-to-use-custom-error-pages-on-ubuntu-14-04</a></p>
+<ul>
+<li>在重新定向前，需要创建一些自定义的页面</li>
+</ul>
+<p><code>custom_404.html</code></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">h1</span> <span class="attr">style</span>=<span class="string">&#x27;color:red&#x27;</span>&gt;</span>Error 404: Not found :-(<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>I have no idea where that file is, sorry.  Are you sure you typed in the correct URL?<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><code>custom_50x.html</code></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">h1</span>&gt;</span>Oops! Something went wrong...<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>We seem to be having some technical difficulties. Hang tight.<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>配置</li>
+</ul>
+<p>配置文件是<code>000-default.conf</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&lt;VirtualHost *:80&gt;</span><br><span class="line">        ServerAdmin webmaster@localhost</span><br><span class="line">        DocumentRoot &#x2F;var&#x2F;www&#x2F;html</span><br><span class="line">        </span><br><span class="line">        ErrorLog $&#123;APACHE_LOG_DIR&#125;&#x2F;error.log</span><br><span class="line">        CustomLog $&#123;APACHE_LOG_DIR&#125;&#x2F;access.log combined</span><br><span class="line">        </span><br><span class="line">        #ErrorDocument</span><br><span class="line">        ErrorDocument 404 &#x2F;custom_404.html</span><br><span class="line">        ErrorDocument 500 &#x2F;custom_50x.html</span><br><span class="line">        ErrorDocument 502 &#x2F;custom_50x.html</span><br><span class="line">        ErrorDocument 503 &#x2F;custom_50x.html</span><br><span class="line">        ErrorDocument 504 &#x2F;custom_50x.html</span><br><span class="line">        </span><br><span class="line">         &lt;Files &quot;custom_404.html&quot;&gt;</span><br><span class="line">             &lt;If &quot;-z %&#123;ENV:REDIRECT_STATUS&#125;&quot;&gt;</span><br><span class="line">                 RedirectMatch 404 ^&#x2F;custom_404.html$</span><br><span class="line">             &lt;&#x2F;If&gt;</span><br><span class="line">        &lt;&#x2F;Files&gt;</span><br><span class="line">        </span><br><span class="line">&lt;&#x2F;VirtualHost&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>404  当访问不存在的页面时，报错</li>
+<li><img src="http://img.xzaslxr.xyz/img/152337.png"></li>
+</ul>
+<h6 id="拒绝服务-dos-攻击"><a href="#拒绝服务-dos-攻击" class="headerlink" title="拒绝服务(dos)攻击"></a>拒绝服务(dos)攻击</h6><blockquote>
+<p>所有网络服务器都可能遭受拒绝服务攻击，这种攻击试图通过占用服务器的资源来阻止对客户机的响应。完全阻止这种攻击是不可能的，但是您可以做一些事情来减轻它们所造成的问题。通常最有效的反dos工具是防火墙或其他操作系统配置。例如，可以将大多数防火墙配置为限制来自任何单个IP地址或网络的并发连接数量，从而防止一系列简单的攻击。当然，这对抵抗分布式拒绝服务攻击(DDoS)毫无帮助。</p>
+</blockquote>
+<p>还有一些特定的Apache HTTP服务器配置设置可以帮助缓解问题</p>
+<p>同样该点在官网<a target="_blank" rel="noopener" href="http://httpd.apache.org/docs/2.4/misc/security_tips.html#page-header">http://httpd.apache.org/docs/2.4/misc/security_tips.html#page-header</a>  提及，并给出一些设置方案</p>
+<p>配置文件为<code>apache.conf</code></p>
+<ul>
+<li><pre><code class="bash">#
+# KeepAlive: Whether or not to allow persistent connections (more than
+# one request per connection). Set to &quot;Off&quot; to deactivate.
+#
+KeepAlive On
+
+#
+# MaxKeepAliveRequests: The maximum number of requests to allow
+# during a persistent connection. Set to 0 to allow an unlimited amount.
+# We recommend you leave this number high, for maximum performance.
+#
+MaxKeepAliveRequests 100
+
+#
+# KeepAliveTimeout: Number of seconds to wait for the next request from the
+# same client on the same connection.
+#
+KeepAliveTimeout 5
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">* &#96;Timeout 300&#96;  #客户端与服务器端建立连接前的时间间隔</span><br><span class="line"></span><br><span class="line">* 可通过http:&#x2F;&#x2F;modules.apache.org&#x2F;提供许多第三方模块，这些模块可以限制某些客户端行为，从而缓解 DoS 问题。</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">###### 隐藏 Apache 的版本号</span><br><span class="line"></span><br><span class="line">Apache主机在默认状态下，如果遭遇错误页面，除了提示出错之外，还会将你的机器软件环境显示出来，如你的Apache版本，PHP版本。</span><br><span class="line"></span><br><span class="line">详细介绍:</span><br><span class="line">[ubuntu隐藏 Apache 的版本号](http:&#x2F;&#x2F;blog.sina.com.cn&#x2F;s&#x2F;blog_4a2ee3fb0102vb04.html)</span><br><span class="line"></span><br><span class="line">配置文件&#96;&#x2F;etc&#x2F;apache2&#x2F;conf-available&#x2F;security&#96;</span><br><span class="line"></span><br><span class="line">修改后内容</span><br><span class="line"></span><br><span class="line">&#96;&#96;&#96;bash</span><br><span class="line">#</span><br><span class="line"># ServerTokens</span><br><span class="line"># This directive configures what you return as the Server HTTP response</span><br><span class="line"># Header. The default is &#39;Full&#39; which sends information about the OS-Type</span><br><span class="line"># and compiled in modules.</span><br><span class="line"># Set to one of:  Full | OS | Minimal | Minor | Major | Prod</span><br><span class="line"># where Full conveys the most information, and Prod the least.</span><br><span class="line">#ServerTokens Minimal</span><br><span class="line">ServerTokens Prod</span><br><span class="line">#ServerTokens Full</span><br><span class="line"></span><br><span class="line">#</span><br><span class="line"># Optionally add a line containing the server version and virtual host</span><br><span class="line"># name to server-generated pages (internal error documents, FTP directory</span><br><span class="line"># listings, mod_status and mod_info output etc., but not CGI generated</span><br><span class="line"># documents or custom error documents).</span><br><span class="line"># Set to &quot;EMail&quot; to also include a mailto: link to the ServerAdmin.</span><br><span class="line"># Set to one of:  On | Off | EMail</span><br><span class="line">#ServerSignature Off</span><br><span class="line">ServerSignature Off</span><br></pre></td></tr></table></figure>
+</code></pre>
+</li>
+</ul>
+<p>详细介绍可以看上面的注释</p>
+<h6 id="关闭-TRACE功能"><a href="#关闭-TRACE功能" class="headerlink" title="关闭 TRACE功能"></a>关闭 TRACE功能</h6><p>关闭 TRACE 功能，防止 TRACE 方法被访问者恶意利用。</p>
+<p><strong><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/61990354">XST的攻击原理与防御</a></strong></p>
+<p>与上面一样，配置文件为<code>/etc/apache2/conf-available/security</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># Set to one of:  On | Off | extended</span></span><br><span class="line">TraceEnable Off</span><br><span class="line"><span class="comment">#TraceEnable On</span></span><br></pre></td></tr></table></figure>
+
+<h6 id="CGI"><a href="#CGI" class="headerlink" title="CGI"></a>CGI</h6><p>建议看<a target="_blank" rel="noopener" href="http://httpd.apache.org/docs/2.4/misc/security_tips.html#page-header">官方建议</a>。</p>
+<h6 id="动态内容安全性"><a href="#动态内容安全性" class="headerlink" title="动态内容安全性"></a>动态内容安全性</h6><p>在 Apache中，<a target="_blank" rel="noopener" href="http://modsecurity.org/">mod_security</a>的模块可以被视为 HTTP 防火墙，并且只要配置得足够好，可以</p>
+<p>增强动态内容安全性。</p>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>收获很多</p>
+<p>感觉实际配置中，使用docker的可能性更大，也相对方便、安全。</p>
+
+    </article>
+    <!-- license  -->
+    
+        <div class="license-wrapper">
+            <p>原文作者：<a href="https://xzlxr.github.io">fe1w0</a>
+            <p>原文链接：<a href="https://xzlxr.github.io/2020/03/16/%E6%90%AD%E5%BB%BAweb%E8%BF%90%E8%A1%8C%E7%9A%84%E5%9F%BA%E7%A1%80%E7%8E%AF%E5%A2%83/">https://xzlxr.github.io/2020/03/16/%E6%90%AD%E5%BB%BAweb%E8%BF%90%E8%A1%8C%E7%9A%84%E5%9F%BA%E7%A1%80%E7%8E%AF%E5%A2%83/</a>
+            <p>发表日期：<a href="https://xzlxr.github.io/2020/03/16/%E6%90%AD%E5%BB%BAweb%E8%BF%90%E8%A1%8C%E7%9A%84%E5%9F%BA%E7%A1%80%E7%8E%AF%E5%A2%83/">March 16th 2020, 12:00:00 am</a>
+            <p>更新日期：<a href="https://xzlxr.github.io/2020/03/16/%E6%90%AD%E5%BB%BAweb%E8%BF%90%E8%A1%8C%E7%9A%84%E5%9F%BA%E7%A1%80%E7%8E%AF%E5%A2%83/">April 12th 2020, 10:31:50 am</a>
+            <p>版权声明：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
+        </div>
+    
+    <!-- paginator  -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+                <div class="nextSlogan">Next Post</div>
+                <a href= "/2020/03/23/%E8%AE%A4%E8%AF%86%E6%95%B0%E6%8D%AE%E5%BA%93/" title= "认识数据库">
+                    <div class="nextTitle">认识数据库</div>
+                </a>
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href= "/2020/02/25/sqli/" title= "sqli">
+                    <div class="prevTitle">sqli</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+    <div id="lv-container" data-id="city" data-uid= MTAyMC80ODYzMS8yNTEyNQ==>
+        <script type="text/javascript">
+            (function (d, s) {
+                var j, e = d.getElementsByTagName(s)[0];
+                if (typeof LivereTower === 'function') { return; }
+                j = d.createElement(s);
+                j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+                j.async = true;
+
+                e.parentNode.insertBefore(j, e);
+            })(document, 'script');
+        </script>
+        <noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+    </div>
+
+<!-- City版安装代码已完成 -->
+    
+    
+    <!-- gitalk评论 -->
+
+    <!-- utteranc评论 -->
+
+    <!-- partial('_partial/comment/changyan') -->
+    <!--PC版-->
+
+
+    
+    
+
+    <!-- 评论 -->
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:xzasliuxinrong@gmail.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="//github.com/xzlxr" class="iconfont-archer github" target="_blank" title=github></a>
+            
+        
+    
+        
+            
+                <span class="iconfont-archer wechat" title=wechat>
+                  
+                  <img class="profile-qr" src="/assets/example_qr.png" />
+                </span>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            
+                <a href="https://steamcommunity.com/id/xzlxr/" class="iconfont-archer steam" target="_blank" title=steam></a>
+            
+        
+    
+        
+    
+        
+            
+                <a href="/atom.xml" class="iconfont-archer rss" target="_blank" title=rss></a>
+            
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+    
+     
+    <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
+    
+    </div>
+    
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper" style=
+    
+
+
+
+
+
+
+
+top:50vh;
+
+    >
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E4%BF%A1%E6%81%AF"><span class="toc-number">1.</span> <span class="toc-text">基本信息</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%90%AD%E5%BB%BA-0x01"><span class="toc-number">2.</span> <span class="toc-text">搭建 0x01</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85-nginx-php-fpm-mysql"><span class="toc-number">2.1.</span> <span class="toc-text">安装 nginx + php-fpm + mysql</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9B%B4%E6%96%B0%E7%B3%BB%E7%BB%9F%E8%BD%AF%E4%BB%B6%E6%BA%90"><span class="toc-number">2.1.1.</span> <span class="toc-text">更新系统软件源</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%89%E8%A3%85-nginx"><span class="toc-number">2.1.2.</span> <span class="toc-text">安装 nginx</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%89%E8%A3%85php-mysql"><span class="toc-number">2.1.3.</span> <span class="toc-text">安装php ,mysql</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%8F%AF%E8%83%BD%E9%81%87%E5%88%B0%E9%97%AE%E9%A2%98"><span class="toc-number">2.1.3.1.</span> <span class="toc-text">可能遇到问题</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%8E%A8%E8%8D%90%E5%8F%A6%E4%B8%80%E7%A7%8D%E6%96%B9%E6%B3%95-install-PHP-7-4-amp-mysql"><span class="toc-number">2.1.3.2.</span> <span class="toc-text">推荐另一种方法 install PHP 7.4 &amp; mysql</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#mysql-install"><span class="toc-number">2.1.4.</span> <span class="toc-text">mysql install</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE-Nginx"><span class="toc-number">2.1.5.</span> <span class="toc-text">配置 Nginx</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E6%8B%9F%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA"><span class="toc-number">2.2.</span> <span class="toc-text">模拟环境搭建</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E5%85%A8%E5%8A%A0%E5%9B%BA"><span class="toc-number">2.3.</span> <span class="toc-text">安全加固</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Nginx-%E5%8A%A0%E5%9B%BA"><span class="toc-number">2.3.1.</span> <span class="toc-text">Nginx 加固</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-number">2.3.1.1.</span> <span class="toc-text">配置文件</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E9%9A%90%E8%97%8Fnginx%E7%89%88%E6%9C%AC%E5%8F%B7"><span class="toc-number">2.3.1.1.1.</span> <span class="toc-text">隐藏nginx版本号</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E7%A6%81%E6%AD%A2%E7%9B%AE%E5%BD%95%E6%B5%8F%E8%A7%88"><span class="toc-number">2.3.1.1.2.</span> <span class="toc-text">禁止目录浏览</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E9%99%90%E5%88%B6%E8%AE%BF%E9%97%AE%E6%95%8F%E6%84%9F%E6%96%87%E4%BB%B6"><span class="toc-number">2.3.1.1.3.</span> <span class="toc-text">限制访问敏感文件</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E9%99%90%E5%88%B6HTTP%E8%AF%B7%E6%B1%82%E6%96%B9%E5%BC%8F"><span class="toc-number">2.3.1.1.4.</span> <span class="toc-text">限制HTTP请求方式</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#Nginx%E9%99%8D%E6%9D%83%E5%90%AF%E5%8A%A8"><span class="toc-number">2.3.1.1.5.</span> <span class="toc-text">Nginx降权启动</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E7%A6%81%E6%AD%A2%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E7%9B%AE%E5%BD%95%E6%89%A7%E8%A1%8Cphp"><span class="toc-number">2.3.1.1.6.</span> <span class="toc-text">禁止文件上传目录执行php</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E9%92%88%E5%AF%B9SQL%E6%B3%A8%E5%85%A5%E7%9A%84%E9%85%8D%E7%BD%AE"><span class="toc-number">2.3.1.1.7.</span> <span class="toc-text">针对SQL注入的配置</span></a></li></ol></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#PHP-%E5%8A%A0%E5%9B%BA"><span class="toc-number">2.3.2.</span> <span class="toc-text">PHP 加固</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6-1"><span class="toc-number">2.3.2.1.</span> <span class="toc-text">配置文件</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%85%B3%E4%BA%8EPHP%E7%9A%84%E5%AE%89%E5%85%A8%E6%A8%A1%E5%BC%8F"><span class="toc-number">2.3.2.1.1.</span> <span class="toc-text">关于PHP的安全模式</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E7%A6%81%E7%94%A8%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84PHP-%E5%87%BD%E6%95%B0"><span class="toc-number">2.3.2.1.2.</span> <span class="toc-text">禁用不安全的PHP 函数</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%85%B3%E9%97%AD%E9%94%99%E8%AF%AF%E6%98%BE%E7%A4%BA"><span class="toc-number">2.3.2.1.3.</span> <span class="toc-text">关闭错误显示</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AE%E9%94%99%E8%AF%AF%E6%97%A5%E5%BF%97"><span class="toc-number">2.3.2.1.4.</span> <span class="toc-text">设置错误日志</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#Session-%E5%AE%89%E5%85%A8%E9%85%8D%E7%BD%AE%E5%8F%AF%E4%BB%A5%E6%9F%A5%E7%9C%8B"><span class="toc-number">2.3.2.1.5.</span> <span class="toc-text">Session 安全配置可以查看</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%85%B3%E9%97%ADPHP%E4%BF%A1%E6%81%AF"><span class="toc-number">2.3.2.1.6.</span> <span class="toc-text">关闭PHP信息</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E9%99%90%E5%88%B6%E8%B7%A8%E7%9B%AE%E5%BD%95%E8%AE%BF%E9%97%AE"><span class="toc-number">2.3.2.1.7.</span> <span class="toc-text">限制跨目录访问</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E4%B8%8A%E4%BC%A0%E7%9B%AE%E5%BD%95%E9%99%90%E5%88%B6"><span class="toc-number">2.3.2.1.8.</span> <span class="toc-text">上传目录限制</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#SQL%E6%B3%A8%E5%85%A5%E9%98%B2%E6%8A%A4"><span class="toc-number">2.3.2.1.9.</span> <span class="toc-text">SQL注入防护</span></a></li></ol></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#mysql%E5%8A%A0%E5%9B%BA"><span class="toc-number">2.3.3.</span> <span class="toc-text">mysql加固</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E8%B4%A6%E6%88%B7%E5%AE%89%E5%85%A8"><span class="toc-number">2.3.3.0.1.</span> <span class="toc-text">账户安全</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%8F%A3%E4%BB%A4"><span class="toc-number">2.3.3.0.2.</span> <span class="toc-text">口令</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%8E%88%E6%9D%83"><span class="toc-number">2.3.3.0.3.</span> <span class="toc-text">授权</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%BC%80%E5%90%AF%E6%97%A5%E5%BF%97%E5%AE%A1%E6%A0%B8%E5%8A%9F%E8%83%BD"><span class="toc-number">2.3.3.0.4.</span> <span class="toc-text">开启日志审核功能</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#my-cnf%E7%9A%84%E5%85%B6%E4%BB%96%E9%85%8D%E7%BD%AE"><span class="toc-number">2.3.3.0.5.</span> <span class="toc-text">my.cnf的其他配置</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%90%AD%E5%BB%BA-0x02"><span class="toc-number">3.</span> <span class="toc-text">搭建 0x02</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Apache"><span class="toc-number">3.1.</span> <span class="toc-text">Apache</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%89%E8%A3%85-Apache"><span class="toc-number">3.1.1.</span> <span class="toc-text">安装 Apache</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6-2"><span class="toc-number">3.1.2.</span> <span class="toc-text">配置文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%89%E5%85%A8%E5%8A%A0%E5%9B%BA-1"><span class="toc-number">3.1.3.</span> <span class="toc-text">安全加固</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B4%A6%E5%8F%B7%E8%AE%BE%E7%BD%AE"><span class="toc-number">3.1.4.</span> <span class="toc-text">账号设置</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%8E%88%E6%9D%83%E8%AE%BE%E7%BD%AE"><span class="toc-number">3.1.4.0.1.</span> <span class="toc-text">授权设置</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%97%A5%E5%BF%97%E8%AE%BE%E7%BD%AE"><span class="toc-number">3.1.4.0.2.</span> <span class="toc-text">日志设置</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E7%A6%81%E6%AD%A2%E8%AE%BF%E9%97%AE%E5%A4%96%E9%83%A8%E6%96%87%E4%BB%B6-%E5%92%8C-%E7%A6%81%E6%AD%A2%E7%9B%AE%E5%BD%95%E5%88%97%E5%87%BA"><span class="toc-number">3.1.4.0.3.</span> <span class="toc-text">禁止访问外部文件 和 禁止目录列出</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E9%94%99%E8%AF%AF%E9%A1%B5%E9%9D%A2%E9%87%8D%E6%96%B0%E5%AE%9A%E5%90%91"><span class="toc-number">3.1.4.0.4.</span> <span class="toc-text">错误页面重新定向</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%8B%92%E7%BB%9D%E6%9C%8D%E5%8A%A1-dos-%E6%94%BB%E5%87%BB"><span class="toc-number">3.1.4.0.5.</span> <span class="toc-text">拒绝服务(dos)攻击</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%85%B3%E9%97%AD-TRACE%E5%8A%9F%E8%83%BD"><span class="toc-number">3.1.4.0.6.</span> <span class="toc-text">关闭 TRACE功能</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#CGI"><span class="toc-number">3.1.4.0.7.</span> <span class="toc-text">CGI</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%8A%A8%E6%80%81%E5%86%85%E5%AE%B9%E5%AE%89%E5%85%A8%E6%80%A7"><span class="toc-number">3.1.4.0.8.</span> <span class="toc-text">动态内容安全性</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%90%8E%E8%AE%B0"><span class="toc-number"></span> <span class="toc-text">后记</span></a>
+    </div>
+    
+    <div class="back-top iconfont-archer">&#xe639;</div>
+    <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-panel-archives">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 33
+        </div>
+        <!-- search  -->
+        
+    </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2020/10/01/hello-world/" >Hello World</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2020 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/30</span><a class="archive-post-title" href= "/2020/09/30/cumtctf2020-Web%E5%87%BA%E9%A2%98/" >cumtctf2020-Web出题</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/13</span><a class="archive-post-title" href= "/2020/09/13/PHP-Parser/" >初识PHP-Parser</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/12</span><a class="archive-post-title" href= "/2020/09/12/20208%E6%9C%88%E5%88%B09%E6%9C%88%E5%88%9D%E7%9A%84wp%E5%90%88%E9%9B%86/" >20208月到9月初的wp合集</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/26</span><a class="archive-post-title" href= "/2020/07/26/CyBRICS-CTF-2020/" >CyBRICS CTF 2020</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/25</span><a class="archive-post-title" href= "/2020/07/25/%E5%AE%89%E6%81%92%E6%9C%88%E8%B5%9B20200725/" >安恒月赛20200725</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/22</span><a class="archive-post-title" href= "/2020/07/22/php-curl%E4%B8%8Edocker-remote-api/" >php_curl与docker_remote_api</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/18</span><a class="archive-post-title" href= "/2020/06/18/zh3r0ctf_and_hsctf/" >zh3r0ctf_and_hsctf</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/28</span><a class="archive-post-title" href= "/2020/05/28/buuctf-0x02/" >buuctf_0x02</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/10</span><a class="archive-post-title" href= "/2020/05/10/VulnStack-0x01/" >VulnStack_0x01</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/05</span><a class="archive-post-title" href= "/2020/05/05/sqli%E4%BB%A3%E7%A0%81%E7%BC%96%E5%86%99%E4%B8%8E%E9%98%B2%E6%8A%A4/" >sqli代码编写与防护</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/29</span><a class="archive-post-title" href= "/2020/04/29/upload-labs/" >upload-labs</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/27</span><a class="archive-post-title" href= "/2020/04/27/web_%E5%AE%89%E5%85%A8%E4%B9%8B%E9%A1%B5%E9%9D%A2%E8%A7%A3%E6%9E%90%E7%9A%84%E6%B5%81%E7%A8%8B%E5%AD%A6%E4%B9%A0/" >页面解析的流程学习</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/26</span><a class="archive-post-title" href= "/2020/04/26/2020-4%E6%AF%94%E8%B5%9B%E4%B8%8E%E5%88%B7%E9%A2%98/" >2020-4中旬比赛与刷题</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/23</span><a class="archive-post-title" href= "/2020/04/23/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9B%B8%E5%85%B3%E6%B3%A8%E5%85%A5%E8%AF%AD%E5%8F%A5%E7%9A%84%E6%94%B6%E9%9B%86%E5%92%8C%E5%AD%A6%E4%B9%A0/" >数据库相关注入语句的收集和学习</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/06</span><a class="archive-post-title" href= "/2020/04/06/2020-yctf/" >2020-yctf</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/06</span><a class="archive-post-title" href= "/2020/04/06/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%8A%9F%E8%83%BD/" >数据库功能</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/30</span><a class="archive-post-title" href= "/2020/03/30/%E7%B3%BB%E7%BB%9F%E8%A1%A8%E5%AD%A6%E4%B9%A0/" >系统表学习</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/23</span><a class="archive-post-title" href= "/2020/03/23/%E8%AE%A4%E8%AF%86%E6%95%B0%E6%8D%AE%E5%BA%93/" >认识数据库</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/16</span><a class="archive-post-title" href= "/2020/03/16/%E6%90%AD%E5%BB%BAweb%E8%BF%90%E8%A1%8C%E7%9A%84%E5%9F%BA%E7%A1%80%E7%8E%AF%E5%A2%83/" >搭建web运行的基础环境</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/25</span><a class="archive-post-title" href= "/2020/02/25/sqli/" >sqli</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/30</span><a class="archive-post-title" href= "/2020/01/30/flask/" >flask</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/10</span><a class="archive-post-title" href= "/2020/01/10/buuctf/" >buuctf</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/07</span><a class="archive-post-title" href= "/2020/01/07/CUMTCTF%E7%AB%9E%E8%B5%9B%E5%B9%B3%E5%8F%B0/" >CUMTCTF竞赛平台</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2019 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/02</span><a class="archive-post-title" href= "/2019/12/02/XSS/" >XSS_20</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/18</span><a class="archive-post-title" href= "/2019/11/18/learngit/" >learngit</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/03</span><a class="archive-post-title" href= "/2019/11/03/cumt-bxs/" >cumt_bxs 入门与提升</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/article/" >回顾与反省</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/07</span><a class="archive-post-title" href= "/2019/10/07/injection/" >injection</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/28</span><a class="archive-post-title" href= "/2019/09/28/CUMTCTF2019-FINAL/" >CUMTCTF2019-FINAL</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/23</span><a class="archive-post-title" href= "/2019/09/23/9-20/" >9-20  wp   慢慢前行</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/18</span><a class="archive-post-title" href= "/2019/09/18/future/" >面对未来</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/17</span><a class="archive-post-title" href= "/2019/09/17/hackme%20wp%20%20%E5%BE%85%E7%BB%AD/" >hackme wp 待续</a>
+        </li>
+    
+    </div>
+  </div>
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name" data-tags="ctf"><span class="iconfont-archer">&#xe606;</span>ctf</span>
+    
+        <span class="sidebar-tag-name" data-tags="web"><span class="iconfont-archer">&#xe606;</span>web</span>
+    
+        <span class="sidebar-tag-name" data-tags="2020"><span class="iconfont-archer">&#xe606;</span>2020</span>
+    
+        <span class="sidebar-tag-name" data-tags="2020-yctf"><span class="iconfont-archer">&#xe606;</span>2020-yctf</span>
+    
+        <span class="sidebar-tag-name" data-tags="python"><span class="iconfont-archer">&#xe606;</span>python</span>
+    
+        <span class="sidebar-tag-name" data-tags="misc"><span class="iconfont-archer">&#xe606;</span>misc</span>
+    
+        <span class="sidebar-tag-name" data-tags="sql injection"><span class="iconfont-archer">&#xe606;</span>sql injection</span>
+    
+        <span class="sidebar-tag-name" data-tags="cumt"><span class="iconfont-archer">&#xe606;</span>cumt</span>
+    
+        <span class="sidebar-tag-name" data-tags="PHP-Parser"><span class="iconfont-archer">&#xe606;</span>PHP-Parser</span>
+    
+        <span class="sidebar-tag-name" data-tags="php"><span class="iconfont-archer">&#xe606;</span>php</span>
+    
+        <span class="sidebar-tag-name" data-tags="xss"><span class="iconfont-archer">&#xe606;</span>xss</span>
+    
+        <span class="sidebar-tag-name" data-tags="life"><span class="iconfont-archer">&#xe606;</span>life</span>
+    
+        <span class="sidebar-tag-name" data-tags="flask"><span class="iconfont-archer">&#xe606;</span>flask</span>
+    
+        <span class="sidebar-tag-name" data-tags="crypto"><span class="iconfont-archer">&#xe606;</span>crypto</span>
+    
+        <span class="sidebar-tag-name" data-tags="sql注入"><span class="iconfont-archer">&#xe606;</span>sql注入</span>
+    
+        <span class="sidebar-tag-name" data-tags="sql-injection"><span class="iconfont-archer">&#xe606;</span>sql-injection</span>
+    
+        <span class="sidebar-tag-name" data-tags="git"><span class="iconfont-archer">&#xe606;</span>git</span>
+    
+        <span class="sidebar-tag-name" data-tags="zh3r0"><span class="iconfont-archer">&#xe606;</span>zh3r0</span>
+    
+        <span class="sidebar-tag-name" data-tags="sql"><span class="iconfont-archer">&#xe606;</span>sql</span>
+    
+        <span class="sidebar-tag-name" data-tags="信安之路"><span class="iconfont-archer">&#xe606;</span>信安之路</span>
+    
+        <span class="sidebar-tag-name" data-tags="mysql"><span class="iconfont-archer">&#xe606;</span>mysql</span>
+    
+        <span class="sidebar-tag-name" data-tags="udf"><span class="iconfont-archer">&#xe606;</span>udf</span>
+    
+        <span class="sidebar-tag-name" data-tags="笔记"><span class="iconfont-archer">&#xe606;</span>笔记</span>
+    
+        <span class="sidebar-tag-name" data-tags="内网渗透"><span class="iconfont-archer">&#xe606;</span>内网渗透</span>
+    
+        <span class="sidebar-tag-name" data-tags="学习"><span class="iconfont-archer">&#xe606;</span>学习</span>
+    
+        <span class="sidebar-tag-name" data-tags="红日"><span class="iconfont-archer">&#xe606;</span>红日</span>
+    
+        <span class="sidebar-tag-name" data-tags="buuctf"><span class="iconfont-archer">&#xe606;</span>buuctf</span>
+    
+        <span class="sidebar-tag-name" data-tags="cumtctf2020"><span class="iconfont-archer">&#xe606;</span>cumtctf2020</span>
+    
+        <span class="sidebar-tag-name" data-tags="docker"><span class="iconfont-archer">&#xe606;</span>docker</span>
+    
+        <span class="sidebar-tag-name" data-tags="curl"><span class="iconfont-archer">&#xe606;</span>curl</span>
+    
+        <span class="sidebar-tag-name" data-tags="sqli"><span class="iconfont-archer">&#xe606;</span>sqli</span>
+    
+        <span class="sidebar-tag-name" data-tags="系统表"><span class="iconfont-archer">&#xe606;</span>系统表</span>
+    
+        <span class="sidebar-tag-name" data-tags="数据库的输入输出"><span class="iconfont-archer">&#xe606;</span>数据库的输入输出</span>
+    
+        <span class="sidebar-tag-name" data-tags="upload"><span class="iconfont-archer">&#xe606;</span>upload</span>
+    
+        <span class="sidebar-tag-name" data-tags="ubuntu"><span class="iconfont-archer">&#xe606;</span>ubuntu</span>
+    
+        <span class="sidebar-tag-name" data-tags="apache"><span class="iconfont-archer">&#xe606;</span>apache</span>
+    
+        <span class="sidebar-tag-name" data-tags="nginx"><span class="iconfont-archer">&#xe606;</span>nginx</span>
+    
+        <span class="sidebar-tag-name" data-tags="buuoj"><span class="iconfont-archer">&#xe606;</span>buuoj</span>
+    
+        <span class="sidebar-tag-name" data-tags="第十三届全国大学生信息安全竞赛-创新实践能力赛"><span class="iconfont-archer">&#xe606;</span>第十三届全国大学生信息安全竞赛-创新实践能力赛</span>
+    
+        <span class="sidebar-tag-name" data-tags="第四届强网杯"><span class="iconfont-archer">&#xe606;</span>第四届强网杯</span>
+    
+        <span class="sidebar-tag-name" data-tags="GACTF"><span class="iconfont-archer">&#xe606;</span>GACTF</span>
+    
+        <span class="sidebar-tag-name" data-tags="🐏城杯"><span class="iconfont-archer">&#xe606;</span>🐏城杯</span>
+    
+        <span class="sidebar-tag-name" data-tags="🎣杯"><span class="iconfont-archer">&#xe606;</span>🎣杯</span>
+    
+        <span class="sidebar-tag-name" data-tags="DDCTF"><span class="iconfont-archer">&#xe606;</span>DDCTF</span>
+    
+        <span class="sidebar-tag-name" data-tags="WMCTF"><span class="iconfont-archer">&#xe606;</span>WMCTF</span>
+    
+        <span class="sidebar-tag-name" data-tags="其他"><span class="iconfont-archer">&#xe606;</span>其他</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br/>
+    1、请确保node版本大于6.2<br/>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br/>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br/>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #787878; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: true
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+    
+        <span class="sidebar-category-name" data-categories="ctf"><span class="iconfont-archer">&#xe60a;</span>ctf</span>
+    
+        <span class="sidebar-category-name" data-categories="PHP-Parser"><span class="iconfont-archer">&#xe60a;</span>PHP-Parser</span>
+    
+        <span class="sidebar-category-name" data-categories="life"><span class="iconfont-archer">&#xe60a;</span>life</span>
+    
+        <span class="sidebar-category-name" data-categories="flask"><span class="iconfont-archer">&#xe60a;</span>flask</span>
+    
+        <span class="sidebar-category-name" data-categories="learn"><span class="iconfont-archer">&#xe60a;</span>learn</span>
+    
+        <span class="sidebar-category-name" data-categories="信安之路"><span class="iconfont-archer">&#xe60a;</span>信安之路</span>
+    
+        <span class="sidebar-category-name" data-categories="内网渗透"><span class="iconfont-archer">&#xe60a;</span>内网渗透</span>
+    
+        <span class="sidebar-category-name" data-categories="php"><span class="iconfont-archer">&#xe60a;</span>php</span>
+    
+        <span class="sidebar-category-name" data-categories="upload"><span class="iconfont-archer">&#xe60a;</span>upload</span>
+    
+        <span class="sidebar-category-name" data-categories="sql-injection"><span class="iconfont-archer">&#xe60a;</span>sql-injection</span>
+    
+        <span class="sidebar-category-name" data-categories="ctf-wp"><span class="iconfont-archer">&#xe60a;</span>ctf-wp</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var siteMeta = {
+        root: "/",
+        author: "fe1w0"
+    }
+</script>
+    <!-- CDN failover -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ === 'undefined')
+        {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js">\x3C/script>')
+        }
+    </script>
+    <script src="/scripts/main.js"></script>
+    <!-- algolia -->
+    
+    <!-- busuanzi  -->
+    
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ  -->
+    
+    </div>
+    <!-- async load share.js -->
+    
+        <script src="/scripts/share.js" async></script>    
+     
+    </body>
+</html>
+
+

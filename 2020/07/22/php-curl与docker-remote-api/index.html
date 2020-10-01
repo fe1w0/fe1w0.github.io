@@ -1,0 +1,1557 @@
+<!DOCTYPE html>
+<html lang="zh">
+    <!-- title -->
+
+
+
+
+<!-- keywords -->
+
+
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" >
+    <meta name="author" content="fe1w0">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="fe1w0">
+    
+    <meta name="keywords" content="fe1w0,fe1w0,fe1w0-blog">
+    
+    <meta name="description" content="">
+    <meta name="description" content="docker remote api 官方文档🔗:https:&#x2F;&#x2F;docs.docker.com&#x2F;engine&#x2F;api&#x2F;可以通过 docker version查看 Engine: API version个人当前 服务器和客户端都是1.4版本需注意版本不同,手册也不同，基本上一个小版本一个手册我宣布curl就是我大哥 👍  search the containers1curl http:&amp;#x2F">
+<meta property="og:type" content="article">
+<meta property="og:title" content="php_curl与docker_remote_api">
+<meta property="og:url" content="https://xzlxr.github.io/2020/07/22/php-curl%E4%B8%8Edocker-remote-api/index.html">
+<meta property="og:site_name" content="fe1w0">
+<meta property="og:description" content="docker remote api 官方文档🔗:https:&#x2F;&#x2F;docs.docker.com&#x2F;engine&#x2F;api&#x2F;可以通过 docker version查看 Engine: API version个人当前 服务器和客户端都是1.4版本需注意版本不同,手册也不同，基本上一个小版本一个手册我宣布curl就是我大哥 👍  search the containers1curl http:&amp;#x2F">
+<meta property="og:locale">
+<meta property="og:image" content="http://img.xzaslxr.xyz/img/image-20200722125449814.png">
+<meta property="og:image" content="http://img.xzaslxr.xyz/img/image-20200722141740320.png">
+<meta property="og:image" content="http://img.xzaslxr.xyz/img/image-20200722141912689.png">
+<meta property="og:image" content="http://img.xzaslxr.xyz/img/image-20200723184832220.png">
+<meta property="article:published_time" content="2020-07-21T17:58:52.000Z">
+<meta property="article:modified_time" content="2020-07-24T18:55:37.841Z">
+<meta property="article:author" content="fe1w0">
+<meta property="article:tag" content="php">
+<meta property="article:tag" content="docker">
+<meta property="article:tag" content="curl">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://img.xzaslxr.xyz/img/image-20200722125449814.png">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    
+    <title>php_curl与docker_remote_api · fe1w0_blog</title>
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .back-top,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s infinite;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+
+</style>
+
+    <link rel="preload" href= "/css/style.css?v=20180824" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <link rel="stylesheet" href= "/css/mobile.css?v=20180824" media="(max-width: 980px)">
+    
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+(function( w ){
+	"use strict";
+	// rel=preload support test
+	if( !w.loadCSS ){
+		w.loadCSS = function(){};
+	}
+	// define on the loadCSS obj
+	var rp = loadCSS.relpreload = {};
+	// rel=preload feature support test
+	// runs once and returns a function for compat purposes
+	rp.support = (function(){
+		var ret;
+		try {
+			ret = w.document.createElement( "link" ).relList.supports( "preload" );
+		} catch (e) {
+			ret = false;
+		}
+		return function(){
+			return ret;
+		};
+	})();
+
+	// if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+	// then change that media back to its intended value on load
+	rp.bindMediaToggle = function( link ){
+		// remember existing media attr for ultimate state, or default to 'all'
+		var finalMedia = link.media || "all";
+
+		function enableStylesheet(){
+			link.media = finalMedia;
+		}
+
+		// bind load handlers to enable media
+		if( link.addEventListener ){
+			link.addEventListener( "load", enableStylesheet );
+		} else if( link.attachEvent ){
+			link.attachEvent( "onload", enableStylesheet );
+		}
+
+		// Set rel and non-applicable media type to start an async request
+		// note: timeout allows this to happen async to let rendering continue in IE
+		setTimeout(function(){
+			link.rel = "stylesheet";
+			link.media = "only x";
+		});
+		// also enable media after 3 seconds,
+		// which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+		setTimeout( enableStylesheet, 3000 );
+	};
+
+	// loop through link elements in DOM
+	rp.poly = function(){
+		// double check this to prevent external calls from running
+		if( rp.support() ){
+			return;
+		}
+		var links = w.document.getElementsByTagName( "link" );
+		for( var i = 0; i < links.length; i++ ){
+			var link = links[ i ];
+			// qualify links to those with rel=preload and as=style attrs
+			if( link.rel === "preload" && link.getAttribute( "as" ) === "style" && !link.getAttribute( "data-loadcss" ) ){
+				// prevent rerunning on link
+				link.setAttribute( "data-loadcss", true );
+				// bind listeners to toggle media back
+				rp.bindMediaToggle( link );
+			}
+		}
+	};
+
+	// if unsupported, run the polyfill
+	if( !rp.support() ){
+		// run once at least
+		rp.poly();
+
+		// rerun poly on an interval until onload
+		var run = w.setInterval( rp.poly, 500 );
+		if( w.addEventListener ){
+			w.addEventListener( "load", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		} else if( w.attachEvent ){
+			w.attachEvent( "onload", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		}
+	}
+
+
+	// commonjs
+	if( typeof exports !== "undefined" ){
+		exports.loadCSS = loadCSS;
+	}
+	else {
+		w.loadCSS = loadCSS;
+	}
+}( typeof global !== "undefined" ? global : this ) );
+</script>
+
+    <link rel="icon" href= "/assets/favicon.ico" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js" as="script" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" as="script" />
+    <link rel="preload" href="/scripts/main.js" as="script" />
+    <link rel="preload" as="font" href="/font/Oswald-Regular.ttf" crossorigin>
+    <link rel="preload" as="font" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" crossorigin>
+    
+    <!-- fancybox -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="read-progress"></div>
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >follow my dream</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">php_curl与docker_remote_api</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href=/>follow my dream</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro" style="
+
+
+
+
+
+
+
+height:50vh;
+">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(https://source.unsplash.com/user/erondu)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            php_curl与docker_remote_api
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                    <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "php">php</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "docker">docker</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "curl">curl</a>
+    
+</div>
+                
+                
+                    <div class="post-intro-read">
+                        <span>字数统计: <span class="post-count word-count">3.6k</span>阅读时长: <span class="post-count reading-time">19 min</span></span>
+                    </div>
+                
+                <div class="post-intro-meta">
+                    <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                    <span class="post-intro-time">2020/07/22</span>
+                    
+                    <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                        <span class="iconfont-archer">&#xe602;</span>
+                        <span id="busuanzi_value_page_pv"></span>
+                    </span>
+                    
+                    <span class="shareWrapper">
+                        <span class="iconfont-archer shareIcon">&#xe71d;</span>
+                        <span class="shareText">Share</span>
+                        <ul class="shareList">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+        
+    </div>
+</div>
+        <script>
+ 
+  // get user agent
+  var browser = {
+    versions: function () {
+      var u = window.navigator.userAgent;
+      return {
+        userAgent: u,
+        trident: u.indexOf('Trident') > -1, //IE内核
+        presto: u.indexOf('Presto') > -1, //opera内核
+        webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+        gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+        mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+        ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+        android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+        iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+        iPad: u.indexOf('iPad') > -1, //是否为iPad
+        webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+        weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+        uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+      };
+    }()
+  }
+  console.log("userAgent:" + browser.versions.userAgent);
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded');
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+      document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in');
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb(){
+    if (browser.versions.uc) {
+      console.log("UCBrowser");
+      fontLoaded();
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular']
+        },
+        loading: function () {  //所有字体开始加载
+          // console.log('loading');
+        },
+        active: function () {  //所有字体已渲染
+          fontLoaded();
+        },
+        inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout');
+          fontLoaded();
+        },
+        timeout: 5000 // Set the timeout to two seconds
+      });
+    }
+  }
+
+  function asyncErr(){
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (cb) { o.addEventListener('load', function (e) { cb(null, e); }, false); }
+    if (err) { o.addEventListener('error', function (e) { err(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+
+  var asyncLoadWithFallBack = function(arr, success, reject) {
+      var currReject = function(){
+        reject()
+        arr.shift()
+        if(arr.length)
+          async(arr[0], success, currReject)
+        }
+
+      async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack([
+    "https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js", 
+    "https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js",
+    "/lib/webfontloader.min.js"
+  ], asyncCb, asyncErr)
+</script>        
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <h1 id="docker-remote-api"><a href="#docker-remote-api" class="headerlink" title="docker remote api"></a>docker remote api</h1><blockquote>
+<p>官方文档🔗:<a target="_blank" rel="noopener" href="https://docs.docker.com/engine/api/">https://docs.docker.com/engine/api/</a><br>可以通过 <code>docker version</code>查看 Engine: API version<br>个人当前 服务器和客户端都是1.4版本<br>需注意版本不同,手册也不同，基本上一个小版本一个手册<br>我宣布<code>curl</code>就是我大哥 👍</p>
+</blockquote>
+<h2 id="search-the-containers"><a href="#search-the-containers" class="headerlink" title="search the containers"></a>search the containers</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl http:&#x2F;&#x2F;192.168.21.131:2375&#x2F;containers&#x2F;json</span><br></pre></td></tr></table></figure>
+
+<h2 id="create-one-container"><a href="#create-one-container" class="headerlink" title="create one container"></a>create one container</h2><ul>
+<li>create.json</li>
+</ul>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://docs.docker.com/engine/api/v1.40/#operation/ContainerCreate">https://docs.docker.com/engine/api/v1.40/#operation/ContainerCreate</a></p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -v -X POST -H <span class="string">&quot;Content-Type: application/json&quot;</span>  http://192.168.21.131:2375/containers/create?name=dvwa -d <span class="string">&#x27;&#123;&quot;Image&quot;: &quot;astronaut1712/dvwa:latest&quot;, &quot;HostConfig&quot;: &#123;&quot;NetworkMode&quot;: &quot;bridge&quot;,&quot;PortBindings&quot;: &#123;&quot;80/tcp&quot;: [&#123;&quot;HostPort&quot;: &quot;3080&quot;&#125;]&#125;&#125;&#125;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="start-the-container"><a href="#start-the-container" class="headerlink" title="start the container"></a>start the container</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -v -X POST http://192.168.21.131:2375/containers/dvwa/start</span><br></pre></td></tr></table></figure>
+
+<h2 id="stop-the-container"><a href="#stop-the-container" class="headerlink" title="stop the container"></a>stop the container</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -v --raw -X POST http://192.168.21.131:2375/containers/dvwa/stop</span><br></pre></td></tr></table></figure>
+
+<h2 id="delete-the-container"><a href="#delete-the-container" class="headerlink" title="delete the container"></a>delete the container</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -v -X DELETE http:&#x2F;&#x2F;192.168.21.131:2375&#x2F;containers&#x2F;dvwa</span><br></pre></td></tr></table></figure>
+
+<h1 id="php-与-docker-remote-api"><a href="#php-与-docker-remote-api" class="headerlink" title="php  与  docker remote api"></a>php  与  docker remote api</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">└─fe1w0</span><br><span class="line">        class.php</span><br><span class="line">        config.php</span><br><span class="line">        curl.php</span><br><span class="line">        docker.php</span><br><span class="line">        error.php</span><br><span class="line">        error1.html</span><br><span class="line">        error2.html</span><br><span class="line">        error3.html</span><br><span class="line">        error4.html</span><br><span class="line">        index.css</span><br><span class="line">        index.html</span><br></pre></td></tr></table></figure>
+
+<p>其中重要的是<code>class.php、curl.php、config.php、docker.php</code></p>
+<ul>
+<li><code>class.php</code></li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">docker</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> $ip_url;    <span class="comment"># http://192.168.21.131:2375 config.php</span></span><br><span class="line">    <span class="keyword">public</span> $image_name;</span><br><span class="line">    <span class="keyword">public</span> $container_name;</span><br><span class="line">    <span class="keyword">public</span> $container_port;</span><br><span class="line">    <span class="keyword">public</span> $time;</span><br><span class="line">    <span class="keyword">public</span> $search_url;</span><br><span class="line">    <span class="keyword">public</span> $create_url;</span><br><span class="line">    <span class="keyword">public</span> $start_url;</span><br><span class="line">    <span class="keyword">public</span> $stop_url;   </span><br><span class="line">    <span class="keyword">public</span> $delete_url;</span><br><span class="line">    <span class="keyword">public</span> $data_string;</span><br><span class="line">    <span class="keyword">public</span> $max_number;  <span class="comment"># 容器的最大数量 config.php</span></span><br><span class="line">    <span class="keyword">public</span> $number;</span><br><span class="line">    <span class="keyword">public</span> $arr_container;</span><br><span class="line">    <span class="keyword">public</span> $port_pool;</span><br><span class="line">    <span class="keyword">public</span> $current_ports;</span><br><span class="line">    <span class="keyword">public</span> $error_location;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params">$ip_url=<span class="string">&quot;&quot;</span>,$image_name=<span class="string">&quot;&quot;</span>,$container_name=<span class="string">&quot;&quot;</span>,$container_port=<span class="string">&quot;&quot;</span>,$time=<span class="string">&quot;&quot;</span>,$max_number=<span class="number">30</span>,$port_pool,$error_location</span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;ip_url =$ip_url;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;image_name = $image_name;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;container_name = $container_name;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;container_port = $container_port;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;max_number = $max_number;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;arr_container=<span class="keyword">array</span>();</span><br><span class="line">        <span class="keyword">$this</span>-&gt;current_ports=<span class="keyword">array</span>();</span><br><span class="line">        <span class="keyword">$this</span>-&gt;port_pool=$port_pool; <span class="comment">//端口池由外部设置</span></span><br><span class="line">        <span class="keyword">$this</span>-&gt;number=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;error_location = $error_location;</span><br><span class="line"></span><br><span class="line">        $parsed = date_parse($time);</span><br><span class="line">        <span class="keyword">$this</span>-&gt;time= $parsed[<span class="string">&#x27;hour&#x27;</span>] * <span class="number">3600</span> + $parsed[<span class="string">&#x27;minute&#x27;</span>] * <span class="number">60</span> + $parsed[<span class="string">&#x27;second&#x27;</span>];</span><br><span class="line"></span><br><span class="line">        <span class="keyword">$this</span>-&gt;search_url = sprintf(<span class="string">&#x27;%s/containers/json?all=1&#x27;</span>,<span class="keyword">$this</span>-&gt;ip_url);<span class="comment"># get</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">geturl</span>(<span class="params">$url</span>)</span>&#123;</span><br><span class="line">        <span class="comment"># 初始化</span></span><br><span class="line">        $headerArray =<span class="keyword">array</span>(<span class="string">&quot;Content-type:application/json;&quot;</span>,<span class="string">&quot;Accept:application/json&quot;</span>);</span><br><span class="line">        $ch = curl_init();</span><br><span class="line">        </span><br><span class="line">        curl_setopt($ch,CURLOPT_RETURNTRANSFER,<span class="literal">true</span>);</span><br><span class="line">        curl_setopt($ch,CURLOPT_TIMEOUT,<span class="number">500</span>);</span><br><span class="line">        curl_setopt($ch,CURLOPT_URL,$url); <span class="comment"># url 为api的url</span></span><br><span class="line">        curl_setopt($ch,CURLOPT_HTTPHEADER,$headerArray);</span><br><span class="line">        <span class="comment">#curl_setopt($ch, CURLOPT_HEADER, true);</span></span><br><span class="line">        $output = curl_exec($ch);</span><br><span class="line">        curl_close($ch);</span><br><span class="line">    </span><br><span class="line">        <span class="comment"># json 转为数组 $res</span></span><br><span class="line">        $output = json_decode($output,<span class="literal">true</span>);</span><br><span class="line">        <span class="keyword">return</span> $output;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">posturl</span>(<span class="params">$url,$data_string=<span class="string">&quot;&quot;</span></span>)</span>&#123;</span><br><span class="line">        <span class="comment">#$data_string = json_encode($requestData);</span></span><br><span class="line">        <span class="comment">#var_dump($data_string);</span></span><br><span class="line">        $ch = curl_init();</span><br><span class="line">        $headerArray = <span class="keyword">array</span>(<span class="string">&#x27;Content-Type: application/json&#x27;</span>, <span class="string">&#x27;Content-Length: &#x27;</span>.strlen($data_string));</span><br><span class="line">    </span><br><span class="line">        curl_setopt($ch,CURLOPT_URL,$url);</span><br><span class="line">        <span class="comment">#curl_setopt($ch, CURLOPT_HEADER, true);</span></span><br><span class="line">        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, <span class="string">&quot;POST&quot;</span>);</span><br><span class="line">        curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);</span><br><span class="line">        curl_setopt($ch,CURLOPT_RETURNTRANSFER,<span class="literal">true</span>);</span><br><span class="line">        curl_setopt($ch,CURLOPT_HTTPHEADER,$headerArray);</span><br><span class="line">        $output = curl_exec($ch);</span><br><span class="line">        curl_close($ch);</span><br><span class="line">    </span><br><span class="line">        <span class="comment">#$output = json_decode($output,true);</span></span><br><span class="line">        <span class="keyword">return</span> $output;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">deleteurl</span>(<span class="params">$url</span>)</span>&#123;</span><br><span class="line">        $ch = curl_init();</span><br><span class="line">    </span><br><span class="line">        curl_setopt($ch, CURLOPT_URL, $url);</span><br><span class="line">        <span class="comment">#curl_setopt($ch, CURLOPT_HEADER, true);</span></span><br><span class="line">        curl_setopt($ch, CURLOPT_RETURNTRANSFER, <span class="number">1</span>);</span><br><span class="line">        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, <span class="string">&#x27;DELETE&#x27;</span>);</span><br><span class="line">        $output = curl_exec($ch);</span><br><span class="line">        curl_close($ch);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">#$output = json_decode($output,true);</span></span><br><span class="line">        <span class="keyword">return</span> $output;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">number_container</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;arr_container = <span class="keyword">$this</span>-&gt;geturl(<span class="keyword">$this</span>-&gt;search_url);</span><br><span class="line">        <span class="keyword">$this</span>-&gt;number = count(<span class="keyword">$this</span>-&gt;arr_container,<span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 得到一个相对随机的端口</span></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">Random_port</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment"># 暂时使用垃圾一点的 伪随机端口</span></span><br><span class="line">        $max = end(<span class="keyword">$this</span>-&gt;port_pool);</span><br><span class="line">        $min = reset(<span class="keyword">$this</span>-&gt;port_pool);</span><br><span class="line">        $port = mt_rand($min,$max);</span><br><span class="line">        <span class="keyword">return</span> $port;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment"># 获取当前容器的端口数组</span></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">get_port_array</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;arr_container = <span class="keyword">$this</span>-&gt;geturl(<span class="keyword">$this</span>-&gt;search_url);</span><br><span class="line">        <span class="comment">#var_dump($this-&gt;arr_container);</span></span><br><span class="line">        <span class="keyword">$this</span>-&gt;number = count(<span class="keyword">$this</span>-&gt;arr_container,<span class="number">0</span>);</span><br><span class="line">        $i = range(<span class="number">0</span>,<span class="keyword">$this</span>-&gt;number<span class="number">-1</span>);</span><br><span class="line">        <span class="keyword">if</span>(<span class="keyword">$this</span>-&gt;number != <span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">foreach</span>($i <span class="keyword">as</span> $nn)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">$this</span>-&gt;current_ports[$nn] = <span class="keyword">$this</span>-&gt;arr_container[$nn][<span class="string">&quot;Ports&quot;</span>][<span class="number">1</span>][<span class="string">&quot;PublicPort&quot;</span>];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 迭代确定最终端口</span></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">get_port</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;   </span><br><span class="line">        $booL = <span class="literal">true</span>;</span><br><span class="line">        $Random_port =<span class="keyword">$this</span>-&gt;Random_port();</span><br><span class="line">        <span class="keyword">$this</span>-&gt;get_port_array();</span><br><span class="line">        <span class="keyword">while</span>(<span class="literal">true</span>)&#123;</span><br><span class="line">            <span class="keyword">foreach</span>(<span class="keyword">$this</span>-&gt;current_ports <span class="keyword">as</span> $port)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">if</span>($port == $Random_port)</span><br><span class="line">                &#123;</span><br><span class="line">                    $booL= <span class="literal">false</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span>(!$booL)&#123;</span><br><span class="line">                <span class="keyword">$this</span>-&gt;get_port();</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">            &#123;</span><br><span class="line">                <span class="keyword">$this</span>-&gt;container_port = $Random_port;</span><br><span class="line">                <span class="comment">#echo(&quot;[*] Container_port: &quot;.$this-&gt;container_port.&quot;\n&quot;);</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment"># 重新加载参数</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">create_container</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        $res = <span class="keyword">$this</span>-&gt;posturl(<span class="keyword">$this</span>-&gt;create_url,<span class="keyword">$this</span>-&gt;data_string);</span><br><span class="line">        <span class="keyword">echo</span>(<span class="string">&quot;[*] create container:&quot;</span>);</span><br><span class="line">        <span class="keyword">echo</span>(<span class="string">&#x27;Request: curl -v -X POST -H &quot;Content-Type: application/json&quot; &#x27;</span>.<span class="keyword">$this</span>-&gt;create_url.<span class="string">&#x27; -d \&#x27;&#x27;</span>. <span class="keyword">$this</span>-&gt;data_string.<span class="string">&#x27;\&#x27;&#x27;</span>.<span class="string">&quot;&lt;br&gt;&quot;</span>);</span><br><span class="line">        <span class="keyword">echo</span>(<span class="string">&quot;Response: &quot;</span>.$res.<span class="string">&quot;&lt;br&gt;&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">start_container</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        $res =  <span class="keyword">$this</span>-&gt;posturl(<span class="keyword">$this</span>-&gt;start_url);</span><br><span class="line">        <span class="keyword">echo</span>(<span class="string">&quot;[*] start container:&quot;</span>);</span><br><span class="line">        <span class="keyword">echo</span>(<span class="string">&#x27;Request: curl -v -X POST &#x27;</span>.<span class="keyword">$this</span>-&gt;start_url.<span class="string">&quot;&lt;br&gt;&quot;</span>);</span><br><span class="line">        <span class="keyword">echo</span>(<span class="string">&quot;Response: &quot;</span>.$res.<span class="string">&quot;&lt;br&gt;&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">stop_container</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        $res = <span class="keyword">$this</span>-&gt;posturl(<span class="keyword">$this</span>-&gt;stop_url);</span><br><span class="line">        <span class="keyword">echo</span>(<span class="string">&quot;[*] stop container:&quot;</span>);</span><br><span class="line">        <span class="keyword">echo</span>(<span class="string">&#x27;Request: curl -v -X POST &#x27;</span>.<span class="keyword">$this</span>-&gt;stop_url.<span class="string">&quot;&lt;br&gt;&quot;</span>);</span><br><span class="line">        <span class="keyword">echo</span>(<span class="string">&quot;Response: &quot;</span>.$res.<span class="string">&quot;&lt;br&gt;&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">delete_container</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        $res = <span class="keyword">$this</span>-&gt;deleteurl(<span class="keyword">$this</span>-&gt;delete_url);</span><br><span class="line">        <span class="keyword">echo</span>(<span class="string">&quot;[*] delete container:&quot;</span>);</span><br><span class="line">        <span class="keyword">echo</span>(<span class="string">&#x27;Request: curl -v -X DELETE &#x27;</span>.<span class="keyword">$this</span>-&gt;delete_url.<span class="string">&quot;&lt;br&gt;&quot;</span>);</span><br><span class="line">        <span class="keyword">echo</span>(<span class="string">&quot;Response: &quot;</span>.$res.<span class="string">&quot;&lt;br&gt;&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">ready</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;number_container();</span><br><span class="line">        <span class="keyword">$this</span>-&gt;reset();</span><br><span class="line">        <span class="keyword">if</span>(<span class="keyword">$this</span>-&gt;number &lt; <span class="keyword">$this</span>-&gt;max_number)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">reset</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(!<span class="keyword">$this</span>-&gt;container_name  <span class="keyword">and</span>  !<span class="keyword">$this</span>-&gt;container_port)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">$this</span>-&gt;get_port(); <span class="comment">// container_port</span></span><br><span class="line">            <span class="comment">//container_name</span></span><br><span class="line">            $pre_container_name=time();</span><br><span class="line">            <span class="keyword">$this</span>-&gt;container_name = $pre_container_name.<span class="keyword">$this</span>-&gt;container_port; </span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;create_url = sprintf(<span class="string">&#x27;%s/containers/create?name=%s&#x27;</span>,<span class="keyword">$this</span>-&gt;ip_url,<span class="keyword">$this</span>-&gt;container_name); <span class="comment">#post</span></span><br><span class="line">        <span class="keyword">$this</span>-&gt;start_url = sprintf(<span class="string">&#x27;%s/containers/%s/start&#x27;</span>,<span class="keyword">$this</span>-&gt;ip_url,<span class="keyword">$this</span>-&gt;container_name); <span class="comment">#post</span></span><br><span class="line">        <span class="keyword">$this</span>-&gt;stop_url = sprintf(<span class="string">&#x27;%s/containers/%s/stop?t=%s&#x27;</span>,<span class="keyword">$this</span>-&gt;ip_url,<span class="keyword">$this</span>-&gt;container_name,<span class="keyword">$this</span>-&gt;time); <span class="comment">#post</span></span><br><span class="line">        <span class="keyword">$this</span>-&gt;delete_url = sprintf(<span class="string">&#x27;%s/containers/%s&#x27;</span>,<span class="keyword">$this</span>-&gt;ip_url,<span class="keyword">$this</span>-&gt;container_name); <span class="comment">#delete</span></span><br><span class="line">        <span class="keyword">$this</span>-&gt;data_string = sprintf( <span class="string">&#x27;&#123;&quot;Image&quot;: &quot;%s&quot;,&quot;HostConfig&quot;: &#123;&quot;NetworkMode&quot;: &quot;bridge&quot;,&quot;PortBindings&quot;: &#123;&quot;80/tcp&quot;: [&#123;&quot;HostPort&quot;: &quot;%s&quot;&#125;]&#125;&#125;&#125;&#x27;</span>,<span class="keyword">$this</span>-&gt;image_name,<span class="keyword">$this</span>-&gt;container_port);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">docker</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;create_container(<span class="keyword">$this</span>-&gt;create_url,<span class="keyword">$this</span>-&gt;data_string);</span><br><span class="line">        <span class="keyword">$this</span>-&gt;start_container(<span class="keyword">$this</span>-&gt;start_url);</span><br><span class="line">        <span class="keyword">$this</span>-&gt;stop_container(<span class="keyword">$this</span>-&gt;stop_url);</span><br><span class="line">        <span class="comment">//$this-&gt;delete_container($this-&gt;delete_url);</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>curl.php</code></li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> </span><br><span class="line">@<span class="keyword">include_once</span>(<span class="string">&#x27;config.php&#x27;</span>);</span><br><span class="line">@<span class="keyword">include_once</span>(<span class="string">&#x27;class.php&#x27;</span>);</span><br><span class="line"></span><br><span class="line">$time=$_POST[<span class="string">&#x27;TTL&#x27;</span>];</span><br><span class="line">$image_name=$_POST[<span class="string">&#x27;image_name&#x27;</span>];</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"><span class="comment">/* $image_name=&quot;dvwa&quot;;</span></span><br><span class="line"><span class="comment">$time=&quot;00:01:00&quot;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">if(isset($_SERVER[&#x27;HTTP_REFERER&#x27;])) &#123;</span></span><br><span class="line"><span class="comment">    if($_SERVER[&#x27;HTTP_REFERER&#x27;]!== $refer_url )</span></span><br><span class="line"><span class="comment">    &#123;   </span></span><br><span class="line"><span class="comment">        $string = sprintf(&quot;&lt;script&gt;location.href=&#x27;%s?error=1&#x27;;&lt;/script&gt;&quot;,$error_location); // 错误类型 1 $_SERVER[&#x27;HTTP_REFERER&#x27;])错误 ,跳转到login.php</span></span><br><span class="line"><span class="comment">        echo($string);</span></span><br><span class="line"><span class="comment">    &#125;</span></span><br><span class="line"><span class="comment">&#125;</span></span><br><span class="line"><span class="comment">else&#123;</span></span><br><span class="line"><span class="comment">    $string = sprintf(&quot;&lt;script&gt;location.href=&#x27;%s?error=2&#x27;;&lt;/script&gt;&quot;,$error_location);  // 错误类型 2  $_SERVER[&#x27;HTTP_REFERER&#x27;])缺少 ,跳转到login.php</span></span><br><span class="line"><span class="comment">&#125;</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">check_images</span>(<span class="params">$data,$images_array</span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>($images_array[$data])&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">check_time</span>(<span class="params">$time</span>)</span></span><br><span class="line"><span class="function"></span>&#123;  </span><br><span class="line">    $parsed = strtotime($time);</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">empty</span>($parsed);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">## docker</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>( <span class="keyword">empty</span>($image_name) <span class="keyword">or</span> <span class="keyword">empty</span>($time) <span class="keyword">or</span> check_images($image_name,$images_array) <span class="keyword">or</span> check_time($time))&#123;  </span><br><span class="line">    $string = sprintf(<span class="string">&quot;&lt;script&gt;location.href=&#x27;%s?error=4&#x27;;&lt;/script&gt;&quot;</span>,$error_location);</span><br><span class="line">    <span class="keyword">echo</span>($string);       <span class="comment">//错误类型 4 docker 页面参数缺少或错误,跳转到靶机请求页面</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span>&#123;</span><br><span class="line">    $image_name = $images_array[$image_name];</span><br><span class="line">    $docker = <span class="keyword">new</span> docker($ip_url,$image_name,$container_name=<span class="string">&quot;&quot;</span>,$container_port=<span class="string">&quot;&quot;</span>,$time,$max_number,$port_pool,$error_location);</span><br><span class="line">    $BOOL = $docker-&gt;ready();</span><br><span class="line">    <span class="keyword">if</span>($BOOL)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// 跳转到成功页面</span></span><br><span class="line">        $string = sprintf(<span class="string">&quot;&lt;script&gt;location.href=&#x27;http://192.168.21.131:%s&#x27;;&lt;/script&gt;&quot;</span>,$docker-&gt;container_port);</span><br><span class="line">        <span class="keyword">echo</span> $string;</span><br><span class="line">        <span class="comment">//image_name   container_name  container_port time</span></span><br><span class="line">        $shell = sprintf(<span class="string">&quot;php docker.php %s %s %s %s &gt;/dev/null &amp;&quot;</span>,$image_name,$docker-&gt;container_name,$docker-&gt;container_port,$time);</span><br><span class="line">        var_dump($shell);</span><br><span class="line">        shell_exec($shell);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">        $string = sprintf(<span class="string">&quot;&lt;script&gt;location.href=&#x27;%s?error=3&#x27;;&lt;/script&gt;&quot;</span>,$docker-&gt;error_location);</span><br><span class="line">        <span class="keyword">echo</span>($string);    <span class="comment">//错误类型 3 容器达到上限,跳转到同一的错误页面</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li><code>config.php</code></li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$ip_url = <span class="string">&#x27;http://192.168.21.131:2375&#x27;</span>; <span class="comment">// docker remote api </span></span><br><span class="line">$max_number = <span class="number">20</span>;   <span class="comment">// 最大靶机数量</span></span><br><span class="line">$port_pool = range(<span class="number">4000</span>,<span class="number">4300</span>);  <span class="comment">//端口池</span></span><br><span class="line">$error_location = <span class="string">&quot;http://localhost/docker/fe1w0/error.php&quot;</span>; <span class="comment">//报错页面  http://202.119.201.197:2000/docker/error.php</span></span><br><span class="line">$refer_url=<span class="string">&#x27;http://localhost/docker/fe1w0&#x27;</span>; <span class="comment">// 允许的refer_url</span></span><br><span class="line">$login_url=<span class="string">&#x27;http://localhost&#x27;</span>;  <span class="comment">// 登录页面</span></span><br><span class="line">$images_array=<span class="keyword">array</span>(<span class="string">&quot;dvwa&quot;</span>=&gt;<span class="string">&quot;astronaut1712/dvwa:latest&quot;</span>,<span class="string">&quot;sqlilabs&quot;</span>=&gt;<span class="string">&quot;c0ny1/sqli-labs:0.1&quot;</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>docker.php</code></li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> </span><br><span class="line">@<span class="keyword">include_once</span>(<span class="string">&quot;config.php&quot;</span>);</span><br><span class="line">@<span class="keyword">include_once</span>(<span class="string">&quot;class.php&quot;</span>);</span><br><span class="line"></span><br><span class="line">$docker_parameter = $argv;</span><br><span class="line">var_dump($docker_parameter);</span><br><span class="line"></span><br><span class="line">$image_name = $docker_parameter[<span class="number">1</span>];</span><br><span class="line">$container_name = $docker_parameter[<span class="number">2</span>];</span><br><span class="line">$container_port = $docker_parameter[<span class="number">3</span>];</span><br><span class="line">$time = $docker_parameter[<span class="number">4</span>];</span><br><span class="line"></span><br><span class="line">$Docker = <span class="keyword">new</span> docker($ip_url,$image_name,$container_name,$container_port,$time,$max_number,$port_pool,$error_location);</span><br><span class="line">$Docker-&gt;reset();</span><br><span class="line">$Docker-&gt;docker();</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="php与定时"><a href="#php与定时" class="headerlink" title="php与定时"></a>php与定时</h1><blockquote>
+<p>目前遇到的最大的难点</p>
+<p>两种思路</p>
+<ul>
+<li>php 能控制docker stop  and delete</li>
+<li>crontab 看别人说,可能不太合适</li>
+</ul>
+</blockquote>
+<h3 id="docker-远程api-控制-stop-、delete"><a href="#docker-远程api-控制-stop-、delete" class="headerlink" title="docker 远程api  控制  stop 、delete"></a>docker 远程api  控制  stop 、delete</h3><blockquote>
+<p>github上的相关讨论</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/moby/moby/issues/1905">https://github.com/moby/moby/issues/1905</a></p>
+</blockquote>
+<p>在1.4的文档中我们可以看到api有<code>StopTimeout</code>这个参数,但奇怪的是在实际使用中,并没有效果(也可能我设置错了)</p>
+<p><img src="http://img.xzaslxr.xyz/img/image-20200722125449814.png" alt="image-20200722125449814"></p>
+<p>以下是我尝试的命令:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -v -X POST -H <span class="string">&quot;Content-Type: application/json http://192.168.21.131:2375/containers/create?name=dvwa -d &#x27;&#123;&quot;</span>Image<span class="string">&quot;: &quot;</span>astronaut1712/dvwa:latest<span class="string">&quot;,&quot;</span>HostConfig<span class="string">&quot;: &#123;&quot;</span>NetworkMode<span class="string">&quot;: &quot;</span>bridge<span class="string">&quot;,&quot;</span>StopSignal<span class="string">&quot;: &quot;</span>SIGTERM<span class="string">&quot;,&quot;</span>StopTimeout<span class="string">&quot;:30,&quot;</span>PortBindings<span class="string">&quot;: &#123;&quot;</span>80/tcp<span class="string">&quot;: [&#123;&quot;</span>HostPort<span class="string">&quot;: &quot;</span>3080<span class="string">&quot;&#125;]&#125;&#125;&#125;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>但在<code>wait</code>功能中有一个起到延时功能的参数,说明如下:</p>
+<blockquote>
+<p>参考链接:<a target="_blank" rel="noopener" href="https://docker-php.readthedocs.io/en/latest/cookbook/container-run/#waiting-for-the-container-to-end">https://docker-php.readthedocs.io/en/latest/cookbook/container-run/#waiting-for-the-container-to-end</a></p>
+</blockquote>
+<p><img src="http://img.xzaslxr.xyz/img/image-20200722141740320.png" alt="image-20200722141740320"></p>
+<p>修改php代码</p>
+<p><img src="http://img.xzaslxr.xyz/img/image-20200722141912689.png" alt="image-20200722141912689"></p>
+<h4 id="执行结果"><a href="#执行结果" class="headerlink" title="执行结果"></a>执行结果</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">[*] create container:</span><br><span class="line">Request: curl -v -X POST -H <span class="string">&quot;Content-Type: application/json&quot;</span> http://192.168.21.131:2375/containers/create?name=dvwa -d <span class="string">&#x27;&#123;&quot;Image&quot;: &quot;astronaut1712/dvwa:latest&quot;,&quot;HostConfig&quot;: &#123;&quot;NetworkMode&quot;: &quot;bridge&quot;,&quot;PortBindings&quot;: &#123;&quot;80/tcp&quot;: [&#123;&quot;HostPort&quot;: &quot;3080&quot;&#125;]&#125;&#125;&#125;&#x27;</span></span><br><span class="line">Response: HTTP/1.1 201 Created</span><br><span class="line">Api-Version: 1.40</span><br><span class="line">Content-Type: application/json</span><br><span class="line">Docker-Experimental: <span class="literal">false</span></span><br><span class="line">Ostype: linux</span><br><span class="line">Server: Docker/19.03.12 (linux)</span><br><span class="line">Date: Wed, 22 Jul 2020 06:15:18 GMT</span><br><span class="line">Content-Length: 88</span><br><span class="line"></span><br><span class="line">&#123;<span class="string">&quot;Id&quot;</span>:<span class="string">&quot;9a65141c4191505094838d91c5f537744e18a795494c480199f6598951102fa8&quot;</span>,<span class="string">&quot;Warnings&quot;</span>:[]&#125;</span><br><span class="line"></span><br><span class="line">[*] start container:</span><br><span class="line">Request: curl -v -X POST http://192.168.21.131:2375/containers/dvwa/start</span><br><span class="line">Response: HTTP/1.1 204 No Content</span><br><span class="line">Api-Version: 1.40</span><br><span class="line">Docker-Experimental: <span class="literal">false</span></span><br><span class="line">Ostype: linux</span><br><span class="line">Server: Docker/19.03.12 (linux)</span><br><span class="line">Date: Wed, 22 Jul 2020 06:15:19 GMT</span><br><span class="line"></span><br><span class="line">[*] stop container:</span><br><span class="line">Request: curl -v -X POST http://192.168.21.131:2375/containers/dvwa/stop?t=30</span><br><span class="line">Response: HTTP/1.1 204 No Content</span><br><span class="line">Api-Version: 1.40</span><br><span class="line">Docker-Experimental: <span class="literal">false</span></span><br><span class="line">Ostype: linux</span><br><span class="line">Server: Docker/19.03.12 (linux)</span><br><span class="line">Date: Wed, 22 Jul 2020 06:15:50 GMT</span><br><span class="line"></span><br><span class="line">[*] delete container:</span><br><span class="line">Request: curl -v -X DELETE http://192.168.21.131:2375/containers/dvwa</span><br><span class="line">Response: HTTP/1.1 204 No Content</span><br><span class="line">Api-Version: 1.40</span><br><span class="line">Docker-Experimental: <span class="literal">false</span></span><br><span class="line">Ostype: linux</span><br><span class="line">Server: Docker/19.03.12 (linux)</span><br><span class="line">Date: Wed, 22 Jul 2020 06:15:50 GMT</span><br><span class="line"></span><br><span class="line">[Finished <span class="keyword">in</span> 32.2s]</span><br></pre></td></tr></table></figure>
+
+<h1 id="php与容器数量控制"><a href="#php与容器数量控制" class="headerlink" title="php与容器数量控制"></a>php与容器数量控制</h1><h2 id="利用查询到的容器信息来解决该问题"><a href="#利用查询到的容器信息来解决该问题" class="headerlink" title="利用查询到的容器信息来解决该问题"></a>利用查询到的容器信息来解决该问题</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">    <span class="comment"># </span></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">number_container</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        $res = <span class="keyword">$this</span>-&gt;geturl(<span class="keyword">$this</span>-&gt;search_url);</span><br><span class="line">        $number = count($res,<span class="number">0</span>);<span class="comment">//count()中的二个参数为0时,统计第一维度的所有元素,为1时循环统计遍历所有元素</span></span><br><span class="line">        <span class="keyword">return</span> $number;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">省略中间的代码</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">docker</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        $number = <span class="keyword">$this</span>-&gt;number_container();</span><br><span class="line">        <span class="keyword">if</span>($number &lt; <span class="keyword">$this</span>-&gt;max_number)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">$this</span>-&gt;create_container(<span class="keyword">$this</span>-&gt;create_url,<span class="keyword">$this</span>-&gt;data_string);</span><br><span class="line">            <span class="keyword">$this</span>-&gt;start_container(<span class="keyword">$this</span>-&gt;start_url);</span><br><span class="line">            <span class="keyword">$this</span>-&gt;stop_container(<span class="keyword">$this</span>-&gt;stop_url);</span><br><span class="line">            <span class="keyword">$this</span>-&gt;delete_container(<span class="keyword">$this</span>-&gt;delete_url);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="keyword">die</span>(<span class="string">&quot;[*] 容器数量已经达到最大值,请稍后尝试&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="php-与端口转发"><a href="#php-与端口转发" class="headerlink" title="php 与端口转发"></a>php 与端口转发</h1><h2 id="端口池"><a href="#端口池" class="headerlink" title="端口池"></a>端口池</h2><p>端口池大小为<code>[5000-6000]</code>，这个由配置文件控制</p>
+<p>如:</p>
+<ul>
+<li><code>config.php</code></li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$ip_url = <span class="string">&#x27;http://192.168.21.131:2375&#x27;</span>;</span><br><span class="line">$max_number = <span class="number">3</span>;</span><br><span class="line">$port_pool = range(<span class="number">4000</span>,<span class="number">4300</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>docker.php</code>节选</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">docker</span></span>&#123;</span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">    省略</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    <span class="keyword">public</span> $port_pool;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params">$ip_url=<span class="string">&quot;&quot;</span>,$image_name=<span class="string">&quot;&quot;</span>,$container_name=<span class="string">&quot;&quot;</span>,$container_port=<span class="string">&quot;&quot;</span>,$time=<span class="string">&quot;&quot;</span>,$max_number=<span class="number">30</span>,$port_pool</span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">         <span class="comment">/*</span></span><br><span class="line"><span class="comment">         省略</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="keyword">$this</span>-&gt;port_pool=$port_pool; <span class="comment">//端口池由外部设置</span></span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">         省略</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">    &#125;</span><br><span class="line"> <span class="comment">/*</span></span><br><span class="line"><span class="comment">省略</span></span><br><span class="line"><span class="comment">*/</span> </span><br><span class="line">&#125;        </span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="统计处于开启状态容器的端口"><a href="#统计处于开启状态容器的端口" class="headerlink" title="统计处于开启状态容器的端口"></a>统计处于开启状态容器的端口</h2><ul>
+<li>思路</li>
+</ul>
+<ol>
+<li>从<code>5000~6000</code>之间随机挑选一个端口 port_A</li>
+<li>读取container的端口信息,并用数组保存下来 port_B</li>
+<li>二者比较, 若port_A 不在port_B 中,则port_A作为正常的端口;反之,退回到第一步,重新执行,直到有正常的端口出现。</li>
+</ol>
+<ul>
+<li>核心代码</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 得到一个相对随机的端口</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Random_port</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment"># 暂时使用垃圾一点的 伪随机端口</span></span><br><span class="line">    $max = end(<span class="keyword">$this</span>-&gt;port_pool);</span><br><span class="line">    $min = reset(<span class="keyword">$this</span>-&gt;port_pool);</span><br><span class="line">    $port = mt_rand($min,$max);</span><br><span class="line">    <span class="keyword">return</span> $port;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment"># 获取当前容器的端口数组</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">get_port_array</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">$this</span>-&gt;arr_container = <span class="keyword">$this</span>-&gt;geturl(<span class="keyword">$this</span>-&gt;search_url);</span><br><span class="line">    <span class="keyword">$this</span>-&gt;number = count(<span class="keyword">$this</span>-&gt;arr_container,<span class="number">0</span>);</span><br><span class="line">    $i = range(<span class="number">0</span>,<span class="keyword">$this</span>-&gt;number<span class="number">-1</span>);</span><br><span class="line">    <span class="keyword">foreach</span>($i <span class="keyword">as</span> $nn)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;current_ports[$nn] = <span class="keyword">$this</span>-&gt;arr_container[$nn][<span class="string">&quot;Ports&quot;</span>][<span class="number">1</span>][<span class="string">&quot;PublicPort&quot;</span>];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 迭代确定最终端口</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">get_port</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;   </span><br><span class="line">    $booL = <span class="literal">true</span>;</span><br><span class="line">    $Random_port =<span class="keyword">$this</span>-&gt;Random_port();</span><br><span class="line">    <span class="keyword">$this</span>-&gt;get_port_array();</span><br><span class="line">    <span class="keyword">while</span>(<span class="literal">true</span>)&#123;</span><br><span class="line">        <span class="keyword">foreach</span>(<span class="keyword">$this</span>-&gt;current_ports <span class="keyword">as</span> $port)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>($port == $Random_port)</span><br><span class="line">            &#123;</span><br><span class="line">                $booL= <span class="literal">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(!$booL)&#123;</span><br><span class="line">            <span class="keyword">$this</span>-&gt;get_port();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">$this</span>-&gt;container_port = $Random_port;</span><br><span class="line">            <span class="keyword">echo</span>(<span class="string">&quot;[*] Container_port: &quot;</span>.<span class="keyword">$this</span>-&gt;container_port.<span class="string">&quot;\n&quot;</span>);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment"># 重新加载参数</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">reset</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">$this</span>-&gt;data_string = sprintf( <span class="string">&#x27;&#123;&quot;Image&quot;: &quot;%s&quot;,&quot;HostConfig&quot;: &#123;&quot;NetworkMode&quot;: &quot;bridge&quot;,&quot;PortBindings&quot;: &#123;&quot;80/tcp&quot;: [&#123;&quot;HostPort&quot;: &quot;%s&quot;&#125;]&#125;&#125;&#125;&#x27;</span>,<span class="keyword">$this</span>-&gt;image_name,<span class="keyword">$this</span>-&gt;container_port);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="多线程-或-多进程"><a href="#多线程-或-多进程" class="headerlink" title="多线程 或 多进程"></a>多线程 或 多进程</h1><p>Q：api客户端为什么需要多线程或多进程。</p>
+<p>A：以下是个人理解：</p>
+<p>当php脚本没有设置多线程或没有使用进程方式启动时,出于性能考虑,中间器会有响应时间设定,但响应超时时,则认为目的服务器有问题,即状态为504错误。而多线程的设定或多进程的方式,不会考虑响应时间问题,直达结束。此外,在前一种情况中,是全部执行才可以输出,而在第二种情况中,随着进展一步步输出。而我的代码(起初的代码),也遇到这个问题,当运行到docker()函数时,需要等待较长的等待时间,比如30分钟，那毫不犹豫就是504报错。所以需要多线程或多进程。</p>
+<p>Q：如何实现？</p>
+<p>A: </p>
+<p><img src="http://img.xzaslxr.xyz/img/image-20200723184832220.png" alt="image-20200723184832220"></p>
+<blockquote>
+<p>此回答参考此链接  <a target="_blank" rel="noopener" href="https://www.zhihu.com/question/31893506/answer/53797159">https://www.zhihu.com/question/31893506/answer/53797159</a>  作者：徐汉彬</p>
+</blockquote>
+<p>当正如前辈,在这么长的时间段里,如何确保父进程()还在进行工作,这是比较难确定的,但对于我而言依旧有学习价值。</p>
+<h2 id="多线程-尝试"><a href="#多线程-尝试" class="headerlink" title="多线程 尝试"></a>多线程 尝试</h2><blockquote>
+<p>学习链接:</p>
+<p>【Multi-Threading in PHP with pthreads】</p>
+<p><a target="_blank" rel="noopener" href="https://gist.github.com/krakjoe/6437782">https://gist.github.com/krakjoe/6437782</a> 原文</p>
+<p><a target="_blank" rel="noopener" href="https://download.csdn.net/download/tianhuimin/6407035">https://download.csdn.net/download/tianhuimin/6407035</a> 为上一篇的翻译 但可惜没csdn币￥</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/u010433704/article/details/92795346">https://blog.csdn.net/u010433704/article/details/92795346</a>  free 译文</p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/zhenbianshu/p/7978835.html">https://www.cnblogs.com/zhenbianshu/p/7978835.html</a> 实例</p>
+<p><a target="_blank" rel="noopener" href="https://www.php.net/manual/zh/book.pthreads.php">https://www.php.net/manual/zh/book.pthreads.php</a>  PHP手册</p>
+<p><a target="_blank" rel="noopener" href="http://www.netkiller.cn/journal/php.thread.html">http://www.netkiller.cn/journal/php.thread.html</a> 推荐</p>
+</blockquote>
+<h2 id="多进程-尝试"><a href="#多进程-尝试" class="headerlink" title="多进程 尝试"></a>多进程 尝试</h2><p>实话实说,开启一个新的shell进程,并在里面运行php脚本的方式, 个人比较推荐,就是要控制好参数,以免被直接构造出webshell。</p>
+<p>大致思路是利用<code>shell_exec()</code>来实现异步执行,同时将输出导向<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki//dev/null"><code>/dev/null</code></a>,并在将当前作业(<code>docker.php</code>)放到当前的shell的后台执行。</p>
+<p>大致代码</p>
+<ul>
+<li><code>curl.php</code></li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>( <span class="keyword">empty</span>($image_name) <span class="keyword">or</span> <span class="keyword">empty</span>($time) <span class="keyword">or</span> check_images($image_name,$images_array) <span class="keyword">or</span> check_time($time))&#123;  </span><br><span class="line">    $string = sprintf(<span class="string">&quot;&lt;script&gt;location.href=&#x27;%s?error=4&#x27;;&lt;/script&gt;&quot;</span>,$error_location);</span><br><span class="line">    <span class="keyword">echo</span>($string);       <span class="comment">//错误类型 4 docker 页面参数缺少或错误,跳转到靶机请求页面</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span>&#123;</span><br><span class="line">    $image_name = $images_array[$image_name];</span><br><span class="line">    $docker = <span class="keyword">new</span> docker($ip_url,$image_name,$container_name=<span class="string">&quot;&quot;</span>,$container_port=<span class="string">&quot;&quot;</span>,$time,$max_number,$port_pool,$error_location);</span><br><span class="line">    $BOOL = $docker-&gt;ready();</span><br><span class="line">    <span class="keyword">if</span>($BOOL)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// 跳转到成功页面</span></span><br><span class="line">        $string = sprintf(<span class="string">&quot;&lt;script&gt;location.href=&#x27;http://192.168.21.131:%s&#x27;;&lt;/script&gt;&quot;</span>,$docker-&gt;container_port);</span><br><span class="line">        <span class="keyword">echo</span> $string;</span><br><span class="line">        <span class="comment">//image_name   container_name  container_port time</span></span><br><span class="line">        $shell = sprintf(<span class="string">&quot;php docker.php %s %s %s %s &gt;/dev/null &amp;&quot;</span>,$image_name,$docker-&gt;container_name,$docker-&gt;container_port,$time);</span><br><span class="line">        var_dump($shell);</span><br><span class="line">        shell_exec($shell);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">        $string = sprintf(<span class="string">&quot;&lt;script&gt;location.href=&#x27;%s?error=3&#x27;;&lt;/script&gt;&quot;</span>,$docker-&gt;error_location);</span><br><span class="line">        <span class="keyword">echo</span>($string);    <span class="comment">//错误类型 3 容器达到上限,跳转到同一的错误页面</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>docker.php</code></li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> </span><br><span class="line">@<span class="keyword">include_once</span>(<span class="string">&quot;config.php&quot;</span>);</span><br><span class="line">@<span class="keyword">include_once</span>(<span class="string">&quot;class.php&quot;</span>);</span><br><span class="line"></span><br><span class="line">$docker_parameter = $argv;</span><br><span class="line">var_dump($docker_parameter);</span><br><span class="line"></span><br><span class="line">$image_name = $docker_parameter[<span class="number">1</span>];</span><br><span class="line">$container_name = $docker_parameter[<span class="number">2</span>];</span><br><span class="line">$container_port = $docker_parameter[<span class="number">3</span>];</span><br><span class="line">$time = $docker_parameter[<span class="number">4</span>];</span><br><span class="line"></span><br><span class="line">$Docker = <span class="keyword">new</span> docker($ip_url,$image_name,$container_name,$container_port,$time,$max_number,$port_pool,$error_location);</span><br><span class="line">$Docker-&gt;reset();</span><br><span class="line">$Docker-&gt;docker();</span><br><span class="line"><span class="meta">?&gt;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h1 id="后计与想法"><a href="#后计与想法" class="headerlink" title="后计与想法"></a>后计与想法</h1><p>😓一开始,打算远程控制zstack来创建和销毁主机,虽然官网上有这一部分资料,但可行性的方案实现起来难度还是高。和老师商量之后,采用在zstack开启一个docker云主机,并用remote api来实现容器的创建和销毁,目前来看实现性要高很多,但安全性也是个燃眉之急[可见 <a target="_blank" rel="noopener" href="http://www.dockerinfo.net/1416.html">Docker 2375 端口入侵服务器</a> ]，这还不算脚本中的问题(暂时在docker的方法中有一个<code>check</code>函数,以备后续研究)。此外,有空可以着手学习<code>swoole</code>。</p>
+<p>Orz,丢人的我。</p>
+
+    </article>
+    <!-- license  -->
+    
+        <div class="license-wrapper">
+            <p>原文作者：<a href="https://xzlxr.github.io">fe1w0</a>
+            <p>原文链接：<a href="https://xzlxr.github.io/2020/07/22/php-curl%E4%B8%8Edocker-remote-api/">https://xzlxr.github.io/2020/07/22/php-curl%E4%B8%8Edocker-remote-api/</a>
+            <p>发表日期：<a href="https://xzlxr.github.io/2020/07/22/php-curl%E4%B8%8Edocker-remote-api/">July 22nd 2020, 1:58:52 am</a>
+            <p>更新日期：<a href="https://xzlxr.github.io/2020/07/22/php-curl%E4%B8%8Edocker-remote-api/">July 25th 2020, 2:55:37 am</a>
+            <p>版权声明：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
+        </div>
+    
+    <!-- paginator  -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+                <div class="nextSlogan">Next Post</div>
+                <a href= "/2020/07/25/%E5%AE%89%E6%81%92%E6%9C%88%E8%B5%9B20200725/" title= "安恒月赛20200725">
+                    <div class="nextTitle">安恒月赛20200725</div>
+                </a>
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href= "/2020/06/18/zh3r0ctf_and_hsctf/" title= "zh3r0ctf_and_hsctf">
+                    <div class="prevTitle">zh3r0ctf_and_hsctf</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+    <div id="lv-container" data-id="city" data-uid= MTAyMC80ODYzMS8yNTEyNQ==>
+        <script type="text/javascript">
+            (function (d, s) {
+                var j, e = d.getElementsByTagName(s)[0];
+                if (typeof LivereTower === 'function') { return; }
+                j = d.createElement(s);
+                j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+                j.async = true;
+
+                e.parentNode.insertBefore(j, e);
+            })(document, 'script');
+        </script>
+        <noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+    </div>
+
+<!-- City版安装代码已完成 -->
+    
+    
+    <!-- gitalk评论 -->
+
+    <!-- utteranc评论 -->
+
+    <!-- partial('_partial/comment/changyan') -->
+    <!--PC版-->
+
+
+    
+    
+
+    <!-- 评论 -->
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:xzasliuxinrong@gmail.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="//github.com/xzlxr" class="iconfont-archer github" target="_blank" title=github></a>
+            
+        
+    
+        
+            
+                <span class="iconfont-archer wechat" title=wechat>
+                  
+                  <img class="profile-qr" src="/assets/example_qr.png" />
+                </span>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            
+                <a href="https://steamcommunity.com/id/xzlxr/" class="iconfont-archer steam" target="_blank" title=steam></a>
+            
+        
+    
+        
+    
+        
+            
+                <a href="/atom.xml" class="iconfont-archer rss" target="_blank" title=rss></a>
+            
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+    
+     
+    <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
+    
+    </div>
+    
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper" style=
+    
+
+
+
+
+
+
+
+top:50vh;
+
+    >
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#docker-remote-api"><span class="toc-number">1.</span> <span class="toc-text">docker remote api</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#search-the-containers"><span class="toc-number">1.1.</span> <span class="toc-text">search the containers</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#create-one-container"><span class="toc-number">1.2.</span> <span class="toc-text">create one container</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#start-the-container"><span class="toc-number">1.3.</span> <span class="toc-text">start the container</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#stop-the-container"><span class="toc-number">1.4.</span> <span class="toc-text">stop the container</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#delete-the-container"><span class="toc-number">1.5.</span> <span class="toc-text">delete the container</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#php-%E4%B8%8E-docker-remote-api"><span class="toc-number">2.</span> <span class="toc-text">php  与  docker remote api</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#php%E4%B8%8E%E5%AE%9A%E6%97%B6"><span class="toc-number">3.</span> <span class="toc-text">php与定时</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#docker-%E8%BF%9C%E7%A8%8Bapi-%E6%8E%A7%E5%88%B6-stop-%E3%80%81delete"><span class="toc-number">3.0.1.</span> <span class="toc-text">docker 远程api  控制  stop 、delete</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%89%A7%E8%A1%8C%E7%BB%93%E6%9E%9C"><span class="toc-number">3.0.1.1.</span> <span class="toc-text">执行结果</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#php%E4%B8%8E%E5%AE%B9%E5%99%A8%E6%95%B0%E9%87%8F%E6%8E%A7%E5%88%B6"><span class="toc-number">4.</span> <span class="toc-text">php与容器数量控制</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%A9%E7%94%A8%E6%9F%A5%E8%AF%A2%E5%88%B0%E7%9A%84%E5%AE%B9%E5%99%A8%E4%BF%A1%E6%81%AF%E6%9D%A5%E8%A7%A3%E5%86%B3%E8%AF%A5%E9%97%AE%E9%A2%98"><span class="toc-number">4.1.</span> <span class="toc-text">利用查询到的容器信息来解决该问题</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#php-%E4%B8%8E%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91"><span class="toc-number">5.</span> <span class="toc-text">php 与端口转发</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AB%AF%E5%8F%A3%E6%B1%A0"><span class="toc-number">5.1.</span> <span class="toc-text">端口池</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%9F%E8%AE%A1%E5%A4%84%E4%BA%8E%E5%BC%80%E5%90%AF%E7%8A%B6%E6%80%81%E5%AE%B9%E5%99%A8%E7%9A%84%E7%AB%AF%E5%8F%A3"><span class="toc-number">5.2.</span> <span class="toc-text">统计处于开启状态容器的端口</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A4%9A%E7%BA%BF%E7%A8%8B-%E6%88%96-%E5%A4%9A%E8%BF%9B%E7%A8%8B"><span class="toc-number">6.</span> <span class="toc-text">多线程 或 多进程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%9A%E7%BA%BF%E7%A8%8B-%E5%B0%9D%E8%AF%95"><span class="toc-number">6.1.</span> <span class="toc-text">多线程 尝试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%9A%E8%BF%9B%E7%A8%8B-%E5%B0%9D%E8%AF%95"><span class="toc-number">6.2.</span> <span class="toc-text">多进程 尝试</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%90%8E%E8%AE%A1%E4%B8%8E%E6%83%B3%E6%B3%95"><span class="toc-number">7.</span> <span class="toc-text">后计与想法</span></a></li></ol>
+    </div>
+    
+    <div class="back-top iconfont-archer">&#xe639;</div>
+    <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-panel-archives">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 33
+        </div>
+        <!-- search  -->
+        
+    </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> Invalid date </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2020/10/01/hello-world/" >Hello World</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2020 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/30</span><a class="archive-post-title" href= "/2020/09/30/cumtctf2020-Web%E5%87%BA%E9%A2%98/" >cumtctf2020-Web出题</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/13</span><a class="archive-post-title" href= "/2020/09/13/PHP-Parser/" >初识PHP-Parser</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/12</span><a class="archive-post-title" href= "/2020/09/12/20208%E6%9C%88%E5%88%B09%E6%9C%88%E5%88%9D%E7%9A%84wp%E5%90%88%E9%9B%86/" >20208月到9月初的wp合集</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/26</span><a class="archive-post-title" href= "/2020/07/26/CyBRICS-CTF-2020/" >CyBRICS CTF 2020</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/25</span><a class="archive-post-title" href= "/2020/07/25/%E5%AE%89%E6%81%92%E6%9C%88%E8%B5%9B20200725/" >安恒月赛20200725</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/22</span><a class="archive-post-title" href= "/2020/07/22/php-curl%E4%B8%8Edocker-remote-api/" >php_curl与docker_remote_api</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/18</span><a class="archive-post-title" href= "/2020/06/18/zh3r0ctf_and_hsctf/" >zh3r0ctf_and_hsctf</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/28</span><a class="archive-post-title" href= "/2020/05/28/buuctf-0x02/" >buuctf_0x02</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/10</span><a class="archive-post-title" href= "/2020/05/10/VulnStack-0x01/" >VulnStack_0x01</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/05</span><a class="archive-post-title" href= "/2020/05/05/sqli%E4%BB%A3%E7%A0%81%E7%BC%96%E5%86%99%E4%B8%8E%E9%98%B2%E6%8A%A4/" >sqli代码编写与防护</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/29</span><a class="archive-post-title" href= "/2020/04/29/upload-labs/" >upload-labs</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/27</span><a class="archive-post-title" href= "/2020/04/27/web_%E5%AE%89%E5%85%A8%E4%B9%8B%E9%A1%B5%E9%9D%A2%E8%A7%A3%E6%9E%90%E7%9A%84%E6%B5%81%E7%A8%8B%E5%AD%A6%E4%B9%A0/" >页面解析的流程学习</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/26</span><a class="archive-post-title" href= "/2020/04/26/2020-4%E6%AF%94%E8%B5%9B%E4%B8%8E%E5%88%B7%E9%A2%98/" >2020-4中旬比赛与刷题</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/23</span><a class="archive-post-title" href= "/2020/04/23/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9B%B8%E5%85%B3%E6%B3%A8%E5%85%A5%E8%AF%AD%E5%8F%A5%E7%9A%84%E6%94%B6%E9%9B%86%E5%92%8C%E5%AD%A6%E4%B9%A0/" >数据库相关注入语句的收集和学习</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/06</span><a class="archive-post-title" href= "/2020/04/06/2020-yctf/" >2020-yctf</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/06</span><a class="archive-post-title" href= "/2020/04/06/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%8A%9F%E8%83%BD/" >数据库功能</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/30</span><a class="archive-post-title" href= "/2020/03/30/%E7%B3%BB%E7%BB%9F%E8%A1%A8%E5%AD%A6%E4%B9%A0/" >系统表学习</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/23</span><a class="archive-post-title" href= "/2020/03/23/%E8%AE%A4%E8%AF%86%E6%95%B0%E6%8D%AE%E5%BA%93/" >认识数据库</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/16</span><a class="archive-post-title" href= "/2020/03/16/%E6%90%AD%E5%BB%BAweb%E8%BF%90%E8%A1%8C%E7%9A%84%E5%9F%BA%E7%A1%80%E7%8E%AF%E5%A2%83/" >搭建web运行的基础环境</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/25</span><a class="archive-post-title" href= "/2020/02/25/sqli/" >sqli</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/30</span><a class="archive-post-title" href= "/2020/01/30/flask/" >flask</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/10</span><a class="archive-post-title" href= "/2020/01/10/buuctf/" >buuctf</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/07</span><a class="archive-post-title" href= "/2020/01/07/CUMTCTF%E7%AB%9E%E8%B5%9B%E5%B9%B3%E5%8F%B0/" >CUMTCTF竞赛平台</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2019 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/02</span><a class="archive-post-title" href= "/2019/12/02/XSS/" >XSS_20</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/18</span><a class="archive-post-title" href= "/2019/11/18/learngit/" >learngit</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/03</span><a class="archive-post-title" href= "/2019/11/03/cumt-bxs/" >cumt_bxs 入门与提升</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/article/" >回顾与反省</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/07</span><a class="archive-post-title" href= "/2019/10/07/injection/" >injection</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/28</span><a class="archive-post-title" href= "/2019/09/28/CUMTCTF2019-FINAL/" >CUMTCTF2019-FINAL</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/23</span><a class="archive-post-title" href= "/2019/09/23/9-20/" >9-20  wp   慢慢前行</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/18</span><a class="archive-post-title" href= "/2019/09/18/future/" >面对未来</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/17</span><a class="archive-post-title" href= "/2019/09/17/hackme%20wp%20%20%E5%BE%85%E7%BB%AD/" >hackme wp 待续</a>
+        </li>
+    
+    </div>
+  </div>
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name" data-tags="ctf"><span class="iconfont-archer">&#xe606;</span>ctf</span>
+    
+        <span class="sidebar-tag-name" data-tags="web"><span class="iconfont-archer">&#xe606;</span>web</span>
+    
+        <span class="sidebar-tag-name" data-tags="2020"><span class="iconfont-archer">&#xe606;</span>2020</span>
+    
+        <span class="sidebar-tag-name" data-tags="2020-yctf"><span class="iconfont-archer">&#xe606;</span>2020-yctf</span>
+    
+        <span class="sidebar-tag-name" data-tags="python"><span class="iconfont-archer">&#xe606;</span>python</span>
+    
+        <span class="sidebar-tag-name" data-tags="misc"><span class="iconfont-archer">&#xe606;</span>misc</span>
+    
+        <span class="sidebar-tag-name" data-tags="sql injection"><span class="iconfont-archer">&#xe606;</span>sql injection</span>
+    
+        <span class="sidebar-tag-name" data-tags="cumt"><span class="iconfont-archer">&#xe606;</span>cumt</span>
+    
+        <span class="sidebar-tag-name" data-tags="PHP-Parser"><span class="iconfont-archer">&#xe606;</span>PHP-Parser</span>
+    
+        <span class="sidebar-tag-name" data-tags="php"><span class="iconfont-archer">&#xe606;</span>php</span>
+    
+        <span class="sidebar-tag-name" data-tags="xss"><span class="iconfont-archer">&#xe606;</span>xss</span>
+    
+        <span class="sidebar-tag-name" data-tags="life"><span class="iconfont-archer">&#xe606;</span>life</span>
+    
+        <span class="sidebar-tag-name" data-tags="flask"><span class="iconfont-archer">&#xe606;</span>flask</span>
+    
+        <span class="sidebar-tag-name" data-tags="crypto"><span class="iconfont-archer">&#xe606;</span>crypto</span>
+    
+        <span class="sidebar-tag-name" data-tags="sql注入"><span class="iconfont-archer">&#xe606;</span>sql注入</span>
+    
+        <span class="sidebar-tag-name" data-tags="sql-injection"><span class="iconfont-archer">&#xe606;</span>sql-injection</span>
+    
+        <span class="sidebar-tag-name" data-tags="git"><span class="iconfont-archer">&#xe606;</span>git</span>
+    
+        <span class="sidebar-tag-name" data-tags="zh3r0"><span class="iconfont-archer">&#xe606;</span>zh3r0</span>
+    
+        <span class="sidebar-tag-name" data-tags="sql"><span class="iconfont-archer">&#xe606;</span>sql</span>
+    
+        <span class="sidebar-tag-name" data-tags="信安之路"><span class="iconfont-archer">&#xe606;</span>信安之路</span>
+    
+        <span class="sidebar-tag-name" data-tags="mysql"><span class="iconfont-archer">&#xe606;</span>mysql</span>
+    
+        <span class="sidebar-tag-name" data-tags="udf"><span class="iconfont-archer">&#xe606;</span>udf</span>
+    
+        <span class="sidebar-tag-name" data-tags="笔记"><span class="iconfont-archer">&#xe606;</span>笔记</span>
+    
+        <span class="sidebar-tag-name" data-tags="内网渗透"><span class="iconfont-archer">&#xe606;</span>内网渗透</span>
+    
+        <span class="sidebar-tag-name" data-tags="学习"><span class="iconfont-archer">&#xe606;</span>学习</span>
+    
+        <span class="sidebar-tag-name" data-tags="红日"><span class="iconfont-archer">&#xe606;</span>红日</span>
+    
+        <span class="sidebar-tag-name" data-tags="buuctf"><span class="iconfont-archer">&#xe606;</span>buuctf</span>
+    
+        <span class="sidebar-tag-name" data-tags="cumtctf2020"><span class="iconfont-archer">&#xe606;</span>cumtctf2020</span>
+    
+        <span class="sidebar-tag-name" data-tags="docker"><span class="iconfont-archer">&#xe606;</span>docker</span>
+    
+        <span class="sidebar-tag-name" data-tags="curl"><span class="iconfont-archer">&#xe606;</span>curl</span>
+    
+        <span class="sidebar-tag-name" data-tags="sqli"><span class="iconfont-archer">&#xe606;</span>sqli</span>
+    
+        <span class="sidebar-tag-name" data-tags="系统表"><span class="iconfont-archer">&#xe606;</span>系统表</span>
+    
+        <span class="sidebar-tag-name" data-tags="数据库的输入输出"><span class="iconfont-archer">&#xe606;</span>数据库的输入输出</span>
+    
+        <span class="sidebar-tag-name" data-tags="upload"><span class="iconfont-archer">&#xe606;</span>upload</span>
+    
+        <span class="sidebar-tag-name" data-tags="ubuntu"><span class="iconfont-archer">&#xe606;</span>ubuntu</span>
+    
+        <span class="sidebar-tag-name" data-tags="apache"><span class="iconfont-archer">&#xe606;</span>apache</span>
+    
+        <span class="sidebar-tag-name" data-tags="nginx"><span class="iconfont-archer">&#xe606;</span>nginx</span>
+    
+        <span class="sidebar-tag-name" data-tags="buuoj"><span class="iconfont-archer">&#xe606;</span>buuoj</span>
+    
+        <span class="sidebar-tag-name" data-tags="第十三届全国大学生信息安全竞赛-创新实践能力赛"><span class="iconfont-archer">&#xe606;</span>第十三届全国大学生信息安全竞赛-创新实践能力赛</span>
+    
+        <span class="sidebar-tag-name" data-tags="第四届强网杯"><span class="iconfont-archer">&#xe606;</span>第四届强网杯</span>
+    
+        <span class="sidebar-tag-name" data-tags="GACTF"><span class="iconfont-archer">&#xe606;</span>GACTF</span>
+    
+        <span class="sidebar-tag-name" data-tags="🐏城杯"><span class="iconfont-archer">&#xe606;</span>🐏城杯</span>
+    
+        <span class="sidebar-tag-name" data-tags="🎣杯"><span class="iconfont-archer">&#xe606;</span>🎣杯</span>
+    
+        <span class="sidebar-tag-name" data-tags="DDCTF"><span class="iconfont-archer">&#xe606;</span>DDCTF</span>
+    
+        <span class="sidebar-tag-name" data-tags="WMCTF"><span class="iconfont-archer">&#xe606;</span>WMCTF</span>
+    
+        <span class="sidebar-tag-name" data-tags="其他"><span class="iconfont-archer">&#xe606;</span>其他</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br/>
+    1、请确保node版本大于6.2<br/>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br/>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br/>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #787878; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: true
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+    
+        <span class="sidebar-category-name" data-categories="ctf"><span class="iconfont-archer">&#xe60a;</span>ctf</span>
+    
+        <span class="sidebar-category-name" data-categories="PHP-Parser"><span class="iconfont-archer">&#xe60a;</span>PHP-Parser</span>
+    
+        <span class="sidebar-category-name" data-categories="life"><span class="iconfont-archer">&#xe60a;</span>life</span>
+    
+        <span class="sidebar-category-name" data-categories="flask"><span class="iconfont-archer">&#xe60a;</span>flask</span>
+    
+        <span class="sidebar-category-name" data-categories="learn"><span class="iconfont-archer">&#xe60a;</span>learn</span>
+    
+        <span class="sidebar-category-name" data-categories="信安之路"><span class="iconfont-archer">&#xe60a;</span>信安之路</span>
+    
+        <span class="sidebar-category-name" data-categories="内网渗透"><span class="iconfont-archer">&#xe60a;</span>内网渗透</span>
+    
+        <span class="sidebar-category-name" data-categories="php"><span class="iconfont-archer">&#xe60a;</span>php</span>
+    
+        <span class="sidebar-category-name" data-categories="upload"><span class="iconfont-archer">&#xe60a;</span>upload</span>
+    
+        <span class="sidebar-category-name" data-categories="sql-injection"><span class="iconfont-archer">&#xe60a;</span>sql-injection</span>
+    
+        <span class="sidebar-category-name" data-categories="ctf-wp"><span class="iconfont-archer">&#xe60a;</span>ctf-wp</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var siteMeta = {
+        root: "/",
+        author: "fe1w0"
+    }
+</script>
+    <!-- CDN failover -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ === 'undefined')
+        {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js">\x3C/script>')
+        }
+    </script>
+    <script src="/scripts/main.js"></script>
+    <!-- algolia -->
+    
+    <!-- busuanzi  -->
+    
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ  -->
+    
+    </div>
+    <!-- async load share.js -->
+    
+        <script src="/scripts/share.js" async></script>    
+     
+    </body>
+</html>
+
+
