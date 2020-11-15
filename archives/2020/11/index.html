@@ -22,7 +22,7 @@
     <meta name="description" content="">
     <meta property="og:type" content="website">
 <meta property="og:title" content="fe1w0">
-<meta property="og:url" content="https://xzlxr.github.io/tags/%E4%BF%A1%E5%AE%89%E4%B9%8B%E8%B7%AF/index.html">
+<meta property="og:url" content="https://xzlxr.github.io/archives/2020/11/index.html">
 <meta property="og:site_name" content="fe1w0">
 <meta property="og:locale">
 <meta property="article:author" content="fe1w0">
@@ -354,290 +354,25 @@
     
     
     <article class="index-post">
-        <a class="abstract-title" href = "/2020/05/05/sqli%E4%BB%A3%E7%A0%81%E7%BC%96%E5%86%99%E4%B8%8E%E9%98%B2%E6%8A%A4/" >
+        <a class="abstract-title" href = "/2020/11/15/php_%E5%AE%89%E5%85%A8%E6%9D%82%E8%AE%B0/" >
             
-                <span>sqli代码编写与防护</span>
+                <span>[Untitled Post]</span>
         </a>
         <div class="abstract-content">
-            要求 0x011、编写常规回显注入的代码，在之前的搭建的环境中测试是否正常
-2、编写报错注入的代码，并做相应的服务器配置来满足条件，并测试代码是否正常
-3、编写盲注的代码，在之前的搭建的环境中测试是否正常
-4、编写宽子节注入的代码，并做相应的服务器配置来满足条件，并测试代码是否正常
-注意事项：环境可以是虚拟机的快照、也可以是 docker 环境，具体用什么可以自选，重点是学习造成这几类注入的原因；注入漏洞通常会出现在多个场景，比如：注册、登录、查询、搜索、留言等，所以写那些脚本的时候可以自选场景，不限于举例的场景；有些注入环境与服务器配置相关，需要大家配置相应的漏洞环境来结合自己编写的脚...
+            php-安全知识点·杂记🤹‍
+若有侵权,请联系删除修改 fe1w0
+
+php_protocol
+https://www.php.net/manual/zh/wrappers.php
+
+巧用利用filtercompress.bzip2://  与 phar://绕过die其他php 标签与版本问题1234567891011121314151617181920212223242526When php parse a file,it looks for opening and closing tag.php parser interpreting  the code between open...
         </div>
         <div class="abstract-post-meta">
             <!-- date  -->
             <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2020/05/05</span>
+                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2020/11/15</span>
             </div>
             <!-- tags  -->
-            
-            <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "信安之路">信安之路</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "sqli">sqli</a>
-    
-</div>
-            
-        </div>
-    </article>
-    
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href = "/2020/04/27/web_%E5%AE%89%E5%85%A8%E4%B9%8B%E9%A1%B5%E9%9D%A2%E8%A7%A3%E6%9E%90%E7%9A%84%E6%B5%81%E7%A8%8B%E5%AD%A6%E4%B9%A0/" >
-            
-                <span>页面解析的流程学习</span>
-        </a>
-        <div class="abstract-content">
-            要求任务标题： web 安全之页面解析的流程学习
-1、理解域名解析的整个过程
-2、理解 web 页面请求的整个流程，绘制流程图（nginx 处理的 11 个过程）
-3、学习 http 协议中的字段及含义
-4、学习 http 请求方法以及返回状态码的类型和含义
-扩展学习：思考这个过程中都会涉及哪些安全问题，常规的网站架构（waf、cdn 等设备部署在什么地方）
-参考深入分析Java Web技术内幕读书笔记（二）浅析DNS域名解析过程
-Nginx处理http请求的11个阶段
-计算机网络应用层
-DNS安全威胁及未来发展趋势的研究
-报告0x01理解域名解析的整个过程大致流程图
-第一步：检查浏览器...
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2020/04/27</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "web">web</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "信安之路">信安之路</a>
-    
-</div>
-            
-        </div>
-    </article>
-    
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href = "/2020/04/23/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9B%B8%E5%85%B3%E6%B3%A8%E5%85%A5%E8%AF%AD%E5%8F%A5%E7%9A%84%E6%94%B6%E9%9B%86%E5%92%8C%E5%AD%A6%E4%B9%A0/" >
-            
-                <span>数据库相关注入语句的收集和学习</span>
-        </a>
-        <div class="abstract-content">
-            基本要求数据库基础之数据库相关注入语句的收集和学习1、收集网络上各种 sql 注入时使用的 payload 并理解其适用的环境（检测注入、利用注入）
-2、记录 sqlmap 的检测和利用过程中使用的 payload（也算一种 payload 收集方式）
-3、理解以上涉及的 sql 语句的意思，其中会涉及不同的数据库、不同注入场景，可以将学习的过程和收集的方式进行整理形成报告，关于 payload 的理解，其中会涉及之前学习的基础。
-扩展学习：理解 sqlmap 自带 tamper 的原理，这里通常包含很多数据库的特性，从而实现 payload 变形啥的，用来绕过一些简单的安全检测
-注入代...
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2020/04/23</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "sql injection">sql injection</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "信安之路">信安之路</a>
-    
-</div>
-            
-        </div>
-    </article>
-    
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href = "/2020/04/06/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%8A%9F%E8%83%BD/" >
-            
-                <span>数据库功能</span>
-        </a>
-        <div class="abstract-content">
-            任务标题： 数据库基础之数据库系统功能相关学习
-1、学习数据库自带函数的功能与用法（思考在什么情况下可以执行命令）
-2、将所有涉及的函数进行测试并举例说明其用法并形成报告
-扩展学习：针对自己所选数据库，尝试执行系统命令，自己构造所需环境
-具体解释在 sql 注入时为了应对各种限制措施，利用数据库自带的一些系统函数经过各种变换之后可以绕过一些安全设备或者一些基础防御的措施，比如一些字符串转换的函数、截取字符串长度的函数等，参考学习：
-
-https://www.runoob.com/mysql/mysql-functions.html
-
-应用的场景包括：通过注入获取数据、变换字符串绕过 WA...
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2020/04/06</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "web">web</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "信安之路">信安之路</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "mysql">mysql</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "udf">udf</a>
-    
-</div>
-            
-        </div>
-    </article>
-    
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href = "/2020/03/30/%E7%B3%BB%E7%BB%9F%E8%A1%A8%E5%AD%A6%E4%B9%A0/" >
-            
-                <span>系统表学习</span>
-        </a>
-        <div class="abstract-content">
-            系统表学习
-1、如何利用数据库的功能读写文件，需要什么样的条件才可以读写
-2、学习数据库系统表的功能，如何利用 sql 语句查询库名、表名、字段名、内容以及当前用户等基本信息，将学习过程中关键部分整理成报告
-扩展学习：尝试查询出用户的 hash，并使用 hashcat 来对获取的 hash 进行暴力破解
-环境:
-ubuntu: 18
-mysql: 5.7.29
-用户:new_user@localhost
-
-
-mysql数据库读写文件
-参考于:
-
-mysql数据库读写文件
-mysql中的数据导入与导出
-
-
-条件secure_file_priv
-该参数用来限制数据导入和导出操作的效果，该值会...
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2020/03/30</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "信安之路">信安之路</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "mysql">mysql</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "系统表">系统表</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "数据库的输入输出">数据库的输入输出</a>
-    
-</div>
-            
-        </div>
-    </article>
-    
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href = "/2020/03/23/%E8%AE%A4%E8%AF%86%E6%95%B0%E6%8D%AE%E5%BA%93/" >
-            
-                <span>认识数据库</span>
-        </a>
-        <div class="abstract-content">
-            基本要求1、什么是关系型和非关系型数据库，两者都包含哪些种类的数据库
-2、选择一种关系型数据库进行学习（选择自己不熟悉的进行学习）
-3、学习数据库中的字段类型并创建库和用户表，需要包含所有字段类型
-4、学习数据库的增删改查，记录学习过程（重点是 sql 语句的理解）并形成报告
-部分解释1、对于关系型数据库，都会提供文件读写的功能，但是具体如何实现略有不同，文件读写在我们利用数据库注入漏洞获取 webshell 的时候非常有帮助，所以读写文件的基础是必须要学的。
-2、任何关系型数据库，在默认安装成功之后会自带一些默认的系统库和表，这些库和表存储了数据库中很多关键的信息，比如用户创建的库相关...
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2020/03/23</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "sql">sql</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "信安之路">信安之路</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "笔记">笔记</a>
-    
-</div>
-            
-        </div>
-    </article>
-    
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href = "/2020/03/16/%E6%90%AD%E5%BB%BAweb%E8%BF%90%E8%A1%8C%E7%9A%84%E5%9F%BA%E7%A1%80%E7%8E%AF%E5%A2%83/" >
-            
-                <span>搭建web运行的基础环境</span>
-        </a>
-        <div class="abstract-content">
-            
-搭建web运行的基础环境
-
-基本信息
-任务目标:准备学习环境,学习web服务器的搭建过程,并做相应的加固学习
-操作系统:win10家庭版+ vm15
-预装环境:ubuntu 18.04 + nginx + php-fpm + mysql  
-报告要求:搭建过程详细记录,收集加固文档,学习加固技术
-
-搭建 0x01安装 nginx + php-fpm + mysqlNginx的安装这篇文章涵盖nginx + php-fpm + mysql的详细安装过程和指南
-更新系统软件源
-备份原有软件源文件cp /etc/apt/sources.list /etc/apt/sources.list.b...
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2020/03/16</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "web">web</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "信安之路">信安之路</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "ubuntu">ubuntu</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "apache">apache</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "nginx">nginx</a>
-    
-</div>
             
         </div>
     </article>
